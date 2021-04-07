@@ -64,6 +64,8 @@ public class Game extends Application {
 		gameLoop.play();
 	    gameStage.show();
 	}
+	
+	@Override
 	public void init() {
 		running  = true;
 		timeLast = System.currentTimeMillis();
@@ -81,7 +83,6 @@ public class Game extends Application {
 			oldFrame = countFrame;
 			}
 			countFrame=0;
-			
 		}
 		
 		update();
