@@ -3,7 +3,7 @@ package state;
 
 import java.util.ArrayList;
 
-import javafx.scene.canvas.Canvas;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 public class GameStateManager {

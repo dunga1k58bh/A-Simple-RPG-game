@@ -11,7 +11,6 @@ import state.GameStateManager;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -33,7 +32,7 @@ public class Main extends Application {
 		// image
 //		private Image image ;
 		private Canvas canvas;
-		private GraphicsContext g,g2;	
+		private GraphicsContext g;	
 		
 		//Key COntrol, Mouse Control
 		KeyEvent kevent;

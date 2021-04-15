@@ -1,8 +1,7 @@
 package state;
 
 import application.Main;
-import javafx.event.ActionEvent;
-import javafx.scene.canvas.Canvas;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
