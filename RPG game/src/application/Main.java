@@ -14,20 +14,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
-
 public class Main extends Application {
 	//kich thuoc cua scene
 	    Scene scene;
 		public static final int width = 1000;
 		public static final int height = 600;
 		 //gameLoop
-		public boolean running = false;
 	    private double timeLast ;
 	    private int countFrame = 0;
 		private int oldFrame = 0;
 		
 		//GameStateManager
-		GameStateManager gsm =new GameStateManager();
+		public GameStateManager gsm =new GameStateManager();
 		
 		// image
 //		private Image image ;
@@ -35,7 +33,6 @@ public class Main extends Application {
 		private GraphicsContext g;	
 		
 		//Key COntrol, Mouse Control
-		KeyEvent kevent;
 	@Override
 	public void init() throws Exception {
 		// TODO Auto-generated method stub
@@ -59,17 +56,17 @@ public class Main extends Application {
 	        	public void handle(KeyEvent k) {
 	        		gsm.keyPressed(k);
 	        	}
-			});  
-			scene.setOnKeyTyped(new EventHandler<KeyEvent>() {
-	        	public void handle(KeyEvent k) {
-	        		gsm.keyType(k);
-	        	}
-			});  
+			});
+			scene.setOnKeyTyped(new EventHandler<>() {
+				public void handle(KeyEvent k) {
+					gsm.keyTyped(k);
+				}
+			});
 			scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 	        	public void handle(KeyEvent k) {
-	        		gsm.keyPressed(k);
+	        		gsm.keyReleased(k);
 	        	}
-			});  
+			});
 			
 			//GameLope
 		    Timeline gameLoop = new Timeline();
@@ -77,9 +74,9 @@ public class Main extends Application {
 	        KeyFrame kf = new KeyFrame(
 	                Duration.seconds(0.017),                // 60 FPS
 	                        new EventHandler<ActionEvent>()
-	                        {   
+	                        {
 	                            public void handle(ActionEvent ae)
-	                            {   
+	                            {
 	                                run();
 	                            }
 	                        });
@@ -104,6 +101,7 @@ public class Main extends Application {
 		}
 		update();
 		draw();
+
 	}
 	public void update() {
 		gsm.update();
