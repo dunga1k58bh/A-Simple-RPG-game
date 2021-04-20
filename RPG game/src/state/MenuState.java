@@ -13,6 +13,10 @@ public class MenuState extends GameState{
     private  String[] options;
     private int currentOption= 1;
 	private Font font,titleFont ;
+	private int PlayState=1,
+	            LoadState=2,
+	            AboutState=3;
+
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
 		
@@ -43,7 +47,6 @@ public class MenuState extends GameState{
 
 	@Override
 	public void draw(GraphicsContext g) {
-
 		//draw backgound;
 		g.drawImage(image, 0, 0, Main.width, Main.height);
         //draw GameTitle
@@ -71,8 +74,8 @@ public class MenuState extends GameState{
 		}
 	}
 	public void keyPressed(KeyEvent k) {
+		//Control
 		if (k.getCode()== KeyCode.UP) {
-
 			currentOption = currentOption - 1;
 			if (currentOption < 1) currentOption = 1;;
 			System.out.println("up");
@@ -81,11 +84,12 @@ public class MenuState extends GameState{
 			currentOption = currentOption +1;
 			if (currentOption > options.length) currentOption = options.length;
 		}
+		//seliction
 		if (k.getCode() == KeyCode.ENTER){
 			if (currentOption ==3+1) System.exit(0);
+			//Select Current Option
 			gsm.setState(currentOption);
 		}
-
 	}
 
 	@Override

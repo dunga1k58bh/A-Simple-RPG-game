@@ -14,7 +14,8 @@ public class PlayState extends GameState{
 
     @Override
     public void update() {
-
+        int map1 = 4;
+        gsm.setState(map1);
     }
 
     @Override
