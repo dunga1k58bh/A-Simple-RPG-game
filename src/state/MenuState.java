@@ -19,8 +19,7 @@ public class MenuState extends GameState{
 
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
-		
-		image = new Image("Menu/menubg.jpg");
+//		image = new Image("Menu/menubg.jpg");
 		font = Font.loadFont("file:res/Font/njnaruto.ttf",48);
 		titleFont = Font.loadFont("file:res/Font/njnaruto.ttf",100);
 //

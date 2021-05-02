@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="TiledReader">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/TiledReader-1.1.0/TiledReader.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

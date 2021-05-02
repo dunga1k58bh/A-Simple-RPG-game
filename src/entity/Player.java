@@ -24,7 +24,7 @@ public class Player extends Entity{
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private Key key= new Key();
     public Player() {
-        setPosX(300);
+        setPosX(500);
         setPosY(300);
 
         //add default texture
@@ -56,7 +56,7 @@ public class Player extends Entity{
             runningDirection = key.right - key.left;
         }
         if (runningDirection == 1) {
-            posX += 5;
+            posX += 1;
             count1++;
             count2++;
         } else if (runningDirection == -1) {
@@ -174,27 +174,27 @@ public class Player extends Entity{
                 }
             }
         }
-        else {
-            System.out.println("Not key pressed");
-            switch (keyEvent.getCode()) {
-                case UP -> {
-                    key.up = 0;
-                    break;
-                }
-                case DOWN -> {
-                    key.down = 0;
-                    break;
-                }
-                case LEFT -> {
-                    key.left = 0;
-                    break;
-                }
-                case RIGHT -> {
-                    key.right = 0;
-                    break;
-                }
-            }
-        }
+//        else {
+//            System.out.println("Not key pressed");
+//            switch (keyEvent.getCode()) {
+//                case UP -> {
+//                    key.up = 0;
+//                    break;
+//                }
+//                case DOWN -> {
+//                    key.down = 0;
+//                    break;
+//                }
+//                case LEFT -> {
+//                    key.left = 0;
+//                    break;
+//                }
+//                case RIGHT -> {
+//                    key.right = 0;
+//                    break;
+//                }
+//            }
+//        }
     }
 
     //Method does not control animation

@@ -12,7 +12,7 @@ public class GameStateManager {
    protected  static ArrayList<GameState> gameStates;
    public int currentState;   
 
-     public GameStateManager() {
+     public GameStateManager()  {
 
          gameStates= new ArrayList<>();
          gameStates.add(new MenuState(this));//0
