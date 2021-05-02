@@ -9,6 +9,7 @@ import state.GameStateManager;
 import tilemap.TileMap;
 
 public class Map1 extends GameState {
+
     //BackGround    Image bg= new Image("/res/")
     private  Player player;
     private TileMap map1;

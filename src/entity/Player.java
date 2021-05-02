@@ -18,9 +18,10 @@ public class Player extends Entity{
     private int count1 = 0;
     private int count2 = 0;
     private int offset = 0;
-    //private final Image head = new Image("char/Small33-resources.assets-14326.png"); //default head
-    //private final Image lowerBody = new Image("char/Small24-resources.assets-12840.png"); //down
-    //private final Image upperBody = new Image("char/Small6-resources.assets-12601.png"); //up
+    int dt = 5; //pseudo time between frames
+    private final int velocity = 10;
+    private int currentVelocity = 0;
+    private final int acceleration = 0; //TODO
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private Key key= new Key();
     public Player() {
@@ -55,8 +56,11 @@ public class Player extends Entity{
         if (key.up == 0) {
             runningDirection = key.right - key.left;
         }
+
         if (runningDirection == 1) {
-            posX += 1;
+            currentVelocity =
+            posX += dt * Math.max(velocity,0);
+//            velocity -= dt*
             count1++;
             count2++;
         } else if (runningDirection == -1) {
@@ -64,6 +68,7 @@ public class Player extends Entity{
             count1++;
             count2++;
         }
+
         else if (runningDirection == 0) {
             animationStep = -1;
             count2++;
@@ -73,6 +78,7 @@ public class Player extends Entity{
             count1 = 0;
             animationStep ++;
         }
+
         if (count2 % 13 == 0 && count2!=0){
             count2 = 0;
             animationStep2 ++;
@@ -174,27 +180,27 @@ public class Player extends Entity{
                 }
             }
         }
-//        else {
-//            System.out.println("Not key pressed");
-//            switch (keyEvent.getCode()) {
-//                case UP -> {
-//                    key.up = 0;
-//                    break;
-//                }
-//                case DOWN -> {
-//                    key.down = 0;
-//                    break;
-//                }
-//                case LEFT -> {
-//                    key.left = 0;
-//                    break;
-//                }
-//                case RIGHT -> {
-//                    key.right = 0;
-//                    break;
-//                }
-//            }
-//        }
+        else {
+            System.out.println("Not key pressed");
+            switch (keyEvent.getCode()) {
+                case UP -> {
+                    key.up = 0;
+                    break;
+                }
+                case DOWN -> {
+                    key.down = 0;
+                    break;
+                }
+                case LEFT -> {
+                    key.left = 0;
+                    break;
+                }
+                case RIGHT -> {
+                    key.right = 0;
+                    break;
+                }
+            }
+        }
     }
 
     //Method does not control animation
@@ -210,3 +216,21 @@ public class Player extends Entity{
 
     }
 }
+//0 <-
+//0 ->
+//0 ^
+//0 v
+//0-15
+//
+//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 0 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 0
+//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 0 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 20
+//        9 0 0 0 0 0 0 0 0 0 0 0 4 5 5 6 0 1 2 3 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 19
+//        1 2 2 2 2 2 2 2 3 0 0 0 0 0 0 0 0 21 21 9 0 0 0 4 5 6 7 0 0 0 4 2 6 0 0 1 2 2
+//        7 8 8 8 8 8 8 8 9 0 0 0 0 0 0 0 0 21 21 9 0 0 0 0 0 0 7 6 0 0 0 0 0 0 0 0 0 7
+//        9 0 0 0 0 0 0 0 0 0 0 4 5 6 0 0 0 21 21 9 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 7
+//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 9 4 5 6 0 0 0 7 2 2 2 5 5 6 0 0 0 0 7
+//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 2 2 2 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7
+//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4 5 6 7
+//        9 0 0 0 0 4 5 6 0 0 1 2 2 2 3 0 0 21 21 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7
+//        1 2 2 3 0 0 0 0 0 0 7 8 8 8 9 0 0 21 21 9 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+//        7 8 8 9 17 17 17 17 17 17 7 8 8 8 9 17 17 21 21 9 7 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8

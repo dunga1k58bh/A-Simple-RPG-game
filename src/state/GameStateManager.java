@@ -3,8 +3,7 @@ package state;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import state.map.Map1;
-
+import state.map.*;
 import java.util.ArrayList;
 public class GameStateManager {
 	
@@ -27,7 +26,6 @@ public class GameStateManager {
      public void setState(int state) {
     	 currentState = state;
      }
-
      public void update() {
     	gameStates.get(currentState).update();
      }

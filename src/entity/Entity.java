@@ -7,6 +7,9 @@ public abstract class Entity {
     protected int MP;
     protected int posX = 0;
     protected int posY = 0;
+    protected int dx;
+    protected int dy;
+    protected int deacc;
 
 
     public abstract void render(GraphicsContext graphicsContext);
