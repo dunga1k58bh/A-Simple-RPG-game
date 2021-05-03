@@ -2,9 +2,11 @@ package tilemap;
 
 import application.Main;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 import java.io.*;
 
@@ -115,11 +117,13 @@ public class TileMap {
     //(targetWidth,targetHeight) :V
     public Image getCropImage(Image image,double x, double y,double tagetWidth, double tagetHeight){
         Rectangle2D cropArea = new Rectangle2D(x,y,tagetWidth,tagetHeight);
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
         ImageView imageView= new ImageView(image);
         imageView.setViewport(cropArea);
         imageView.setFitWidth(tagetWidth);
         imageView.setFitHeight(tagetHeight);
-        return  imageView.snapshot(null,null);
+        return  imageView.snapshot(params,null);
     }
     //vẽ bắt đầu từ đâu trên map
     public void setPos(double x, double y){

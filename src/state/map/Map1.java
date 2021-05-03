@@ -2,6 +2,7 @@ package state.map;
 
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import state.GameState;
 import state.GameStateManager;
@@ -9,7 +10,7 @@ import tilemap.TileMap;
 
 public class Map1 extends GameState {
 
-    //BackGround    Image bg= new Image("/res/")
+    private Image bg= new Image("bg/bgMap1.png");
     private  Player player;
     private TileMap map1;
     public Map1(GameStateManager gsm){
@@ -32,6 +33,7 @@ public class Map1 extends GameState {
 
     @Override
     public void draw(GraphicsContext g) {
+        g.drawImage(bg,0,0,Main.width,Main.height);
         map1.draw(g);
         player.render(g);
     }
