@@ -1,5 +1,6 @@
 package state.map;
 
+import application.Main;
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -33,7 +34,7 @@ public class Map1 extends GameState {
 
     @Override
     public void draw(GraphicsContext g) {
-        g.drawImage(bg,0,0,Main.width,Main.height);
+        g.drawImage(bg,0,0, Main.width, Main.height);
         map1.draw(g);
         player.render(g);
     }

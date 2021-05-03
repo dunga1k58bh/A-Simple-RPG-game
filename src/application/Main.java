@@ -17,8 +17,8 @@ import javafx.scene.layout.BorderPane;
 public class Main extends Application {
 	//kich thuoc cua scene
 	    Scene scene;
-		public static final double width = 1000;
-		public static final double height = 600;
+		public static final double width = 1008;
+		public static final double height = 576;
 		 //gameLoop
 	    private double timeLast ;
 	    private int countFrame = 0;
