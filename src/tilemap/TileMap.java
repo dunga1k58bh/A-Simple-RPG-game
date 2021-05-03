@@ -26,17 +26,16 @@ public class TileMap {
     private int mapRow;
     private int mapCol;
     //For draw
-    private int numTileWidth;
-    private int numTileHeight;
+    private double numTileWidth;
+    private double numTileHeight;
     private int beginDrawHeight;
     private int beginDrawWidth;
     private double camSpeed;
-    public TileMap(int tileSize){
+    public TileMap(int tileSize) {
         this.tileSize = tileSize;
        numTileWidth = Main.width/tileSize +2;
        numTileHeight = Main.height/tileSize +2;
        camSpeed = 0.8;
-
     }
     public void loadTileSet (String s){
         tileset = new Image(s);
@@ -113,6 +112,7 @@ public class TileMap {
         imageView.setFitHeight(tagetHeight);
         return  imageView.snapshot(null,null);
     }
+
     public void setPos(double x, double y){
         this.x += (x - this.x) * camSpeed;
         this.y += (y - this.y) * camSpeed;
@@ -120,10 +120,10 @@ public class TileMap {
         if (this.x>xmax) this.x = xmax;
         if (this.y<ymin) this.y = ymin;
         if (this.y>ymax) this.y = ymax;
-        beginDrawWidth = (int)-this.x / tileSize;
-        beginDrawHeight= (int)-this.y /tileSize;
-
+        beginDrawWidth = (int) - this.x /tileSize;
+        beginDrawHeight= (int) - this.y /tileSize;
     }
+    
     public void draw(GraphicsContext g){
         for (int row = beginDrawHeight;row <beginDrawHeight+numTileHeight;row ++) {
                 if (row<0) row = 0;

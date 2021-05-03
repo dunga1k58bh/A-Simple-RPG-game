@@ -28,7 +28,7 @@ public class Map1 extends GameState {
 
     @Override
     public void update() {
-        map1.setPos(Main.width/2 -player.getPosX(), Main.height/2-player.getPosY());
+        map1.setPos(Main.width/2 - player.getPosX(), Main.height/2 - player.getPosY());
     }
 
     @Override
