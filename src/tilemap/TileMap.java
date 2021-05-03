@@ -8,8 +8,10 @@ import javafx.scene.image.ImageView;
 
 import java.io.*;
 
+// ->>
 public class TileMap {
-    //Pos
+    //Pos : Vị trị bắt đầu vẽ 1 phần map(góc trên cùng bên trái)
+    // - Gốc tọa độ là góc trên cùng bên trái của cả map
     private double x;
     private double y;
     private double xmin,ymin,xmax,ymax;
@@ -26,17 +28,18 @@ public class TileMap {
     private int mapRow;
     private int mapCol;
     //For draw
-    private double numTileWidth;
-    private double numTileHeight;
-    private int beginDrawHeight;
-    private int beginDrawWidth;
+    private double rowDraw;
+    private double colDraw;
+    private int rowBeginDraw;
+    private int colBeginDraw;
     private double camSpeed;
     public TileMap(int tileSize) {
         this.tileSize = tileSize;
-       numTileWidth = Main.width/tileSize +2;
-       numTileHeight = Main.height/tileSize +2;
+       colDraw = Main.width/tileSize +2;
+       rowDraw = Main.height/tileSize +2;
        camSpeed = 0.8;
     }
+    //Lay tileSet (la 1 Image)
     public void loadTileSet (String s){
         tileset = new Image(s);
         tilesetRow = (int) tileset.getHeight()/tileSize;
@@ -74,20 +77,22 @@ public class TileMap {
         int c= rc%tilesetCol;
         return tiles[r][c].getType();
     }
-
+    //file .map là 1 file 2 dòng đầu là cột n, hàng m, mảng m*n là số hiệu của các tile trong tileSet
     public void loadMap(String s){
         try {
+            //Doc File
             FileInputStream in = new FileInputStream(s);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             mapCol = Integer.parseInt(br.readLine());
             mapRow = Integer.parseInt(br.readLine());
             map = new int[mapRow][mapCol];
-            width = mapCol* tileSize;
+
+            width = mapCol* tileSize; //Kích cỡ map
             height = mapRow*tileSize;
-            xmin = Main.width - width;
-            xmax = 0;
-            ymin = Main.height - height;
-            ymax = 0;
+            xmin = 0;
+            xmax = width - Main.width;
+            ymin = 0;
+            ymax = height - Main.height;
             String del ="\s+";
             for (int row =0;row <mapRow;row ++){
                 String line = br.readLine();
@@ -104,6 +109,10 @@ public class TileMap {
             e.printStackTrace();
         }
     }
+
+    //Cắt ảnh, gốc ảnh trên cùng bên trái,
+    //(x,y) điểm bắt đầu cắt
+    //(targetWidth,targetHeight) :V
     public Image getCropImage(Image image,double x, double y,double tagetWidth, double tagetHeight){
         Rectangle2D cropArea = new Rectangle2D(x,y,tagetWidth,tagetHeight);
         ImageView imageView= new ImageView(image);
@@ -112,30 +121,31 @@ public class TileMap {
         imageView.setFitHeight(tagetHeight);
         return  imageView.snapshot(null,null);
     }
-
+    //vẽ bắt đầu từ đâu trên map
     public void setPos(double x, double y){
-        this.x += (x - this.x) * camSpeed;
-        this.y += (y - this.y) * camSpeed;
+        this.x +=(x-this.x)*camSpeed;
+        this.y +=(y-this.y)*camSpeed;
+        //Đoạn này để đảm bảo chỉ vẽ những thứ có trong map
         if (this.x<xmin) this.x = xmin;
         if (this.x>xmax) this.x = xmax;
         if (this.y<ymin) this.y = ymin;
         if (this.y>ymax) this.y = ymax;
-        beginDrawWidth = (int) - this.x /tileSize;
-        beginDrawHeight= (int) - this.y /tileSize;
+        //cột hàng bắt đầu vẽ
+        colBeginDraw = (int)  this.x /tileSize;
+        rowBeginDraw= (int)  this.y /tileSize;
     }
     
     public void draw(GraphicsContext g){
-        for (int row = beginDrawHeight;row <beginDrawHeight+numTileHeight;row ++) {
-                if (row<0) row = 0;
+        for (int row = rowBeginDraw;row <rowBeginDraw+rowDraw;row ++) {
                 if(row>=mapRow) break;
-            for (int col = beginDrawWidth; col < beginDrawWidth+numTileWidth; col++) {
-                if (col<0) col = 0;
+            for (int col = colBeginDraw; col < colBeginDraw + colDraw; col++) {
                 if (col>=mapCol) break;
                 if (map[row][col]==0) continue;
                 int rc = map[row][col];
                 int r= rc/tilesetCol;
                 int c= rc%tilesetCol;
-                g.drawImage(tiles[r][c].getImage(),(int)x+col*tileSize,(int)y+row*tileSize);
+                //Bản chất của 2 tham số tọa độ của hàm dưới đây là phép dịch gốc tọa độ!!
+                g.drawImage(tiles[r][c].getImage(),(int)-x+col*tileSize,(int)-y+row*tileSize);
             }
         }
     }

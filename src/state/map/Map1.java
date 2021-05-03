@@ -1,6 +1,5 @@
 package state.map;
 
-import application.Main;
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -28,7 +27,7 @@ public class Map1 extends GameState {
 
     @Override
     public void update() {
-        map1.setPos(Main.width/2 - player.getPosX(), Main.height/2 - player.getPosY());
+        map1.setPos(0,0);
     }
 
     @Override
