@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class GameStateManager {
 	
      
-   protected  static ArrayList<GameState> gameStates;
-   public int currentState;   
+   protected static ArrayList<GameState> gameStates;
+   private int currentState;
 
      public GameStateManager()  {
 
@@ -20,7 +20,7 @@ public class GameStateManager {
          gameStates.add(new AboutState(this));//3
          gameStates.add(new Map1(this));
 
-         currentState = 0;
+         currentState = 1;
          
      }
      public void setState(int state) {

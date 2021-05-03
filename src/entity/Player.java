@@ -18,11 +18,12 @@ public class Player extends Entity{
     private int count1 = 0;
     private int count2 = 0;
     private int offset = 0;
-    int dt = 5; //pseudo time between frames
-    private final int velocity = 10;
-    private int currentVelocity = 0;
-    private final int acceleration = 0; //TODO
+    private double dt = 1; //pseudo time between frames
+    private double velocity = 5;
+    private double currentVelocity = 0;
+    private final double acceleration = 0.5; //TODO
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
+    private int lastRunningDirection = 0;
     private Key key= new Key();
     public Player() {
         setPosX(500);
@@ -58,18 +59,28 @@ public class Player extends Entity{
         }
 
         if (runningDirection == 1) {
-            currentVelocity =
+            if (animationStep == -1) {
+                animationStep = 0;
+            }
+            lastRunningDirection = runningDirection;
+            currentVelocity = velocity;
             posX += dt * Math.max(velocity,0);
-//            velocity -= dt*
             count1++;
             count2++;
         } else if (runningDirection == -1) {
-            posX -= 5;
+            if (animationStep == -1) {
+                animationStep = 0;
+            }
+            lastRunningDirection = runningDirection;
+            currentVelocity = velocity;
+            posX -= dt * Math.max(velocity,0);
             count1++;
             count2++;
         }
 
         else if (runningDirection == 0) {
+            currentVelocity -= acceleration*dt;
+            posX += lastRunningDirection * dt * Math.max(currentVelocity,0);
             animationStep = -1;
             count2++;
         }
@@ -86,6 +97,7 @@ public class Player extends Entity{
         }
         //offset = 0;
         //animationStep ++;
+
         //render
         //Image image1 = new Image("char/Small33-resources.assets-14326.png"); //head
         switch (animationStep%5) {

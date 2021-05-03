@@ -5,8 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 public abstract class Entity {
     protected int HP;
     protected int MP;
-    protected int posX = 0;
-    protected int posY = 0;
+    protected double posX = 0;
+    protected double posY = 0;
     protected int dx;
     protected int dy;
     protected int deacc;
@@ -30,7 +30,7 @@ public abstract class Entity {
         this.MP = MP;
     }
 
-    public int getPosX() {
+    public double getPosX() {
         return posX;
     }
 
@@ -38,7 +38,7 @@ public abstract class Entity {
         this.posX = posX;
     }
 
-    public int getPosY() {
+    public double getPosY() {
         return posY;
     }
 

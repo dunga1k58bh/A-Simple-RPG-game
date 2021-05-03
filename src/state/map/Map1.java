@@ -44,11 +44,11 @@ public class Map1 extends GameState {
 
     @Override
     public void keyTyped(KeyEvent k) {
-
+        player.keyIn(k);
     }
 
     @Override
     public void keyReleased(KeyEvent k) {
-
+        player.keyIn(k);
     }
 }
