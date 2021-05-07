@@ -12,10 +12,12 @@ import java.io.*;
 
 // ->>
 public class TileMap {
-    //Pos : Vị trị bắt đầu vẽ 1 phần map(góc trên cùng bên trái)
+
     // - Gốc tọa độ là góc trên cùng bên trái của cả map
+    //Pos : Vị trị bắt đầu vẽ 1 phần map(góc trên cùng bên trái)
     private double x; //SCREEN position(topleft corner) on VIRTUAL MAP
     private double y;
+
     private double xmin,ymin,xmax,ymax;
     //TileSet
     private int tileSize;

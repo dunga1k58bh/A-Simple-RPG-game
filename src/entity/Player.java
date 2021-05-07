@@ -106,11 +106,11 @@ public class Player extends Entity{
 
         //render
         //Image image1 = new Image("char/Small33-resources.assets-14326.png"); //head
-        switch (animationStep%5) {
-            case -1: {
+        switch (animationStep % 5) {
+            case -1 -> {
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
-                graphicsContext.drawImage(standLower, posX - 7 , posY - 17);
+                graphicsContext.drawImage(standLower, posX - 7, posY - 17);
 
                 //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
                 graphicsContext.drawImage(standUpper, posX - 14, posY - 35 + offset);
@@ -118,7 +118,7 @@ public class Player extends Entity{
                 graphicsContext.drawImage(head.get(0), posX - 15, posY - 68 + offset); //head
                 break;
             }
-            case 0: {
+            case 0 -> {
                 graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
@@ -128,7 +128,7 @@ public class Player extends Entity{
                 graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 14, posY - 35 + offset);
                 break;
             }
-            case 1: {
+            case 1 -> {
                 graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
@@ -138,7 +138,7 @@ public class Player extends Entity{
                 graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 19, posY - 35 + offset);
                 break;
             }
-            case 2: {
+            case 2 -> {
                 graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
@@ -148,7 +148,7 @@ public class Player extends Entity{
                 graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 10, posY - 33 + offset);
                 break;
             }
-            case 3: {
+            case 3 -> {
                 graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
@@ -158,7 +158,7 @@ public class Player extends Entity{
                 graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 13, posY - 33 + offset);
                 break;
             }
-            case 4: {
+            case 4 -> {
                 graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
