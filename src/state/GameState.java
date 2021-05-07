@@ -16,8 +16,8 @@ public abstract class GameState {
 	}
 
     public abstract void  init();
-    public abstract void update();
-    public abstract void draw(GraphicsContext g);
+    public abstract void tick();
+    public abstract void render(GraphicsContext g);
     public abstract void keyPressed( KeyEvent k);
     public abstract void keyTyped( KeyEvent k);
     public abstract void keyReleased(KeyEvent k);

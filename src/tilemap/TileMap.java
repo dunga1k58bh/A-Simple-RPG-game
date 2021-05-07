@@ -14,7 +14,7 @@ import java.io.*;
 public class TileMap {
     //Pos : Vị trị bắt đầu vẽ 1 phần map(góc trên cùng bên trái)
     // - Gốc tọa độ là góc trên cùng bên trái của cả map
-    private double x;
+    private double x; //SCREEN position(topleft corner) on VIRTUAL MAP
     private double y;
     private double xmin,ymin,xmax,ymax;
     //TileSet
@@ -125,7 +125,11 @@ public class TileMap {
         imageView.setFitHeight(tagetHeight);
         return  imageView.snapshot(params,null);
     }
-    //vẽ bắt đầu từ đâu trên map
+
+    public void tick() {
+
+    }
+    //Anchor point: top left of VIRTUAL map, not screen
     public void setPos(double x, double y){
         this.x +=(x-this.x)*camSpeed;
         this.y +=(y-this.y)*camSpeed;

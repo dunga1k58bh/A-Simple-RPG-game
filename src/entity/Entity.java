@@ -13,7 +13,7 @@ public abstract class Entity {
 
 
     public abstract void render(GraphicsContext graphicsContext);
-
+    public abstract void tick();
     public int getHP() {
         return HP;
     }

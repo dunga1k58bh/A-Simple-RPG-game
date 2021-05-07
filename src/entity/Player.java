@@ -21,7 +21,7 @@ public class Player extends Entity{
     private double dt = 1; //pseudo time between frames
     private double velocity = 5;
     private double currentVelocity = 0;
-    private final double acceleration = 0.5; //TODO
+    private final double acceleration = 0.4; //TODO
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private int lastRunningDirection = 0;
     private Key key= new Key();
@@ -50,9 +50,8 @@ public class Player extends Entity{
         setPosY(y);
     }
 
-    //private "default skin"
     @Override
-    public void render(GraphicsContext graphicsContext) {
+    public void tick() {
         //tick
         if (key.up == 0) {
             runningDirection = key.right - key.left;
@@ -95,6 +94,13 @@ public class Player extends Entity{
             animationStep2 ++;
             offset = animationStep2%2*3;
         }
+    }
+
+
+    //private "default skin"
+    @Override
+    public void render(GraphicsContext graphicsContext) {
+
         //offset = 0;
         //animationStep ++;
 
@@ -228,21 +234,3 @@ public class Player extends Entity{
 
     }
 }
-//0 <-
-//0 ->
-//0 ^
-//0 v
-//0-15
-//
-//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 0 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 0
-//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 0 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 20
-//        9 0 0 0 0 0 0 0 0 0 0 0 4 5 5 6 0 1 2 3 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 19
-//        1 2 2 2 2 2 2 2 3 0 0 0 0 0 0 0 0 21 21 9 0 0 0 4 5 6 7 0 0 0 4 2 6 0 0 1 2 2
-//        7 8 8 8 8 8 8 8 9 0 0 0 0 0 0 0 0 21 21 9 0 0 0 0 0 0 7 6 0 0 0 0 0 0 0 0 0 7
-//        9 0 0 0 0 0 0 0 0 0 0 4 5 6 0 0 0 21 21 9 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0 0 7
-//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 9 4 5 6 0 0 0 7 2 2 2 5 5 6 0 0 0 0 7
-//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 2 2 2 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7
-//        9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21 21 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4 5 6 7
-//        9 0 0 0 0 4 5 6 0 0 1 2 2 2 3 0 0 21 21 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7
-//        1 2 2 3 0 0 0 0 0 0 7 8 8 8 9 0 0 21 21 9 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-//        7 8 8 9 17 17 17 17 17 17 7 8 8 8 9 17 17 21 21 9 7 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8

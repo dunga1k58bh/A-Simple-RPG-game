@@ -13,13 +13,13 @@ public class PlayState extends GameState{
     }
 
     @Override
-    public void update() {
+    public void tick() {
         int map1 = 4;
         gsm.setState(map1);
     }
 
     @Override
-    public void draw(GraphicsContext g) {
+    public void render(GraphicsContext g) {
           g.strokeText("PlayState",300,300);
     }
 

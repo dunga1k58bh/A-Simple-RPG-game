@@ -39,13 +39,13 @@ public class MenuState extends GameState{
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 
 		
 	}
 
 	@Override
-	public void draw(GraphicsContext g) {
+	public void render(GraphicsContext g) {
 		//draw backgound;
 		g.drawImage(image, 0, 0, Main.width, Main.height);
         //draw GameTitle

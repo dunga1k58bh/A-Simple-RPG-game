@@ -13,12 +13,12 @@ public class LoadState extends GameState{
     }
 
     @Override
-    public void update() {
+    public void tick() {
 
     }
 
     @Override
-    public void draw(GraphicsContext g) {
+    public void render(GraphicsContext g) {
         g.strokeText("AboutState",300,400);
     }
 

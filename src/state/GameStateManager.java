@@ -26,11 +26,11 @@ public class GameStateManager {
      public void setState(int state) {
     	 currentState = state;
      }
-     public void update() {
-    	gameStates.get(currentState).update();
+     public void tick() {
+    	gameStates.get(currentState).tick();
      }
      public void draw(GraphicsContext g) {
-    	 gameStates.get(currentState).draw(g);
+    	 gameStates.get(currentState).render(g);
      }
      public void keyPressed( KeyEvent k) {
     	gameStates.get(currentState).keyPressed(k); 

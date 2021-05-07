@@ -99,12 +99,12 @@ public class Main extends Application {
 			}
 			countFrame=0;
 		}
-		update();
+		tick();
 		draw();
 
 	}
-	public void update() {
-		gsm.update();
+	public void tick() {
+		gsm.tick();
 	}
 	public void draw() {
 		g.clearRect(0, 0, width, height);
