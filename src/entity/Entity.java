@@ -1,8 +1,10 @@
 package entity;
 
 import javafx.scene.canvas.GraphicsContext;
+import tilemap.TileMap;
 
 public abstract class Entity {
+    protected  TileMap tileMap;
     protected int HP;
     protected int MP;
     protected double posX = 0;
@@ -10,7 +12,9 @@ public abstract class Entity {
     protected int dx;
     protected int dy;
     protected int deacc;
-
+    public Entity (TileMap tileMap){
+        this.tileMap = tileMap;
+    }
 
     public abstract void render(GraphicsContext graphicsContext);
     public abstract void tick();

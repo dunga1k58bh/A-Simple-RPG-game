@@ -5,3 +5,9 @@ bin/application/Main.class
 bin/state/MenuState.class
 bin/tilemap/TileMap.class
 *.class
+bin/entity/Entity.class
+bin/entity/Player$1.class
+bin/entity/Player.class
+bin/state/map/Map1.class
+bin/state/PlayState.class
+bin/tilemap/TileMap.class

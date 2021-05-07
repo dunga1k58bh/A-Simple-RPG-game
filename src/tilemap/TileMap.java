@@ -41,7 +41,7 @@ public class TileMap {
         this.tileSize = tileSize;
        colDraw = Main.width/tileSize +2;
        rowDraw = Main.height/tileSize +2;
-       camSpeed = 0.8;
+       camSpeed = 0.05;
     }
     //Lay tileSet (la 1 Image)
     public void loadTileSet (String s){
@@ -75,6 +75,15 @@ public class TileMap {
     public int getHeight() {
         return height;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
     public int getType(int row, int col){
         int rc = map[row][col];
         int r= rc/tilesetCol;

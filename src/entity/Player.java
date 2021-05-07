@@ -3,6 +3,8 @@ package entity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import tilemap.Tile;
+import tilemap.TileMap;
 import utils.Key;
 
 import java.util.ArrayList;
@@ -25,7 +27,8 @@ public class Player extends Entity{
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private int lastRunningDirection = 0;
     private Key key= new Key();
-    public Player() {
+    public Player(TileMap tileMap) {
+        super(tileMap);
         setPosX(500);
         setPosY(300);
 
@@ -44,8 +47,8 @@ public class Player extends Entity{
         lowerBody.add(4,new Image("char/Small28-resources.assets-5528.png"));
     }
 
-    public Player(int x, int y) {
-        this();
+    public Player(TileMap tileMap,int x, int y) {
+        this(tileMap);
         setPosX(x);
         setPosY(y);
     }
@@ -100,7 +103,10 @@ public class Player extends Entity{
     //private "default skin"
     @Override
     public void render(GraphicsContext graphicsContext) {
-
+        double tempPosX = posX;
+        double tempPosY = posY;
+        posX-=tileMap.getX();
+        posY-=tileMap.getY();
         //offset = 0;
         //animationStep ++;
 
@@ -169,6 +175,8 @@ public class Player extends Entity{
                 break;
             }
         }
+        posX= tempPosX;
+        posY = tempPosY;
     }
 
     private void drawWalkAnimation(int s) {

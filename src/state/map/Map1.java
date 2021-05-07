@@ -13,12 +13,15 @@ public class Map1 extends GameState {
     private Image bg= new Image("bg/bgMap1.png");
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private TileMap map1;
+    public final double playerStartingPosX = 11; //TODO
+    public final double playerStartingPosY = 11; //TODO
     public Map1(GameStateManager gsm){
         super(gsm);
-        player = new Player();
+
         map1 = new TileMap(48);
         map1.loadMap("res/Map/Map1.map");
         map1.loadTileSet("Map/TileSet.png");
+        player = new Player(map1);
         map1.setPos(0,0);
     }
     @Override
@@ -28,7 +31,7 @@ public class Map1 extends GameState {
 
     @Override
     public void tick() {
-        map1.setPos(0,0);
+        map1.setPos(player.getPosX()- Main.width/2,player.getPosY()-Main.height/2);
         map1.tick();
         player.tick();
     }

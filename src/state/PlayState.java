@@ -1,7 +1,9 @@
 package state;
 
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import state.map.Map1;
 
 public class PlayState extends GameState{
     public PlayState(GameStateManager gsm){
