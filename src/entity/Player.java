@@ -50,9 +50,47 @@ public class Player extends Entity{
         setPosY(y);
     }
 
+    public double getDx() {
+        double dx = 0;
+        if (key.up == 0) {
+            runningDirection = key.right - key.left;
+        }
+
+        if (runningDirection == 1) {
+            if (animationStep == -1) {
+                animationStep = 0;
+            }
+            lastRunningDirection = runningDirection;
+            currentVelocity = velocity;
+            dx = dt * Math.max(velocity,0);
+            count1++;
+            count2++;
+        } else if (runningDirection == -1) {
+            if (animationStep == -1) {
+                animationStep = 0;
+            }
+            lastRunningDirection = runningDirection;
+            currentVelocity = velocity;
+            dx = -dt * Math.max(velocity,0);
+            count1++;
+            count2++;
+        } else if (runningDirection == 0) {
+            currentVelocity -= acceleration*dt;
+            dx = lastRunningDirection * dt * Math.max(currentVelocity,0);
+            animationStep = -1;
+            count2++;
+        }
+        return dx;
+    }
+
+    public double getDy() {
+        return 0;
+    }
+
     @Override
     public void tick() {
         //tick
+        /*
         if (key.up == 0) {
             runningDirection = key.right - key.left;
         }
@@ -83,12 +121,15 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
+*/
 
+        //for the running animation
         if (count1 % 5 == 0 && count1!=0) {
             count1 = 0;
             animationStep ++;
         }
 
+        //for the head shaking animation
         if (count2 % 13 == 0 && count2!=0){
             count2 = 0;
             animationStep2 ++;
