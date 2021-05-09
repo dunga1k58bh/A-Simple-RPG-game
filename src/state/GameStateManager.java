@@ -18,7 +18,7 @@ public class GameStateManager {
          gameStates.add(new PlayState(this));//1
          gameStates.add(new LoadState(this));//2
          gameStates.add(new AboutState(this));//3
-         gameStates.add(new Map1(this));
+         //gameStates.add(new Map1(this));
 
          currentState = 1;
          

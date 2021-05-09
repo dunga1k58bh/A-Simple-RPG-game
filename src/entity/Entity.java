@@ -38,7 +38,7 @@ public abstract class Entity {
         return posX;
     }
 
-    public void setPosX(int posX) {
+    public void setPosX(double posX) {
         this.posX = posX;
     }
 
@@ -46,7 +46,7 @@ public abstract class Entity {
         return posY;
     }
 
-    public void setPosY(int posY) {
+    public void setPosY(double posY) {
         this.posY = posY;
     }
 }
