@@ -1,6 +1,7 @@
 package tilemap;
 
 import application.Main;
+import entity.Player;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,6 +18,10 @@ public class TileMap {
     //Pos : Vị trị bắt đầu vẽ 1 phần map(góc trên cùng bên trái)
     private double x; //SCREEN position(topleft corner) on VIRTUAL MAP
     private double y;
+
+    private Player player;
+    private double playerPosX;
+    private double playerPosY;
 
     private double xmin,ymin,xmax,ymax;
     //TileSet
@@ -42,6 +47,9 @@ public class TileMap {
        colDraw = Main.width/tileSize +2;
        rowDraw = Main.height/tileSize +2;
        camSpeed = 0.05;
+    }
+    public void setPlayer(Player player) {
+        this.player=player;
     }
     //Lay tileSet (la 1 Image)
     public void loadTileSet (String s){
@@ -167,5 +175,12 @@ public class TileMap {
                 g.drawImage(tiles[r][c].getImage(),(int)-x+col*tileSize,(int)-y+row*tileSize);
             }
         }
+    }
+
+    public double getCameraPosX() {
+        return x;
+    }
+    public double getCameraPosY() {
+        return y;
     }
 }
