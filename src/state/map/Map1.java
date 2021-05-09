@@ -15,19 +15,6 @@ public class Map1 extends GameState {
 
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
-<<<<<<< HEAD
-    private TileMap map1;
-    public final double playerStartingPosX = 11; //TODO
-    public final double playerStartingPosY = 11; //TODO
-    public Map1(GameStateManager gsm){
-        super(gsm);
-
-        map1 = new TileMap(48);
-        map1.loadMap("res/Map/Map1.map");
-        map1.loadTileSet("Map/TileSet.png");
-        player = new Player(map1);
-        map1.setPos(0,0);
-=======
 
     private TileMap tilemap1;
 
@@ -55,7 +42,6 @@ public class Map1 extends GameState {
         this.player = player;
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
->>>>>>> e82c43e5e0fb51e283c9e857b161b9e14f496988
     }
 
     @Override
@@ -64,16 +50,11 @@ public class Map1 extends GameState {
     }
     @Override
     public void tick() {
-<<<<<<< HEAD
-        map1.setPos(player.getPosX()- Main.width/2,player.getPosY()-Main.height/2);
-        map1.tick();
-=======
         playerPosX += player.getDx();
         //System.out.println(playerPosX);
         playerPosY += player.getDy();
         //System.out.println(playerPosY);
         tilemap1.tick();
->>>>>>> e82c43e5e0fb51e283c9e857b161b9e14f496988
         player.tick();
     }
 
