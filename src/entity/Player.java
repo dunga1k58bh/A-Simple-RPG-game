@@ -18,7 +18,14 @@ public class Player extends Entity{
     private int count1 = 0;
     private int count2 = 0;
     private int offset = 0;
+
+    //distance player will move IF ACCEPTED BY MAP
+    private double dx = 0;
+    private double dy = 0;
+
     private double dt = 1; //pseudo time between frames
+
+    //velocity of player when moving
     private double velocity = 5;
     private double currentVelocity = 0;
     private final double acceleration = 0.4; //TODO
@@ -50,8 +57,10 @@ public class Player extends Entity{
         setPosY(y);
     }
 
+    //calculate distance player will move next frame
+    //also activate animation (because whenever this function is called, player will move
     public double getDx() {
-        double dx = 0;
+        //double dx = 0;
         if (key.up == 0) {
             runningDirection = key.right - key.left;
         }
@@ -84,13 +93,22 @@ public class Player extends Entity{
     }
 
     public double getDy() {
-        return 0;
+        return dy;
     }
 
+    //this function is called whenever the map realize that it can not move along X axis
+    public void moveX() {
+        posX += dx;
+    }
+
+    //this function is called whenever the map realize that it can not move along X axis
+    public void moveY() {
+        posY += dy;
+    }
     @Override
     public void tick() {
         //tick
-//        /*
+       /*
         if (key.up == 0) {
             runningDirection = key.right - key.left;
         }
@@ -121,7 +139,7 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
-//*/
+*/
 
         //for the running animation
         if (count1 % 5 == 0 && count1!=0) {

@@ -41,12 +41,12 @@ public class TileMap {
     private double colDraw;
     private int rowBeginDraw;
     private int colBeginDraw;
-    private double camSpeed;
+    private final double camSpeed = 0.8;
     public TileMap(int tileSize) {
         this.tileSize = tileSize;
        colDraw = Main.width/tileSize +2;
        rowDraw = Main.height/tileSize +2;
-       camSpeed = 0.8;
+       //camSpeed = 0.8;
     }
     public void setPlayer(Player player) {
         this.player=player;
@@ -139,18 +139,39 @@ public class TileMap {
     public void tick() {
 
     }
+
+
     //Anchor point: top left of VIRTUAL map, not screen
-    public void setPos(double x, double y){
-        this.x +=(x-this.x)*camSpeed;
-        this.y +=(y-this.y)*camSpeed;
+    //return: binary value which has 8 bit. Pay attention to the last 2 bits:
+    //first bit is set to 1 if map cannot move along X
+    //second bit is set to 1 if map cannot move along Y
+    public int setPos(double x, double y){
+        byte thisIsReturnValue = 0b00000000;
+        this.x +=(x-this.x)*1;
+        this.y +=(y-this.y)*1;
         //Đoạn này để đảm bảo chỉ vẽ những thứ có trong map
-        if (this.x<xmin) this.x = xmin;
-        if (this.x>xmax) this.x = xmax;
-        if (this.y<ymin) this.y = ymin;
-        if (this.y>ymax) this.y = ymax;
+        if (this.x<xmin) {
+            this.x = xmin;
+            thisIsReturnValue |= 0b00000010;
+        }
+        if (this.x>xmax) {
+            this.x = xmax;
+            thisIsReturnValue |= 0b00000010;
+        }
+        if (this.y<ymin) {
+            this.y = ymin;
+            thisIsReturnValue |= 0b00000001;
+        }
+        if (this.y>ymax) {
+            this.y = ymax;
+            thisIsReturnValue |= 0b00000001;
+        }
+
         //cột hàng bắt đầu vẽ
         colBeginDraw = (int)  this.x /tileSize;
         rowBeginDraw= (int)  this.y /tileSize;
+
+        return thisIsReturnValue;
     }
     
     public void draw(GraphicsContext g){

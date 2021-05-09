@@ -6,14 +6,17 @@ import javafx.scene.input.KeyEvent;
 import state.map.Map1;
 
 public class PlayState extends GameState{
+
+    //OVERALL DESCRIPTION:
     //Playstate owns unique player object and several maps obj. player obj will be passed to map obj for control
     private Player player = new Player();
     private Map1 map1 = new Map1(gsm);
 
     public PlayState(GameStateManager gsm){
         super(gsm);
-        map1.setPlayer(player); //pass player obj to map obj
+        map1.setPlayer(player); //pass player obj to map obj for control
     }
+
     @Override
     public void init() {
 

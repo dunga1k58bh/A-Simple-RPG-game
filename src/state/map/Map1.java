@@ -10,7 +10,12 @@ import state.GameStateManager;
 import tilemap.TileMap;
 
 public class Map1 extends GameState {
-    //this class own tile map obj and store a reference to player object which playstate owns
+
+    //OVERALL DESCRIPTION:
+    //this class owns tilemap obj and stores a reference to player object which playstate owns. Playstate will pass player obj to this class.
+    //this class also owns player's on-map cord
+    //this class owns camera position
+
     private Image bg= new Image("bg/bgMap1.png");
 
     //only reference
@@ -18,7 +23,7 @@ public class Map1 extends GameState {
 
     private TileMap tilemap1;
 
-    //starting position of player on map (On-map cord)
+    //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 300; //TODO
     public final double playerStartingPosY = 500; //TODO
 
@@ -26,9 +31,16 @@ public class Map1 extends GameState {
     private double playerPosX = playerStartingPosX;
     private double playerPosY = playerStartingPosY; // they are equal because camera is 0 0 on construction
 
-    //Camera position (On-map cord)
+    //Camera position (On-map coord)
     private double camPosX = 0;
     private double camPosY = 0;
+
+    //What should i comment? the names tell em'all ?
+    //Lol, kidding. These are the coordinate camera will move to BASED ON PLAYER POSITION!
+    private double newCamPosX = 0;
+    private double newCamPosY = 0;
+
+    private final double camSpeed = 0.8;
 
     public Map1(GameStateManager gsm){
         super(gsm);
@@ -54,6 +66,17 @@ public class Map1 extends GameState {
         //System.out.println(playerPosX);
         playerPosY += player.getDy();
         //System.out.println(playerPosY);
+        newCamPosX = playerPosX - Main.width*1/3;
+        newCamPosY = playerPosY - Main.height*2/3;
+        camPosX += (newCamPosX - camPosX)*camSpeed;
+        camPosY += (newCamPosY - camPosY)*camSpeed;
+        int result = tilemap1.setPos(camPosX,camPosY);
+        if ((result & 0b00000010) == 0b00000010) { //map cannot move along X
+            player.moveX();
+        }
+        if ((result & 0b00000001) == 0b00000001) { //map cannot move along Y
+            player.moveY();
+        }
         tilemap1.tick();
         player.tick();
     }
