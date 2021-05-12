@@ -25,11 +25,11 @@ public class Map1 extends GameState {
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 300; //TODO
-    public final double playerStartingPosY = 500; //TODO
+    public final double playerStartingPosY = 100; //TODO
 
-    //player's on-map position
-    private double playerPosX = playerStartingPosX;
-    private double playerPosY = playerStartingPosY; // they are equal because camera is 0 0 on construction
+//    //player's on-map position
+//    private double playerPosX = playerStartingPosX;
+//    private double playerPosY = playerStartingPosY; // they are equal because camera is 0 0 on construction
 
     //Camera position (On-map coord)
     private double camPosX = 0;
@@ -45,8 +45,8 @@ public class Map1 extends GameState {
     public Map1(GameStateManager gsm){
         super(gsm);
         tilemap1 = new TileMap(48);
-        tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.loadTileSet("Map/TileSet.png");
+        tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.setPos(camPosX,camPosY);
     }
 
@@ -54,6 +54,8 @@ public class Map1 extends GameState {
         this.player = player;
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
+        //Vứt TileMap cho player
+        player.setTileMap(tilemap1);
     }
 
     @Override
@@ -62,21 +64,21 @@ public class Map1 extends GameState {
     }
     @Override
     public void tick() {
-        playerPosX += player.getDx();
-        //System.out.println(playerPosX);
-        playerPosY += player.getDy();
-        //System.out.println(playerPosY);
-        newCamPosX = playerPosX - Main.width*1/3;
-        newCamPosY = playerPosY - Main.height*2/3;
+//        playerPosX += player.getDx();
+//        playerPosY += player.getDy();
+        //Lấy luôn posX luôn vì đã cho 2 cái giống nhau rồi
+        newCamPosX = player.getPosX() - Main.width*1/3;
+        newCamPosY = player.getPosY() - Main.height*2/3;
         camPosX += (newCamPosX - camPosX)*camSpeed;
         camPosY += (newCamPosY - camPosY)*camSpeed;
-        int result = tilemap1.setPos(camPosX,camPosY);
-        if ((result & 0b00000010) == 0b00000010) { //map cannot move along X
-            player.moveX();
-        }
-        if ((result & 0b00000001) == 0b00000001) { //map cannot move along Y
-            player.moveY();
-        }
+        //Đoạn này Player chỉ cần di chuyển thôi Map tự biết lúc nào dừng
+        tilemap1.setPos(camPosX,camPosY);
+//        if ((result & 0b00000010) == 0b00000010) { //map cannot move along X
+//            player.moveX();
+//        }
+//        if ((result & 0b00000001) == 0b00000001) { //map cannot move along Y
+//            player.moveY();
+//        }
         tilemap1.tick();
         player.tick();
     }

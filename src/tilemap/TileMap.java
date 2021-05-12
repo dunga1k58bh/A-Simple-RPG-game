@@ -19,9 +19,6 @@ public class TileMap {
     private double x; //SCREEN position(topleft corner) on VIRTUAL MAP
     private double y;
 
-    private Player player;
-    private double playerPosX;
-    private double playerPosY;
 
     private double xmin,ymin,xmax,ymax;
     //TileSet
@@ -48,9 +45,6 @@ public class TileMap {
        rowDraw = Main.height/tileSize +2;
        //camSpeed = 0.8;
     }
-    public void setPlayer(Player player) {
-        this.player=player;
-    }
     //Lay tileSet (la 1 Image)
     public void loadTileSet (String s){
         tileset = new Image(s);
@@ -66,6 +60,7 @@ public class TileMap {
             }
         }
         for (int i = 1;i<=6;i++) tiles[0][i].setType(Tile.BlOCKDOWN);
+        for (int i = 7;i<=9;i++) tiles[0][i].setType(Tile.BLOCK);
         for (int i= 10;i<15;i++) tiles[0][i].setType(Tile.BlOCKDOWN);
         tiles[1][1].setType(Tile.DEAD);
         tiles[1][3].setType(Tile.BLOCK);
@@ -112,7 +107,7 @@ public class TileMap {
                 String[] tokens = line.split(del);
                 for (int col = 0 ; col < mapCol;col ++){
                     map[row][col] = Integer.parseInt(tokens[col]);
-                    System.out.print(map[row][col]+" ");
+                    System.out.print(map[row][col]+"("+getType(row,col)+") ");
                 }
                 System.out.println();
             }
@@ -145,33 +140,27 @@ public class TileMap {
     //return: binary value which has 8 bit. Pay attention to the last 2 bits:
     //first bit is set to 1 if map cannot move along X
     //second bit is set to 1 if map cannot move along Y
-    public int setPos(double x, double y){
-        byte thisIsReturnValue = 0b00000000;
+    public void setPos(double x, double y){
         this.x +=(x-this.x)*1;
         this.y +=(y-this.y)*1;
         //Đoạn này để đảm bảo chỉ vẽ những thứ có trong map
         if (this.x<xmin) {
             this.x = xmin;
-            thisIsReturnValue |= 0b00000010;
         }
         if (this.x>xmax) {
             this.x = xmax;
-            thisIsReturnValue |= 0b00000010;
         }
         if (this.y<ymin) {
             this.y = ymin;
-            thisIsReturnValue |= 0b00000001;
         }
         if (this.y>ymax) {
             this.y = ymax;
-            thisIsReturnValue |= 0b00000001;
         }
 
         //cột hàng bắt đầu vẽ
         colBeginDraw = (int)  this.x /tileSize;
         rowBeginDraw= (int)  this.y /tileSize;
 
-        return thisIsReturnValue;
     }
     
     public void draw(GraphicsContext g){

@@ -19,10 +19,6 @@ public class Player extends Entity{
     private int count2 = 0;
     private int offset = 0;
 
-    //distance player will move IF ACCEPTED BY MAP
-    private double dx = 0;
-    private double dy = 0;
-
     private double dt = 1; //pseudo time between frames
 
     //velocity of player when moving
@@ -35,7 +31,7 @@ public class Player extends Entity{
     public Player() {
         setPosX(500);
         setPosY(300);
-
+        setEntityBoxSize(48,60);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi)
         //add default texture
         head.add(0,new Image("char/Small32-resources.assets-4440.png"));
         head.add(1,new Image("char/Small33-resources.assets-14326.png"));
@@ -59,56 +55,56 @@ public class Player extends Entity{
 
     //calculate distance player will move next frame
     //also activate animation (because whenever this function is called, player will move
-    public double getDx() {
-        //double dx = 0;
-        if (key.up == 0) {
-            runningDirection = key.right - key.left;
-        }
+//    public double getDx() {
+//        //double dx = 0;
+//        if (key.up == 0) {
+//            runningDirection = key.right - key.left;
+//        }
+//
+//        if (runningDirection == 1) {
+//            if (animationStep == -1) {
+//                animationStep = 0;
+//            }
+//            lastRunningDirection = runningDirection;
+//            currentVelocity = velocity;
+//            dx = dt * Math.max(velocity,0);
+//            count1++;
+//            count2++;
+//        } else if (runningDirection == -1) {
+//            if (animationStep == -1) {
+//                animationStep = 0;
+//            }
+//            lastRunningDirection = runningDirection;
+//            currentVelocity = velocity;
+//            dx = -dt * Math.max(velocity,0);
+//            count1++;
+//            count2++;
+//        } else if (runningDirection == 0) {
+//            currentVelocity -= acceleration*dt;
+//            dx = lastRunningDirection * dt * Math.max(currentVelocity,0);
+//            animationStep = -1;
+//            count2++;
+//        }
+//        return dx;
+//    }
 
-        if (runningDirection == 1) {
-            if (animationStep == -1) {
-                animationStep = 0;
-            }
-            lastRunningDirection = runningDirection;
-            currentVelocity = velocity;
-            dx = dt * Math.max(velocity,0);
-            count1++;
-            count2++;
-        } else if (runningDirection == -1) {
-            if (animationStep == -1) {
-                animationStep = 0;
-            }
-            lastRunningDirection = runningDirection;
-            currentVelocity = velocity;
-            dx = -dt * Math.max(velocity,0);
-            count1++;
-            count2++;
-        } else if (runningDirection == 0) {
-            currentVelocity -= acceleration*dt;
-            dx = lastRunningDirection * dt * Math.max(currentVelocity,0);
-            animationStep = -1;
-            count2++;
-        }
-        return dx;
-    }
-
-    public double getDy() {
-        return dy;
-    }
-
-    //this function is called whenever the map realize that it can not move along X axis
-    public void moveX() {
-        posX += dx;
-    }
-
-    //this function is called whenever the map realize that it can not move along X axis
-    public void moveY() {
-        posY += dy;
-    }
+//    public double getDy() {
+//        return dy;
+//    }
+//
+//    //this function is called whenever the map realize that it can not move along X axis
+//    public void moveX() {
+//        posX += dx;
+//    }
+//
+//    //this function is called whenever the map realize that it can not move along X axis
+//    public void moveY() {
+//        posY += dy;
+//    }
     @Override
     public void tick() {
         //tick
-       /*
+        //E muốn tính dx,dy xong xuôi rồi checkCollision sau đó update posX,posY;
         if (key.up == 0) {
             runningDirection = key.right - key.left;
         }
@@ -119,7 +115,7 @@ public class Player extends Entity{
             }
             lastRunningDirection = runningDirection;
             currentVelocity = velocity;
-            posX += dt * Math.max(velocity,0);
+            dx= dt * Math.max(velocity,0);
             count1++;
             count2++;
         } else if (runningDirection == -1) {
@@ -128,18 +124,22 @@ public class Player extends Entity{
             }
             lastRunningDirection = runningDirection;
             currentVelocity = velocity;
-            posX -= dt * Math.max(velocity,0);
+            dx =- dt * Math.max(velocity,0);
             count1++;
             count2++;
         }
 
         else if (runningDirection == 0) {
             currentVelocity -= acceleration*dt;
-            posX += lastRunningDirection * dt * Math.max(currentVelocity,0);
+            dx = lastRunningDirection * dt * Math.max(currentVelocity,0);
             animationStep = -1;
             count2++;
         }
-*/
+        dy = 5 ;//Test tự rơi
+        CheckTileMapCollision();
+        posX+=dx;
+        posY+=dy;
+
 
         //for the running animation
         if (count1 % 5 == 0 && count1!=0) {
@@ -159,6 +159,12 @@ public class Player extends Entity{
     //private "default skin"
     @Override
     public void render(GraphicsContext graphicsContext) {
+        //Đoạn này hiểu đơn giản chỉ cần lấy pos Draw như bên dưới thì nó sẽ nằm trong màn hình
+        double posXTemp = posX;
+        double posYTemp = posY;
+        posX = posX - tileMap.getCameraPosX();
+        posY = posY - tileMap.getCameraPosY();
+
 
         //offset = 0;
         //animationStep ++;
@@ -228,6 +234,8 @@ public class Player extends Entity{
                 break;
             }
         }
+        posX = posXTemp;
+        posY = posYTemp;
     }
 
     private void drawWalkAnimation(int s) {

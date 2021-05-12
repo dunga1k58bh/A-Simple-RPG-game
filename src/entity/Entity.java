@@ -1,15 +1,31 @@
 package entity;
 
 import javafx.scene.canvas.GraphicsContext;
+import tilemap.Tile;
+import tilemap.TileMap;
 
 public abstract class Entity {
     protected int HP;
     protected int MP;
     protected double posX = 0;
     protected double posY = 0;
-    protected int dx;
-    protected int dy;
+    protected double dx;
+    protected double dy;
     protected int deacc;
+
+    //TileMap
+    protected TileMap tileMap;
+    protected int tileSize;
+
+    //Entity box (Hiểu đơn giản là kích cỡ hcn bao quanh Entity)
+    protected int cheight;
+    protected int cwidth;
+    //Check TileMap Collision (Loại Tile )4 góc Hcn
+
+    protected int TopLeft;
+    protected int TopRight;
+    protected int BottomLeft;
+    protected int BottomRight;
 
 
     public abstract void render(GraphicsContext graphicsContext);
@@ -45,4 +61,61 @@ public abstract class Entity {
     public void setPosY(double posY) {
         this.posY = posY;
     }
+    public void setTileMap(TileMap tileMap){
+        this.tileMap = tileMap;
+        this.tileSize = tileMap.getTileSize();
+    }
+    public void setEntityBoxSize(int cwidth, int cheight){
+        this.cwidth = cwidth;
+        this.cheight = cheight;
+    }
+    //Hàm tính loại Tile mà 4 góc HCN của Entity đang ở khi Entity ở tọa độ x,y
+    public void CaculateCorrners(double x, double y){
+        int LeftCol = (int)(x-cwidth/2)/tileSize;
+        int RightCol = (int) (x+cwidth/2)/tileSize;
+        int TopRow = (int) (y-cheight)/tileSize;
+        int BottomRow = (int)(y/tileSize);
+
+        TopLeft = tileMap.getType(TopRow,LeftCol); //Hàm này trả về loại Tile
+        TopRight = tileMap.getType(TopRow,RightCol);
+        BottomLeft = tileMap.getType(BottomRow,LeftCol);
+        BottomRight = tileMap.getType(BottomRow,RightCol);
+    }
+    //Ý tưởng thì khá đơn giản : Tính 4 góc của hcn bao quanh nhân vật, xem 4 góc đó đang nằm ở Tile loại nào?
+    //(trạng thái (posX+dx,posY+dy) tức là trạng thái sau (xem có cho phép không)) và tìm cách xử lý phù hợp
+    public void CheckTileMapCollision(){
+        double currCol = (int)posX/tileSize;
+        double currRow = (int)posY/tileSize;
+
+        if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
+        if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
+        CaculateCorrners(posX+dx,posY+dy);
+//        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
+        //Sau đây là 4 trường hợp chính
+        if (dy>0){
+            if (BottomRight == Tile.BlOCKDOWN||BottomLeft == Tile.BlOCKDOWN){
+                dy = 0;
+                posY = (currRow+1)*tileSize-1;
+            }
+        }
+        if(dy<0){
+            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
+                dy = 0;
+                posY =(currRow)*tileSize +cheight+1;
+            }
+        }
+        if (dx>0){
+            if (TopRight == Tile.BLOCK || BottomRight == Tile.BLOCK ){
+                dx = 0;
+                posX = (currCol+1)*tileSize - cwidth/2-1;
+            }
+        }
+        if (dx<0){
+            if (TopLeft == Tile.BLOCK || BottomLeft == Tile.BLOCK){
+                dx=0;
+                posX = currCol*tileSize +cwidth/2+1;
+            }
+        }
+    }
+
 }
