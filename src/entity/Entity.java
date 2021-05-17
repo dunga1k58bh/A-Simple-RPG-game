@@ -89,28 +89,31 @@ public abstract class Entity {
 
         if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
         if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
-        CaculateCorrners(posX+dx,posY+dy);
-//        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
+
+
+        CaculateCorrners(posX,posY+dy);
+        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
-        if (dy>0){
-            if (BottomRight == Tile.BlOCKDOWN||BottomLeft == Tile.BlOCKDOWN){
+        if (dy>0){//rơi xuống
+            if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
                 dy = 0;
                 posY = (currRow+1)*tileSize-1;
             }
         }
-        if(dy<0){
+        if(dy<0){ //Bay lên
             if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
                 dy = 0;
                 posY =(currRow)*tileSize +cheight+1;
             }
         }
-        if (dx>0){
+        CaculateCorrners(posX+dx,posY);
+        if (dx>0){ //Sang trái
             if (TopRight == Tile.BLOCK || BottomRight == Tile.BLOCK ){
                 dx = 0;
                 posX = (currCol+1)*tileSize - cwidth/2-1;
             }
         }
-        if (dx<0){
+        if (dx<0){//Sang Phải
             if (TopLeft == Tile.BLOCK || BottomLeft == Tile.BLOCK){
                 dx=0;
                 posX = currCol*tileSize +cwidth/2+1;

@@ -56,15 +56,11 @@ public class TileMap {
         for (int i = 0;i<tilesetRow;i++) {
             for (int j = 0; j < tilesetCol; j++) {
                 temp = getCropImage(tileset, j * tileSize, i * tileSize, tileSize, tileSize);
-                tiles[i][j] = new Tile(temp, 0);
+                tiles[i][j] = new Tile(temp, Tile.ALLOW);
             }
         }
-        for (int i = 1;i<=6;i++) tiles[0][i].setType(Tile.BlOCKDOWN);
-        for (int i = 7;i<=9;i++) tiles[0][i].setType(Tile.BLOCK);
-        for (int i= 10;i<15;i++) tiles[0][i].setType(Tile.BlOCKDOWN);
-        tiles[1][1].setType(Tile.DEAD);
-        tiles[1][3].setType(Tile.BLOCK);
-        tiles[1][4].setType(Tile.BLOCK);
+        for (int i = 1;i<=21;i++) tiles[0][i].setType(Tile.BLOCK);
+        tiles[1][2].setType(Tile.DEAD);
     }
 
     public int getTileSize() {
@@ -100,7 +96,7 @@ public class TileMap {
             xmax = width - Main.width;
             ymin = 0;
             ymax = height - Main.height;
-            String del ="\s+";
+            String del =",";
             for (int row =0;row <mapRow;row ++){
                 String line = br.readLine();
                 if (line == null) break;

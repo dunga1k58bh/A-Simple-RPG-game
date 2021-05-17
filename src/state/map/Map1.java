@@ -25,7 +25,7 @@ public class Map1 extends GameState {
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 300; //TODO
-    public final double playerStartingPosY = 100; //TODO
+    public final double playerStartingPosY = 600; //TODO
 
 //    //player's on-map position
 //    private double playerPosX = playerStartingPosX;
