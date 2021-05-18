@@ -1,0 +1,11 @@
+/out/
+/bin/
+/.idea/
+bin/application/Main.class
+bin/state/MenuState.class
+bin/tilemap/TileMap.class
+*.class
+RPG game.iml
+*.class
+*.iml
+RPG game.iml
