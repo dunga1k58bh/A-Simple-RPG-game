@@ -1,7 +1,11 @@
 package state.map;
 
+import java.util.ArrayList;
 import application.Main;
+import entity.Enemy;
 import entity.Player;
+import entity.enemies.Snail;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -20,7 +24,7 @@ public class Map1 extends GameState {
 
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
-
+    private ArrayList<Enemy> enemies;
     private TileMap tilemap1;
 
     //starting position of player on map (On-map coord)
@@ -48,15 +52,34 @@ public class Map1 extends GameState {
         tilemap1.loadTileSet("Map/TileSet.png");
         tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.setPos(camPosX,camPosY);
+        generateEnemies();
     }
 
     public void setPlayer(Player player) {
         this.player = player;
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
-        //Vứt TileMap cho player
+        //Vá»©t TileMap cho player
         player.setTileMap(tilemap1);
     }
+    
+	private void generateEnemies() {
+		enemies = new ArrayList<Enemy>();
+		Snail s;
+		Point2D[] points = new Point2D[] {
+			new Point2D(200, 100),
+			new Point2D(860, 200),
+			new Point2D(1525, 200),
+			new Point2D(1680, 200),
+			new Point2D(1800, 200)
+		};
+		for(int i = 0; i < points.length; i++) {
+			s = new Snail(tilemap1);
+			s.setPosition(points[i].getX(), points[i].getY());
+			enemies.add(s);
+		}
+		
+	}
 
     @Override
     public void init() {
@@ -66,12 +89,12 @@ public class Map1 extends GameState {
     public void tick() {
 //        playerPosX += player.getDx();
 //        playerPosY += player.getDy();
-        //Lấy luôn posX luôn vì đã cho 2 cái giống nhau rồi
+        //Láº¥y luÃ´n posX luÃ´n vÃ¬ Ä‘Ã£ cho 2 cÃ¡i giá»‘ng nhau rá»“i
         newCamPosX = player.getPosX() - Main.width*1/3;
         newCamPosY = player.getPosY() - Main.height*2/3;
         camPosX += (newCamPosX - camPosX)*camSpeed;
         camPosY += (newCamPosY - camPosY)*camSpeed;
-        //Đoạn này Player chỉ cần di chuyển thôi Map tự biết lúc nào dừng
+        //Ä�oáº¡n nÃ y Player chá»‰ cáº§n di chuyá»ƒn thÃ´i Map tá»± biáº¿t lÃºc nÃ o dá»«ng
         tilemap1.setPos(camPosX,camPosY);
 //        if ((result & 0b00000010) == 0b00000010) { //map cannot move along X
 //            player.moveX();
@@ -81,6 +104,14 @@ public class Map1 extends GameState {
 //        }
         tilemap1.tick();
         player.tick();
+		for(int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			e.tick();
+			if(e.isDead()) {
+				enemies.remove(i);
+				i--;
+			}
+		}
     }
 
     @Override
@@ -88,6 +119,9 @@ public class Map1 extends GameState {
         g.drawImage(bg,0,0, Main.width, Main.height);
         tilemap1.draw(g);
         player.render(g);
+		for(int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).render(g);
+		}
     }
 
     @Override
