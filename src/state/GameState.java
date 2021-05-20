@@ -7,7 +7,7 @@ import javafx.scene.input.KeyEvent;
 
 
 
-// tao lop triu tuong GameState , ve sau moi state se la mot Parent(chua nhieu node) trong Scene graph
+// tao lop triu tuong GameState
 public abstract class GameState {        
 	@SuppressWarnings("unused")
 	protected GameStateManager gsm;

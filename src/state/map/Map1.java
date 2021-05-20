@@ -28,8 +28,8 @@ public class Map1 extends GameState {
     private TileMap tilemap1;
 
     //starting position of player on map (On-map coord)
-    public final double playerStartingPosX = 300; //TODO
-    public final double playerStartingPosY = 600; //TODO
+    public final double playerStartingPosX = 200; //TODO
+    public final double playerStartingPosY = 100; //TODO
 
 //    //player's on-map position
 //    private double playerPosX = playerStartingPosX;
@@ -131,6 +131,7 @@ public class Map1 extends GameState {
 
     @Override
     public void keyTyped(KeyEvent k) {
+//
         player.keyIn(k);
     }
 

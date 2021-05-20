@@ -76,9 +76,9 @@ public class Snail extends Enemy{
 	public void tick() {
 		// update position
 		getNextPosition();
-		checkTileMapCollision();
-		setPosition(xtemp, ytemp);
-		
+		CheckTileMapCollision();
+		posX+=dx;
+		posY+=dy;
 		// check flinching
 		if(flinching) {
 			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
@@ -100,11 +100,9 @@ public class Snail extends Enemy{
 		// update animation
 		animation.update();
 	}
-	
+	@Override
 	public void render(GraphicsContext graphicsContext) {
 		if(notOnScreen()) return;
-		setMapPosition();
 		super.render(graphicsContext);
-
 	}
 }

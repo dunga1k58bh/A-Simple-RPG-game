@@ -32,8 +32,6 @@
     <orderEntry type="library" name="javafx.base" level="application" />
     <orderEntry type="library" name="javafx-swt" level="application" />
     <orderEntry type="library" name="java" level="project" />
-    <orderEntry type="library" name="TiledReader" level="project" />
-    <orderEntry type="library" exported="" name="libtiled-1.2.3" level="project" />
     <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>

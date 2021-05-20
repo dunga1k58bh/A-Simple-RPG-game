@@ -11,7 +11,7 @@ public abstract class Entity {
     protected double posY = 0;
     protected double dx;
     protected double dy;
-    protected int deacc;
+    protected  boolean falling;
 
     //TileMap
     protected TileMap tileMap;
@@ -30,6 +30,8 @@ public abstract class Entity {
 
     public abstract void render(GraphicsContext graphicsContext);
     public abstract void tick();
+
+
     public int getHP() {
         return HP;
     }
@@ -86,7 +88,7 @@ public abstract class Entity {
     public void CheckTileMapCollision(){
         double currCol = (int)posX/tileSize;
         double currRow = (int)posY/tileSize;
-
+        falling = true;
         if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
         if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
 
@@ -105,6 +107,7 @@ public abstract class Entity {
                 dy = 0;
                 posY =(currRow)*tileSize +cheight+1;
             }
+            falling = false;
         }
         CaculateCorrners(posX+dx,posY);
         if (dx>0){ //Sang trái

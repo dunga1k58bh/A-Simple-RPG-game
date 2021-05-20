@@ -6,7 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import tilemap.Tile;
 import tilemap.TileMap;
 
-public class Enemy extends Entity{
+public abstract class Enemy extends Entity{
 
 	protected int HP;
 	protected int maxHP;
@@ -14,38 +14,10 @@ public class Enemy extends Entity{
 	protected int damage;
 	protected boolean flinching;
 	protected long flinchTimer;
-	
-	// tile stuff
-	protected TileMap tileMap;
-	protected int tileSize;
-	protected double xmap;
-	protected double ymap;
-	
-	// position and vector
-	protected double posX;
-	protected double posY;
-	protected double dx;
-	protected double dy;
-	
+
 	// dimensions
 	protected int width;
 	protected int height;
-	
-	// collision box
-	protected int cwidth;
-	protected int cheight;
-	
-	// collision
-	protected int curRow;
-	protected int curCol;
-	protected double xdest;
-	protected double ydest;
-	protected double xtemp;
-	protected double ytemp;
-	protected boolean topLeft;
-	protected boolean topRight;
-	protected boolean bottomLeft;
-	protected boolean bottomRight;
 	
 	// animation
 	protected Animation animation;
@@ -59,7 +31,6 @@ public class Enemy extends Entity{
 	protected boolean up;
 	protected boolean down;
 	protected boolean jumping;
-	protected boolean falling;
 	
 	// movement attributes
 	protected double moveSpeed;
@@ -72,6 +43,7 @@ public class Enemy extends Entity{
 	
 	// constructor
 	public Enemy(TileMap tm) {
+		super();
 		tileMap = tm;
 		tileSize = tm.getTileSize(); 
 	}
@@ -96,10 +68,7 @@ public class Enemy extends Entity{
 		this.dx = dx;
 		this.dy = dy;
 	}
-	public void setMapPosition() {
-		xmap = tileMap.getCameraPosX();
-		ymap = tileMap.getCameraPosY();
-	}
+
 	
 	
 	public boolean intersects(Enemy e) {
@@ -111,87 +80,13 @@ public class Enemy extends Entity{
 	public Rectangle2D getRectangle() {
 		return new Rectangle2D((int)posX - cwidth, (int)posY - cheight, cwidth, cheight);
 	}
-	
-	public void calculateCorners(double x, double y) {
-		int leftTile = (int)(x - cwidth / 2) / tileSize;
-		int rightTile = (int)(x + cwidth / 2 - 1) / tileSize;
-		int topTile = (int)(y - cheight / 2) / tileSize;
-		int bottomTile = (int)(y + cheight / 2 - 1) / tileSize;
-		
-		int tl = tileMap.getType(topTile, leftTile);
-		int tr = tileMap.getType(topTile, rightTile);
-		int bl = tileMap.getType(bottomTile, leftTile);
-		int br = tileMap.getType(bottomTile, rightTile);
-		
-		topLeft = tl == Tile.BLOCK;
-		topRight = tr == Tile.BLOCK;
-		bottomLeft = bl == Tile.BLOCK;
-		bottomRight = br == Tile.BLOCK;
-	}
-	
-	public void checkTileMapCollision() {
-		curCol = (int)posX / tileSize;
-		curRow = (int)posY / tileSize;
-		xdest = posX + dx;
-		ydest = posY + dy;
-		xtemp = posX;
-		ytemp = posY;
-		
-		calculateCorners(posX, ydest);
-		if(dy < 0) {
-			if(topLeft || topRight) {
-				dy = 0;
-				ytemp = curRow * tileSize + cheight / 2;
-			}
-			else {
-				ytemp += dy;
-			}
-		}
-		if(dy > 0) {
-			if(bottomLeft || bottomRight) {
-				dy = 0;
-				falling = false;
-				ytemp = (curRow + 1) * tileSize - cheight / 2;
-			}
-			else {
-				ytemp += dy;
-			}
-		}
-		
-		calculateCorners(xdest, posY);
-		if(dx < 0) {
-			if(topLeft || bottomLeft) {
-				dx = 0;
-				xtemp = curCol * tileSize + cwidth / 2;
-			}
-			else {
-				xtemp += dx;
-			}
-		}
-		if(dx > 0) {
-			if(topRight || bottomRight) {
-				dx = 0;
-				xtemp = (curCol + 1) * tileSize - cwidth / 2;
-			}
-			else {
-				xtemp += dx;
-			}
-		}
-		
-		if(!falling) {
-			calculateCorners(posX, ydest + 1);
-			if(!bottomLeft && !bottomRight) {
-				falling = true;
-			}
-		}
-	}
-	
+
 	
 	public boolean notOnScreen() {
-		return posX + xmap + width < 0 ||
-			posX + xmap - width > Main.width ||
-			posY + ymap + height < 0 ||
-			posY + ymap - height > Main.height;
+		return posX - tileMap.getCameraPosX() + width > Main.width ||
+			posX - tileMap.getCameraPosX() - width < 0 ||
+			posY - tileMap.getCameraPosY() + height < 0 ||
+			posY - tileMap.getCameraPosY() - height > Main.height;
 	}
 	
 	public void getHit(int damage) {
@@ -203,22 +98,20 @@ public class Enemy extends Entity{
 		flinchTimer = System.nanoTime();
 	}
 	
-	@Override
+    @Override
 	public void render(GraphicsContext graphicsContext) {
 		if(facingRight) {
 			graphicsContext.drawImage(
 				animation.getImage(),
-				(int)(posX + xmap - width / 2), (int)(posY + ymap - height / 2));
+				(int)(posX -tileMap.getCameraPosX()- width / 2), (int)(posY + tileMap.getCameraPosY() - height / 2));
 		}
 		else {
 			graphicsContext.drawImage(
 				animation.getImage(),
-				(int)(posX + xmap - width / 2 + width),
-				(int)(posY + ymap - height / 2),
+				(int)(posX -tileMap.getCameraPosX() - width / 2 + width),
+				(int)(posY -tileMap.getCameraPosY()- height / 2),
 				-width,height);
 		}
 	}
 
-	@Override
-	public void tick() {}
 }
