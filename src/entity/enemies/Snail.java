@@ -24,9 +24,9 @@ public class Snail extends Enemy{
 		HP = maxHP = 3;
 		damage = 1;
 		
-		width = 30;
-		height = 30;
-	    setEntityBoxSize(30,30);
+		width = 60;
+		height = 60;
+	    setEntityBoxSize(60,60);
 		
 		// load sprites
 		try {

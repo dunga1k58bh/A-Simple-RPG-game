@@ -99,7 +99,7 @@ public class Map1 extends GameState {
         tilemap1.draw(g);
         player.render(g);
 		for(int i = 0; i < enemies.size(); i++) {
-		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
+//		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
 			enemies.get(i).render(g);
 		}
     }
