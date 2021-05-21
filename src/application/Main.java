@@ -101,14 +101,13 @@ public class Main extends Application {
 		}
 		tick();
 		draw();
-
 	}
 	public void tick() {
 		gsm.tick();
 	}
 	public void draw() {
 		g.clearRect(0, 0, width, height);
-		gsm.draw(g);
+		gsm.render(g);
 	}
 	
 	

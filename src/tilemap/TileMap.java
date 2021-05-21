@@ -34,15 +34,15 @@ public class TileMap {
     private int mapRow;
     private int mapCol;
     //For draw
-    private double rowDraw;
-    private double colDraw;
+    private int rowDraw;
+    private int colDraw;
     private int rowBeginDraw;
     private int colBeginDraw;
     private final double camSpeed = 0.8;
     public TileMap(int tileSize) {
         this.tileSize = tileSize;
-       colDraw = Main.width/tileSize +2;
-       rowDraw = Main.height/tileSize +2;
+       colDraw = (int)Main.width/tileSize +2;
+       rowDraw = (int)Main.height/tileSize +2;
        //camSpeed = 0.8;
     }
     //Lay tileSet (la 1 Image)

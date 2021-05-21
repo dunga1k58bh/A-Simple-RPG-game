@@ -18,7 +18,7 @@ public class Snail extends Enemy{
 		super(tm);
 		
 		moveSpeed = 0.3;
-		maxSpeed = 0.3;
+		maxSpeed = 1;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
 		HP = maxHP = 3;
@@ -26,8 +26,7 @@ public class Snail extends Enemy{
 		
 		width = 30;
 		height = 30;
-		cwidth = 20;
-		cheight = 20;
+	    setEntityBoxSize(30,30);
 		
 		// load sprites
 		try {
@@ -71,14 +70,16 @@ public class Snail extends Enemy{
 		
 		// falling
 		if(falling) dy += fallSpeed;
+
 	}
 	
 	public void tick() {
 		// update position
+		falling = true;
 		getNextPosition();
 		CheckTileMapCollision();
-		posX+=dx;
-		posY+=dy;
+		posX += dx;
+		posY += dy;
 		// check flinching
 		if(flinching) {
 			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
@@ -86,12 +87,12 @@ public class Snail extends Enemy{
 		}
 		
 		// if it hits a wall, go other direction
-		if(right && dx == 0) {
+		if((right && dx == 0)||posX - posXBegin > 100) {
 			right = false;
 			left = true;
 			facingRight = false;
 		}
-		else if(left && dx == 0) {
+		else if((left && dx == 0)||posX - posXBegin < -100){
 			right = true;
 			left = false;
 			facingRight = true;
@@ -102,6 +103,7 @@ public class Snail extends Enemy{
 	}
 	@Override
 	public void render(GraphicsContext graphicsContext) {
+		setMapPosittion();
 		if(notOnScreen()) return;
 		super.render(graphicsContext);
 	}

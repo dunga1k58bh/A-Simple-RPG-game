@@ -8,12 +8,15 @@ import tilemap.TileMap;
 
 public abstract class Enemy extends Entity{
 
+	protected  double posXBegin;
+	protected  double posYBegin;
 	protected int HP;
 	protected int maxHP;
 	protected boolean dead;
 	protected int damage;
 	protected boolean flinching;
 	protected long flinchTimer;
+
 
 	// dimensions
 	protected int width;
@@ -47,8 +50,8 @@ public abstract class Enemy extends Entity{
 		tileMap = tm;
 		tileSize = tm.getTileSize(); 
 	}
-	public int getx() { return (int)posX; }
-	public int gety() { return (int)posY; }
+	public double getx() { return (int)posX; }
+	public double gety() { return (int)posY; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 	public int getCWidth() { return cwidth; }
@@ -61,6 +64,8 @@ public abstract class Enemy extends Entity{
 	public boolean isDead() { return dead; }
 	public int getDamage() { return damage; }
 	public void setPosition(double x, double y) {
+		posXBegin = x;
+		posYBegin = y;
 		this.posX = x;
 		this.posY = y;
 	}
@@ -68,7 +73,10 @@ public abstract class Enemy extends Entity{
 		this.dx = dx;
 		this.dy = dy;
 	}
-
+    public void setMapPosittion(){
+		xmap = tileMap.getCameraPosX();
+		ymap = tileMap.getCameraPosY();
+	}
 	
 	
 	public boolean intersects(Enemy e) {
@@ -83,10 +91,10 @@ public abstract class Enemy extends Entity{
 
 	
 	public boolean notOnScreen() {
-		return posX - tileMap.getCameraPosX() + width > Main.width ||
-			posX - tileMap.getCameraPosX() - width < 0 ||
-			posY - tileMap.getCameraPosY() + height < 0 ||
-			posY - tileMap.getCameraPosY() - height > Main.height;
+		return posX - xmap- width > Main.width ||
+			posX - xmap + width < 0 ||
+			posY - ymap + height < 0 ||
+			posY - ymap - height > Main.height;
 	}
 	
 	public void getHit(int damage) {
@@ -102,15 +110,17 @@ public abstract class Enemy extends Entity{
 	public void render(GraphicsContext graphicsContext) {
 		if(facingRight) {
 			graphicsContext.drawImage(
-				animation.getImage(),
-				(int)(posX -tileMap.getCameraPosX()- width / 2), (int)(posY + tileMap.getCameraPosY() - height / 2));
+					animation.getImage(),
+					(posX -xmap- width / 2 ),
+					(posY -ymap- height ),
+					width,height);
 		}
 		else {
 			graphicsContext.drawImage(
 				animation.getImage(),
-				(int)(posX -tileMap.getCameraPosX() - width / 2 + width),
-				(int)(posY -tileMap.getCameraPosY()- height / 2),
-				-width,height);
+				(posX -xmap- width / 2 ),
+				(posY -ymap- height ),
+				width,height);
 		}
 	}
 

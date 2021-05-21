@@ -29,7 +29,7 @@ public class GameStateManager {
      public void tick() {
     	gameStates.get(currentState).tick();
      }
-     public void draw(GraphicsContext g) {
+     public void render(GraphicsContext g) {
     	 gameStates.get(currentState).render(g);
      }
      public void keyPressed( KeyEvent k) {

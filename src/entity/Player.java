@@ -53,54 +53,6 @@ public class Player extends Entity{
         setPosY(y);
     }
 
-    //calculate distance player will move next frame
-    //also activate animation (because whenever this function is called, player will move
-//    public double getDx() {
-//        //double dx = 0;
-//        if (key.up == 0) {
-//            runningDirection = key.right - key.left;
-//        }
-//
-//        if (runningDirection == 1) {
-//            if (animationStep == -1) {
-//                animationStep = 0;
-//            }
-//            lastRunningDirection = runningDirection;
-//            currentVelocity = velocity;
-//            dx = dt * Math.max(velocity,0);
-//            count1++;
-//            count2++;
-//        } else if (runningDirection == -1) {
-//            if (animationStep == -1) {
-//                animationStep = 0;
-//            }
-//            lastRunningDirection = runningDirection;
-//            currentVelocity = velocity;
-//            dx = -dt * Math.max(velocity,0);
-//            count1++;
-//            count2++;
-//        } else if (runningDirection == 0) {
-//            currentVelocity -= acceleration*dt;
-//            dx = lastRunningDirection * dt * Math.max(currentVelocity,0);
-//            animationStep = -1;
-//            count2++;
-//        }
-//        return dx;
-//    }
-
-//    public double getDy() {
-//        return dy;
-//    }
-//
-//    //this function is called whenever the map realize that it can not move along X axis
-//    public void moveX() {
-//        posX += dx;
-//    }
-//
-//    //this function is called whenever the map realize that it can not move along X axis
-//    public void moveY() {
-//        posY += dy;
-//    }
     @Override
     public void tick() {
         //tick

@@ -16,6 +16,8 @@ public abstract class Entity {
     //TileMap
     protected TileMap tileMap;
     protected int tileSize;
+    protected  double xmap;
+    protected  double ymap;
 
     //Entity box (Hiểu đơn giản là kích cỡ hcn bao quanh Entity)
     protected int cheight;
@@ -86,20 +88,17 @@ public abstract class Entity {
     //Ý tưởng thì khá đơn giản : Tính 4 góc của hcn bao quanh nhân vật, xem 4 góc đó đang nằm ở Tile loại nào?
     //(trạng thái (posX+dx,posY+dy) tức là trạng thái sau (xem có cho phép không)) và tìm cách xử lý phù hợp
     public void CheckTileMapCollision(){
-        double currCol = (int)posX/tileSize;
-        double currRow = (int)posY/tileSize;
-        falling = true;
+        int currCol = (int)posX/tileSize;
+        int currRow = (int)posY/tileSize;
         if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
         if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
-
-
         CaculateCorrners(posX,posY+dy);
-        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
         if (dy>0){//rơi xuống
             if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
                 dy = 0;
-                posY = (currRow+1)*tileSize-1;
+                posY = (currRow+1) * tileSize-1;
+                falling = false;
             }
         }
         if(dy<0){ //Bay lên
@@ -107,7 +106,6 @@ public abstract class Entity {
                 dy = 0;
                 posY =(currRow)*tileSize +cheight+1;
             }
-            falling = false;
         }
         CaculateCorrners(posX+dx,posY);
         if (dx>0){ //Sang trái

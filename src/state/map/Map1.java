@@ -31,20 +31,9 @@ public class Map1 extends GameState {
     public final double playerStartingPosX = 200; //TODO
     public final double playerStartingPosY = 100; //TODO
 
-//    //player's on-map position
-//    private double playerPosX = playerStartingPosX;
-//    private double playerPosY = playerStartingPosY; // they are equal because camera is 0 0 on construction
-
     //Camera position (On-map coord)
     private double camPosX = 0;
     private double camPosY = 0;
-
-    //What should i comment? the names tell em'all ?
-    //Lol, kidding. These are the coordinate camera will move to BASED ON PLAYER POSITION!
-    private double newCamPosX = 0;
-    private double newCamPosY = 0;
-
-    private final double camSpeed = 0.8;
 
     public Map1(GameStateManager gsm){
         super(gsm);
@@ -89,19 +78,9 @@ public class Map1 extends GameState {
     public void tick() {
 //        playerPosX += player.getDx();
 //        playerPosY += player.getDy();
-        //Láº¥y luÃ´n posX luÃ´n vÃ¬ Ä‘Ã£ cho 2 cÃ¡i giá»‘ng nhau rá»“i
-        newCamPosX = player.getPosX() - Main.width*1/3;
-        newCamPosY = player.getPosY() - Main.height*2/3;
-        camPosX += (newCamPosX - camPosX)*camSpeed;
-        camPosY += (newCamPosY - camPosY)*camSpeed;
-        //Ä�oáº¡n nÃ y Player chá»‰ cáº§n di chuyá»ƒn thÃ´i Map tá»± biáº¿t lÃºc nÃ o dá»«ng
+        camPosX = player.getPosX() - Main.width*1/3;
+        camPosY = player.getPosY() - Main.height*2/3;
         tilemap1.setPos(camPosX,camPosY);
-//        if ((result & 0b00000010) == 0b00000010) { //map cannot move along X
-//            player.moveX();
-//        }
-//        if ((result & 0b00000001) == 0b00000001) { //map cannot move along Y
-//            player.moveY();
-//        }
         tilemap1.tick();
         player.tick();
 		for(int i = 0; i < enemies.size(); i++) {
@@ -120,6 +99,7 @@ public class Map1 extends GameState {
         tilemap1.draw(g);
         player.render(g);
 		for(int i = 0; i < enemies.size(); i++) {
+		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
 			enemies.get(i).render(g);
 		}
     }
