@@ -1,5 +1,6 @@
 package state;
 
+import Audio.Music;
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -11,10 +12,10 @@ public class PlayState extends GameState{
     //Playstate owns unique player object and several maps obj. player obj will be passed to map obj for control
     private Player player = new Player();
     private Map1 map1 = new Map1(gsm);
-
     public PlayState(GameStateManager gsm){
         super(gsm);
         map1.setPlayer(player); //pass player obj to map obj for control
+
     }
 
     @Override
@@ -32,6 +33,7 @@ public class PlayState extends GameState{
         map1.render(g);
           //g.strokeText("PlayState",300,300);
     }
+
 
     @Override
     public void keyPressed(KeyEvent k) {

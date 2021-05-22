@@ -1,6 +1,8 @@
 package state.map;
 
 import java.util.ArrayList;
+
+import Audio.Music;
 import application.Main;
 import entity.Enemy;
 import entity.Player;
@@ -20,12 +22,15 @@ public class Map1 extends GameState {
     //this class also owns player's on-map cord
     //this class owns camera position
 
-    private Image bg= new Image("bg/bgMap1.png");
-
+    private final Image bg= new Image("bg/bgMap1.png");
+    private final Music bgMusic;
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
-    private TileMap tilemap1;
+    private final TileMap tilemap1;
+
+    //Music BackGround
+    Music musicBackGround ;
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 200; //TODO
@@ -37,11 +42,17 @@ public class Map1 extends GameState {
 
     public Map1(GameStateManager gsm){
         super(gsm);
+
+        bgMusic = new Music("res/Audio/bgMusic0.wav");
         tilemap1 = new TileMap(48);
         tilemap1.loadTileSet("Map/TileSet.png");
         tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.setPos(camPosX,camPosY);
         generateEnemies();
+
+        //Set Cycle music background and Play
+        bgMusic.setCycle();
+        bgMusic.startMusic();
     }
 
     public void setPlayer(Player player) {
@@ -53,7 +64,7 @@ public class Map1 extends GameState {
     }
     
 	private void generateEnemies() {
-		enemies = new ArrayList<Enemy>();
+		enemies = new ArrayList<>();
 		Snail s;
 		Point2D[] points = new Point2D[] {
 			new Point2D(200, 100),
@@ -62,11 +73,11 @@ public class Map1 extends GameState {
 			new Point2D(1680, 200),
 			new Point2D(1800, 200)
 		};
-		for(int i = 0; i < points.length; i++) {
-			s = new Snail(tilemap1);
-			s.setPosition(points[i].getX(), points[i].getY());
-			enemies.add(s);
-		}
+        for (Point2D point : points) {
+            s = new Snail(tilemap1);
+            s.setPosition(point.getX(), point.getY());
+            enemies.add(s);
+        }
 		
 	}
 
@@ -76,8 +87,7 @@ public class Map1 extends GameState {
     }
     @Override
     public void tick() {
-//        playerPosX += player.getDx();
-//        playerPosY += player.getDy();
+
         camPosX = player.getPosX() - Main.width*1/3;
         camPosY = player.getPosY() - Main.height*2/3;
         tilemap1.setPos(camPosX,camPosY);
@@ -98,10 +108,10 @@ public class Map1 extends GameState {
         g.drawImage(bg,0,0, Main.width, Main.height);
         tilemap1.draw(g);
         player.render(g);
-		for(int i = 0; i < enemies.size(); i++) {
+        for (Enemy enemy : enemies) {
 //		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
-			enemies.get(i).render(g);
-		}
+            enemy.render(g);
+        }
     }
 
     @Override

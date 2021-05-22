@@ -103,9 +103,9 @@ public class TileMap {
                 String[] tokens = line.split(del);
                 for (int col = 0 ; col < mapCol;col ++){
                     map[row][col] = Integer.parseInt(tokens[col]);
-                    System.out.print(map[row][col]+"("+getType(row,col)+") ");
+//                    System.out.print(map[row][col]+"("+getType(row,col)+") ");
                 }
-                System.out.println();
+//                System.out.println();
             }
 
         } catch (IOException e) {
