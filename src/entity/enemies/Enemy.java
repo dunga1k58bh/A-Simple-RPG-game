@@ -5,6 +5,7 @@ import entity.Animation;
 import entity.Entity;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import tilemap.TileMap;
 
 public abstract class Enemy extends Entity {
@@ -102,6 +103,21 @@ public abstract class Enemy extends Entity {
 	
     @Override
 	public void render(GraphicsContext graphicsContext) {
+    	if (!dead) {
+    		graphicsContext.fillRect(
+    				posX -xmap- width / 2 + 10,
+    				posY -ymap- height + 10,
+    				40,
+    				5);
+    		graphicsContext.setFill(Color.RED);
+    		graphicsContext.fillRect(
+    				posX -xmap- width / 2 + 10,
+    				posY -ymap- height + 10,
+    				40 * (double)HP / (double)maxHP,
+    				5);
+    		graphicsContext.setFill(Color.WHITE);
+    	}
+    	
 		if(facingRight) {
 			graphicsContext.drawImage(
 					animation.getImage(),
