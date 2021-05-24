@@ -41,6 +41,5 @@ public class Animation {
 			curFrame = 0;
 			playedOnce = true;
 		}
-		
 	}
 }

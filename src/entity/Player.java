@@ -1,5 +1,6 @@
 package entity;
 
+import entity.skills.Skill1;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -18,6 +19,10 @@ public class Player extends Entity{
     private int count1 = 0;
     private int count2 = 0;
     private int offset = 0;
+
+    //Skills
+    private Skill1 skill1;
+
 
     private double dt = 1; //pseudo time between frames
 
@@ -45,6 +50,8 @@ public class Player extends Entity{
         lowerBody.add(2,new Image("char/Small26-resources.assets-6747.png"));
         lowerBody.add(3,new Image("char/Small27-resources.assets-6734.png"));
         lowerBody.add(4,new Image("char/Small28-resources.assets-5528.png"));
+
+
     }
 
     public Player(int x, int y) {
@@ -53,8 +60,17 @@ public class Player extends Entity{
         setPosY(y);
     }
 
+
+    public void initSkill(){
+        skill1 = new Skill1(tileMap);
+        skill1.setPos(posX,posY);
+
+    }
+
     @Override
     public void tick() {
+
+
         //tick
         //E muốn tính dx,dy xong xuôi rồi checkCollision sau đó update posX,posY;
         if (key.up == 0) {
@@ -105,6 +121,9 @@ public class Player extends Entity{
             animationStep2 ++;
             offset = animationStep2%2*3;
         }
+        //Update Skill
+        skill1.setPos(posX,posY);
+        skill1.tick();
     }
 
 
@@ -188,6 +207,14 @@ public class Player extends Entity{
         }
         posX = posXTemp;
         posY = posYTemp;
+
+        if (key.skill1 == 1) skill1.render(graphicsContext);
+
+
+
+
+
+
     }
 
     private void drawWalkAnimation(int s) {
@@ -215,6 +242,10 @@ public class Player extends Entity{
                     key.right = 1;
                     break;
                 }
+                case Q -> {
+                    key.skill1 =1;
+                    break;
+                }
             }
         }
         else {
@@ -234,6 +265,10 @@ public class Player extends Entity{
                 }
                 case RIGHT -> {
                     key.right = 0;
+                    break;
+                }
+                case Q -> {
+                    key.skill1 = 0;
                     break;
                 }
             }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import Audio.Music;
 import application.Main;
-import entity.Enemy;
+import entity.enemies.Enemy;
 import entity.Player;
 import entity.enemies.Snail;
 import javafx.geometry.Point2D;
@@ -23,14 +23,14 @@ public class Map1 extends GameState {
     //this class owns camera position
 
     private final Image bg= new Image("bg/bgMap1.png");
-    private final Music bgMusic;
+
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
     private final TileMap tilemap1;
 
     //Music BackGround
-    Music musicBackGround ;
+    private final Music bgMusic;
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 200; //TODO
@@ -52,6 +52,7 @@ public class Map1 extends GameState {
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
+        bgMusic.setVolume(0.1);
         bgMusic.startMusic();
     }
 
@@ -61,6 +62,7 @@ public class Map1 extends GameState {
         player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player
         player.setTileMap(tilemap1);
+        player.initSkill();
     }
     
 	private void generateEnemies() {

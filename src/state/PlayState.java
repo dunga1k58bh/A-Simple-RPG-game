@@ -15,7 +15,6 @@ public class PlayState extends GameState{
     public PlayState(GameStateManager gsm){
         super(gsm);
         map1.setPlayer(player); //pass player obj to map obj for control
-
     }
 
     @Override

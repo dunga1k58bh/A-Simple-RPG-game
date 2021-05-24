@@ -14,11 +14,14 @@ public class Music {
         mediaPlayer.play();
     }
 
-        public void setCycle(){
+    public void setCycle(){
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
     public void pauseMusic(){
         mediaPlayer.pause();
+    }
+    public void setVolume(double vol){
+        mediaPlayer.setVolume(vol);
     }
 }
 

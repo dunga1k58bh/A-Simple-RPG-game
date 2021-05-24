@@ -5,4 +5,5 @@ public class Key {
     public int down = 0;
     public int left = 0;
     public int right = 0;
+    public int skill1 = 0;
 }

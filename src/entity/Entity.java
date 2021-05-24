@@ -19,15 +19,33 @@ public abstract class Entity {
     protected  double xmap;
     protected  double ymap;
 
+    //Left or right ??
+    protected boolean facingRight;
+
+
     //Entity box (Hiểu đơn giản là kích cỡ hcn bao quanh Entity)
     protected int cheight;
     protected int cwidth;
+    // dimensions
+    protected int width;
+    protected int height;
+
+
     //Check TileMap Collision (Loại Tile )4 góc Hcn
 
     protected int TopLeft;
     protected int TopRight;
     protected int BottomLeft;
     protected int BottomRight;
+
+
+    public Entity(TileMap tileMap){
+        this.tileMap = tileMap;
+        this.tileSize = tileMap.getTileSize();
+    }
+    public Entity(){
+
+    }
 
 
     public abstract void render(GraphicsContext graphicsContext);
@@ -65,6 +83,11 @@ public abstract class Entity {
     public void setPosY(double posY) {
         this.posY = posY;
     }
+    public  void setPos(double x, double y){
+        this.posX = x;
+        this.posY = y;
+    }
+
     public void setTileMap(TileMap tileMap){
         this.tileMap = tileMap;
         this.tileSize = tileMap.getTileSize();
@@ -120,6 +143,10 @@ public abstract class Entity {
                 posX = currCol*tileSize +cwidth/2+1;
             }
         }
+    }
+    public void setMapPosittion(){
+        xmap = tileMap.getCameraPosX();
+        ymap = tileMap.getCameraPosY();
     }
 
 }

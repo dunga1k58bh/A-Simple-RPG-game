@@ -1,9 +1,10 @@
 package tilemap;
 
+import entity.Entity;
 import javafx.scene.image.Image;
 
 
-public class Tile {
+public class Tile  {
     private Image image;
     private int type;
 

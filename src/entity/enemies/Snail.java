@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import javax.imageio.ImageIO;
 import entity.Animation;
-import entity.Enemy;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

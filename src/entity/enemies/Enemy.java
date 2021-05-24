@@ -1,12 +1,13 @@
-package entity;
+package entity.enemies;
 
 import application.Main;
+import entity.Animation;
+import entity.Entity;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
-import tilemap.Tile;
 import tilemap.TileMap;
 
-public abstract class Enemy extends Entity{
+public abstract class Enemy extends Entity {
 
 	protected  double posXBegin;
 	protected  double posYBegin;
@@ -18,15 +19,13 @@ public abstract class Enemy extends Entity{
 	protected long flinchTimer;
 
 
-	// dimensions
-	protected int width;
-	protected int height;
+
 	
 	// animation
 	protected Animation animation;
 	protected int curAction;
 	protected int preAction;
-	protected boolean facingRight;
+
 	
 	// movement
 	protected boolean left;
@@ -73,11 +72,6 @@ public abstract class Enemy extends Entity{
 		this.dx = dx;
 		this.dy = dy;
 	}
-    public void setMapPosittion(){
-		xmap = tileMap.getCameraPosX();
-		ymap = tileMap.getCameraPosY();
-	}
-	
 	
 	public boolean intersects(Enemy e) {
 		Rectangle2D r1 = getRectangle();
@@ -118,9 +112,9 @@ public abstract class Enemy extends Entity{
 		else {
 			graphicsContext.drawImage(
 				animation.getImage(),
-				(posX -xmap- width / 2 ),
+				(posX -xmap + width / 2 ),
 				(posY -ymap- height ),
-				width,height);
+				-width,height);
 		}
 	}
 
