@@ -10,6 +10,10 @@ public abstract class Entity {
     protected int MP;
     protected double posX = 0;
     protected double posY = 0;
+    protected double xmin;
+    protected double xmax;
+    protected double ymax;
+    protected double ymin;
     protected double dx;
     protected double dy;
     protected  boolean falling;
@@ -96,6 +100,11 @@ public abstract class Entity {
     public void setTileMap(TileMap tileMap){
         this.tileMap = tileMap;
         this.tileSize = tileMap.getTileSize();
+        this.xmin = cwidth/2+1;
+        this.xmax = tileMap.getWidth()-cwidth/2-1;
+        this.ymin = cheight+1;
+        this.ymax = tileMap.getHeight() -1;
+
     }
     public void setEntityBoxSize(int cwidth, int cheight){
         this.cwidth = cwidth;
@@ -118,17 +127,24 @@ public abstract class Entity {
     public void CheckTileMapCollision(){
         int currCol = (int)posX/tileSize;
         int currRow = (int)posY/tileSize;
-        if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
-        if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
 
-         CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
-        //System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
-        //Sau đây là 4 trường hợp chính
-        if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
-            onGround = true;
+        if(posX+dx>xmax||posX+dx<xmin) dx = 0;
+        if(posY+dy>ymax||posY+dy<ymin) {
+            if(dy>0) onGround = true;
+            if(dy<0) onRoof = true;
+            dy = 0;
         }
-        else {
-            onGround = false;
+        System.out.println(dy);
+        CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
+        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
+        //Sau đây là 4 trường hợp chính
+
+        if(dy!=0) {
+            if (BottomRight == Tile.BLOCK || BottomLeft == Tile.BLOCK) {
+                onGround = true;
+            } else {
+                onGround = false;
+            }
         }
 
         if (dy>0){//rơi xuống
@@ -139,7 +155,7 @@ public abstract class Entity {
                 onGround = true;
 //                System.out.println("Onground");
             }else{
-                onGround = false;
+//                onGround = false;
             }
         }
         if(dy<0){ //Bay lên

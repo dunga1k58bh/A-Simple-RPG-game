@@ -25,6 +25,10 @@ public class Fly extends Enemy{
 		
 		width = 80;
 		height = 62;
+		this.xmin = width/2+1;
+		this.xmax = tileMap.getWidth()-width/2-1;
+		this.ymin = height;
+		this.ymax = tileMap.getHeight() -1;
 	    setEntityBoxSize(80, 62);
 		
 		// load sprites

@@ -28,6 +28,10 @@ public class Monster2 extends Enemy{
         stopJumpSpeed=0.5;
         width = 220;
         height =190;
+        this.xmin = width/2+1;
+        this.xmax = tileMap.getWidth()-width/2-1;
+        this.ymin = height;
+        this.ymax = tileMap.getHeight() -1;
         setEntityBoxSize(220,190);
 
         animations = new Animation[6];

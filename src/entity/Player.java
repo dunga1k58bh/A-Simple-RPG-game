@@ -144,12 +144,9 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
-        //dy = 5 ;//Test tự rơi
-        //CheckTileMapCollision();
-        //System.out.println("dxdy"+dx+" "+dy);
+        if(dy == 0 ) System.out.println("Dy = 0");
         CheckTileMapCollision();
         //System.out.println(posX+" "+posY);
-
         posX+=dx;
         posY+=dy;
 
