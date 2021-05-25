@@ -50,7 +50,7 @@ public class TileMap {
         tileset = new Image(s);
         tilesetRow = (int) tileset.getHeight()/tileSize;
         tilesetCol = (int) tileset.getWidth()/tileSize;
-        System.out.println(tilesetRow+" "+tilesetCol);
+        //System.out.println(tilesetRow+" "+tilesetCol);
         tiles = new Tile[tilesetRow][tilesetCol];
         Image temp;
         for (int i = 0;i<tilesetRow;i++) {
@@ -103,12 +103,13 @@ public class TileMap {
                 String[] tokens = line.split(del);
                 for (int col = 0 ; col < mapCol;col ++){
                     map[row][col] = Integer.parseInt(tokens[col]);
-//                    System.out.print(map[row][col]+"("+getType(row,col)+") ");
                 }
-//                System.out.println();
+
+                }
+
             }
 
-        } catch (IOException e) {
+         catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -137,8 +138,8 @@ public class TileMap {
     //first bit is set to 1 if map cannot move along X
     //second bit is set to 1 if map cannot move along Y
     public void setPos(double x, double y){
-        this.x +=(x-this.x)*1;
-        this.y +=(y-this.y)*1;
+        this.x +=(x-this.x)*0.1;
+        this.y +=(y-this.y)*0.1;
         //Đoạn này để đảm bảo chỉ vẽ những thứ có trong map
         if (this.x<xmin) {
             this.x = xmin;

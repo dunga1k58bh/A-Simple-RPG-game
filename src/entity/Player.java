@@ -9,11 +9,14 @@ import utils.Key;
 import java.util.ArrayList;
 
 public class Player extends Entity{
-    private Image standLower = new Image("char/Small23-resources.assets-11235.png");
-    private Image standUpper = new Image("char/Small5-resources.assets-1687.png");
+    private Image standLowerBody = new Image("char/Small23-resources.assets-11235.png");
+    private Image standUpperBody = new Image("char/Small5-resources.assets-1687.png");
     private ArrayList<Image> head = new ArrayList<Image>();
-    private ArrayList<Image> lowerBody = new ArrayList<Image>();
-    private ArrayList<Image> upperBody = new ArrayList<Image>();
+    private ArrayList<Image> runLowerBody = new ArrayList<Image>();
+    private ArrayList<Image> runUpperBody = new ArrayList<Image>();
+    private ArrayList<Image> jumpLowerBody = new ArrayList<Image>();
+    private ArrayList<Image> jumpUpperBody = new ArrayList<Image>();
+    private Image jumpHead;
     private int animationStep = 0;
     private int animationStep2 = 0;
     private int count1 = 0;
@@ -24,34 +27,57 @@ public class Player extends Entity{
     private Skill1 skill1;
 
 
+
+    private int jump = 0;  //this variable is set to 1 whenever player is on-air
     private double dt = 1; //pseudo time between frames
 
     //velocity of player when moving
-    private double velocity = 5;
-    private double currentVelocity = 0;
-    private final double acceleration = 0.4; //TODO
+    private final double velocityX = 5;
+    private final double velocityY = -7;
+    private double currentVelocityX = 0;
+    private double currentVelocityY = 0;
+    private final double accelerationX = 0.4; //TODO
+    private final double accelerationY = 1;
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private int lastRunningDirection = 0;
+    private int facing = 1;
+    private boolean lock = false;
     private Key key= new Key();
     public Player() {
         setPosX(500);
         setPosY(300);
-        setEntityBoxSize(48,60);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi)
+        setEntityBoxSize(48,60);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
         //add default texture
-        head.add(0,new Image("char/Small32-resources.assets-4440.png"));
-        head.add(1,new Image("char/Small33-resources.assets-14326.png"));
-        upperBody.add (0,new Image("char/Small6-resources.assets-12601.png"));
-        upperBody.add (1,new Image("char/Small7-resources.assets-12452.png"));
-        upperBody.add (2,new Image("char/Small8-resources.assets-1354.png"));
-        upperBody.add (3,new Image("char/Small9-resources.assets-7446.png"));
-        upperBody.add (4,new Image("char/Small10-resources.assets-8065.png"));
-        lowerBody.add(0,new Image("char/Small24-resources.assets-12840.png"));
-        lowerBody.add(1,new Image("char/Small25-resources.assets-6123.png"));
-        lowerBody.add(2,new Image("char/Small26-resources.assets-6747.png"));
-        lowerBody.add(3,new Image("char/Small27-resources.assets-6734.png"));
-        lowerBody.add(4,new Image("char/Small28-resources.assets-5528.png"));
 
+        head.add(0,new Image("char/Small32-resources.assets-4440.png")); //standing
+        head.add(1,new Image("char/Small33-resources.assets-14326.png")); //running
+        runUpperBody.add (0,new Image("char/Small6-resources.assets-12601.png"));
+        runUpperBody.add (1,new Image("char/Small7-resources.assets-12452.png"));
+        runUpperBody.add (2,new Image("char/Small8-resources.assets-1354.png"));
+        runUpperBody.add (3,new Image("char/Small9-resources.assets-7446.png"));
+        runUpperBody.add (4,new Image("char/Small10-resources.assets-8065.png")); //Small11-resources.assets-7160.png
 
+        runLowerBody.add(0,new Image("char/Small24-resources.assets-12840.png"));
+        runLowerBody.add(1,new Image("char/Small25-resources.assets-6123.png"));
+        runLowerBody.add(2,new Image("char/Small26-resources.assets-6747.png"));
+        runLowerBody.add(3,new Image("char/Small27-resources.assets-6734.png"));
+        runLowerBody.add(4,new Image("char/Small28-resources.assets-5528.png"));
+
+        //jump animation contains 3 phases:
+        //Phase 1: from gound to highest-air (Example: https://drive.google.com/file/d/12mnGkDOkYaG6wl46t_2hhXUM60TrX_NP/view?usp=sharing)
+        //Phase 2: air-rolling (Example: https://drive.google.com/file/d/19lhi_kn1RBmVkM7ksC5QPMG8mFIGK23E/view?usp=sharing)
+        //Phase 3: falling (Example: https://drive.google.com/file/d/1HrBG9Pz_xFWDgIKE4c9VnVCrhyeICt2Y/view?usp=sharing)
+        jumpHead = new Image("char/Small32-resources.assets-4440.png");
+
+        jumpUpperBody.add(0, new Image("char/Small11-resources.assets-7160.png")); //Phase 1
+        jumpUpperBody.add(1, new Image("char/Small1-resources.assets-7704.png")); //*
+        jumpUpperBody.add(2, new Image("char/Small2-resources.assets-6576.png")); //* Phase 2
+        jumpUpperBody.add(3, new Image("char/Small3-resources.assets-11828.png")); //*
+        jumpUpperBody.add(4, new Image("char/Small4-resources.assets-5934.png")); //*
+        jumpUpperBody.add(5, new Image("char/Small12-resources.assets-4133.png")); //Phase 3
+
+        jumpLowerBody.add(0,new Image("char/Small29-resources.assets-15129.png")); //Phase 1
+        jumpLowerBody.add(1,new Image("char/Small30-resources.assets-11864.png")); //Phase 3
     }
 
     public Player(int x, int y) {
@@ -72,39 +98,54 @@ public class Player extends Entity{
 
 
         //tick
-        //E muốn tính dx,dy xong xuôi rồi checkCollision sau đó update posX,posY;
-        if (key.up == 0) {
-            runningDirection = key.right - key.left;
+
+
+        if (key.up == 1 && currentVelocityY >= 0) {
+            System.out.println("OOOO");
+            lock = true;
+            currentVelocityY = velocityY;
         }
 
+        currentVelocityY += dt * accelerationY;
+        dy = dt * currentVelocityY;
+
+
+        CheckTileMapCollision();
+        if (dy == 0) {
+            currentVelocityY = 0;
+        }
+
+        runningDirection = key.right - key.left;
         if (runningDirection == 1) {
             if (animationStep == -1) {
                 animationStep = 0;
             }
+            facing = runningDirection;
             lastRunningDirection = runningDirection;
-            currentVelocity = velocity;
-            dx= dt * Math.max(velocity,0);
+            currentVelocityX = velocityX;
+            dx= dt * Math.max(velocityX,0);
             count1++;
             count2++;
         } else if (runningDirection == -1) {
+            facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;
             }
             lastRunningDirection = runningDirection;
-            currentVelocity = velocity;
-            dx =- dt * Math.max(velocity,0);
+            currentVelocityX = velocityX;
+            dx =- dt * Math.max(velocityX,0);
             count1++;
             count2++;
         }
 
         else if (runningDirection == 0) {
-            currentVelocity -= acceleration*dt;
-            dx = lastRunningDirection * dt * Math.max(currentVelocity,0);
+            currentVelocityX -= accelerationX *dt;
+            dx = lastRunningDirection * dt * Math.max(currentVelocityX,0);
             animationStep = -1;
             count2++;
         }
-        dy = 5 ;//Test tự rơi
-        CheckTileMapCollision();
+        //dy = 5 ;//Test tự rơi
+        //CheckTileMapCollision();
         posX+=dx;
         posY+=dy;
 
@@ -142,69 +183,99 @@ public class Player extends Entity{
 
         //render
         //Image image1 = new Image("char/Small33-resources.assets-14326.png"); //head
+        animationStep = 2;
         switch (animationStep % 5) {
-            case -1 -> {
-
-                //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
-                graphicsContext.drawImage(standLower, posX - 7, posY - 17);
-
-                //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
-                graphicsContext.drawImage(standUpper, posX - 14, posY - 35 + offset);
-
-                graphicsContext.drawImage(head.get(0), posX - 15, posY - 68 + offset); //head
+            case -1 -> { //Draw stand animation
+                if (facing == 1) {
+                    graphicsContext.drawImage(standLowerBody, 0, 0, standLowerBody.getWidth(), standLowerBody.getHeight(), posX - 7, posY - 17, standLowerBody.getWidth() * facing, standLowerBody.getHeight());
+                    graphicsContext.drawImage(standUpperBody, 0, 0, standUpperBody.getWidth(), standUpperBody.getHeight(), posX - 14, posY - 35 + offset, standUpperBody.getWidth() * facing, standUpperBody.getHeight());
+                    graphicsContext.drawImage(head.get(0), 0, 0, head.get(0).getWidth(), head.get(0).getWidth(), posX - 15, posY - 66 + offset, head.get(0).getWidth() * facing, head.get(0).getHeight()); //head
+                } else if (facing == -1) {
+                        graphicsContext.drawImage(standLowerBody, 0, 0, standLowerBody.getWidth(), standLowerBody.getHeight(), posX+20, posY - 17, standLowerBody.getWidth() * facing, standLowerBody.getHeight());
+                        graphicsContext.drawImage(standUpperBody, 0, 0, standUpperBody.getWidth(), standUpperBody.getHeight(), posX+26, posY - 35 + offset, standUpperBody.getWidth() * facing, standUpperBody.getHeight());
+                        graphicsContext.drawImage(head.get(0), 0, 0, head.get(0).getWidth(), head.get(0).getWidth(), posX+27, posY - 66 + offset, head.get(0).getWidth() * facing, head.get(0).getHeight()); //head
+                    }
                 break;
+
             }
-            case 0 -> {
-                graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
+            case 0 -> { //Draw
+                if (facing == 1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0,head.get(1).getWidth(), head.get(1).getHeight(),posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
 
-                //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
-                graphicsContext.drawImage(lowerBody.get(animationStep % lowerBody.size()), posX - lowerBody.get(animationStep % upperBody.size()).getWidth() / 2, posY - lowerBody.get(animationStep % lowerBody.size()).getHeight());
+                    //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0,runLowerBody.get(animationStep % runLowerBody.size()).getWidth(),runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth() * facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
 
-                //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
-                graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 14, posY - 35 + offset);
+                    //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 14, posY - 35 + offset,runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                } else if (facing == -1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0,head.get(1).getWidth(), head.get(1).getHeight(),posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+
+                    //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0,runLowerBody.get(animationStep % runLowerBody.size()).getWidth(),runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 25, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth() * facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+
+                    //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 14 + 25, posY - 35 + offset,runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                }
+
                 break;
             }
             case 1 -> {
-                graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
-
-                //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
-                graphicsContext.drawImage(lowerBody.get(animationStep % lowerBody.size()), posX - lowerBody.get(animationStep % upperBody.size()).getWidth() / 2 + 3, posY - lowerBody.get(animationStep % lowerBody.size()).getHeight());
-
-                //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //upper
-                graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 19, posY - 35 + offset);
+                if (facing == 1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                } else if (facing == -1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 27, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3 + 32, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19 + 35, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                }
                 break;
             }
             case 2 -> {
-                graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
-
-                //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
-                graphicsContext.drawImage(lowerBody.get(animationStep % lowerBody.size()), posX - lowerBody.get(animationStep % upperBody.size()).getWidth() / 2 + 2, posY - lowerBody.get(animationStep % lowerBody.size()).getHeight());
-
-                //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //upper
-                graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 10, posY - 33 + offset);
+                if (facing == 1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 2, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 10, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                }
+                else if (facing == -1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 29, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 2 +25, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 10 +20, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                }
                 break;
             }
             case 3 -> {
-                graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
-
-                //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
-                graphicsContext.drawImage(lowerBody.get(animationStep % lowerBody.size()), posX - lowerBody.get(animationStep % upperBody.size()).getWidth() / 2 + 4, posY - lowerBody.get(animationStep % lowerBody.size()).getHeight());
-
-                //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //upper
-                graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 13, posY - 33 + offset);
+                if (facing == 1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runLowerBody.size()).getWidth() / 2 + 4, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 13, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                }
+                else if (facing == -1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 +25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runLowerBody.size()).getWidth() / 2 + 4 + 30, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 13 + 20, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                }
                 break;
             }
             case 4 -> {
                 graphicsContext.drawImage(head.get(1), posX - 15, posY - 68 + offset);
 
                 //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //lower
-                graphicsContext.drawImage(lowerBody.get(animationStep % lowerBody.size()), posX - lowerBody.get(animationStep % upperBody.size()).getWidth() / 2 + 4, posY - lowerBody.get(animationStep % lowerBody.size()).getHeight());
+                graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 4, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
 
                 //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //upper
-                graphicsContext.drawImage(upperBody.get(animationStep % upperBody.size()), posX - 9, posY - 33 + offset);
+                graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), posX - 9, posY - 33 + offset);
                 break;
             }
         }
+
+        //Draw a small dot at player position for simple debug
+        double radius = 3;
+        //Stoking
+        graphicsContext.strokeOval(posX-radius, posY-radius, radius*2, radius*2);
+        //Filling:
+        graphicsContext.fillOval(posX-radius, posY-radius, radius*2, radius*2);
+
         posX = posXTemp;
         posY = posYTemp;
 
@@ -215,6 +286,10 @@ public class Player extends Entity{
 
 
 
+    }
+
+    public int getFacing() {
+        return facing;
     }
 
     private void drawWalkAnimation(int s) {
@@ -228,18 +303,22 @@ public class Player extends Entity{
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
+                    System.out.println("Key UP");
                     break;
                 }
                 case DOWN -> {
                     key.down = 1;
+                    System.out.println("Key DOWN");
                     break;
                 }
                 case LEFT -> {
                     key.left = 1;
+                    System.out.println("Key LEFT");
                     break;
                 }
                 case RIGHT -> {
                     key.right = 1;
+                    System.out.println("Key RIGHT");
                     break;
                 }
                 case Q -> {
@@ -249,7 +328,7 @@ public class Player extends Entity{
             }
         }
         else {
-            System.out.println("Not key pressed");
+            System.out.println("Key released");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;

@@ -89,10 +89,15 @@ public class Map1 extends GameState {
     }
     @Override
     public void tick() {
-
-        camPosX = player.getPosX() - Main.width*1/3;
+        if (player.getFacing() == 1) {
+            camPosX = player.getPosX() - Main.width*1/3;
+        }
+        else {
+            camPosX = player.getPosX() - Main.width*2/3;
+        }
         camPosY = player.getPosY() - Main.height*2/3;
         tilemap1.setPos(camPosX,camPosY);
+
         tilemap1.tick();
         player.tick();
 		for(int i = 0; i < enemies.size(); i++) {

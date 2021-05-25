@@ -115,7 +115,9 @@ public abstract class Entity {
         int currRow = (int)posY/tileSize;
         if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
         if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
-        CaculateCorrners(posX,posY+dy);
+
+        CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
+        //System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
         if (dy>0){//rơi xuống
             if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
@@ -128,6 +130,7 @@ public abstract class Entity {
             if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
                 dy = 0;
                 posY =(currRow)*tileSize +cheight+1;
+                //System.out.println("BAY");
             }
         }
         CaculateCorrners(posX+dx,posY);
