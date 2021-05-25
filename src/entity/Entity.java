@@ -121,22 +121,27 @@ public abstract class Entity {
         if (posX+dx>tileMap.getWidth()-cwidth||posX+dx<cwidth) dx =0; //2 dòng đảm bảo Entity ko bay khỏi map
         if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
 
-        CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
-        //System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
+         CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
+        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
+
+
         if (dy>0){//rơi xuống
             if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
                 dy = 0;
                 posY = (currRow+1) * tileSize-1;
                 falling = false;
                 onGround = true;
+//                System.out.println("Onground");
+            }else{
+                onGround = false;
             }
         }
         if(dy<0){ //Bay lên
             if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
                 dy = 0;
-                posY =(currRow)*tileSize +cheight+1;
-                onGround = true;
+                posY =(currRow)*tileSize +3;
+                onRoof = true;
                 //System.out.println("BAY");
             }
         }

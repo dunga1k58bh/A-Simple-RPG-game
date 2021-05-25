@@ -35,7 +35,7 @@ public class Map1 extends GameState {
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 200; //TODO
-    public final double playerStartingPosY = 500; //TODO
+    public final double playerStartingPosY = 700; //TODO
 
     //Camera position (On-map coord)
     private double camPosX = 0;

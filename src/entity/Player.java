@@ -46,7 +46,7 @@ public class Player extends Entity{
     public Player() {
         setPosX(500);
         setPosY(300);
-        setEntityBoxSize(48,60);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
+        setEntityBoxSize(48,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
         //add default texture
 
         head.add(0,new Image("char/Small32-resources.assets-4440.png")); //standing
@@ -109,7 +109,12 @@ public class Player extends Entity{
         currentVelocityY += dt * accelerationY;
         dy = dt * currentVelocityY;
 
-
+        if(dy>20){
+            dy = 20;
+        }
+        if(dy<-20){
+            dy =-20;
+        }
 
         if (dy == 0) {
             currentVelocityY = 0;
@@ -146,7 +151,10 @@ public class Player extends Entity{
         }
         //dy = 5 ;//Test tự rơi
         //CheckTileMapCollision();
+        System.out.println("dxdy"+dx+" "+dy);
         CheckTileMapCollision();
+        System.out.println(posX+" "+posY);
+
         posX+=dx;
         posY+=dy;
 
