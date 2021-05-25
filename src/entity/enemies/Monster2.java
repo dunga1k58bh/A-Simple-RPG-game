@@ -85,10 +85,12 @@ public class Monster2 extends Enemy{
             right = false;
             left = true;
             facingRight = false;
+            currentAnimation = DEAD;
         } else if ((left && dx == 0) || posX - posXBegin < -100) {
             right = true;
             left = false;
             facingRight = true;
+            currentAnimation = WALK;
         }
 
         // update animation
@@ -102,16 +104,18 @@ public class Monster2 extends Enemy{
         if(facingRight) {
             graphicsContext.drawImage(
                     animations[currentAnimation].getImage(),
-                    (posX -xmap+ (double)animations[currentAnimation].getWidth()/2-20),
-                    (posY -ymap- (double)animations[currentAnimation].getHeight()+10),
-                    -width,height);
+                    (posX -xmap+ (double)animations[currentAnimation].getWidth()/2-15),
+                    (posY -ymap- (double)animations[currentAnimation].getHeight()+15),
+                    -animations[currentAnimation].getWidth(),
+                    animations[currentAnimation].getHeight());
 
         }else{
             graphicsContext.drawImage(
                     animations[currentAnimation].getImage(),
                     (posX -xmap- (double)animations[currentAnimation].getWidth()/2 ),
-                    (posY -ymap- (double)animations[currentAnimation].getHeight()+10),
-                    width,height);
+                    (posY -ymap- (double)animations[currentAnimation].getHeight()+15),
+                    animations[currentAnimation].getWidth(),
+                    animations[currentAnimation].getHeight());
 
         }
     }
