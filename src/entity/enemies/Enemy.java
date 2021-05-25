@@ -12,10 +12,13 @@ public abstract class Enemy extends Entity {
 
 	protected  double posXBegin;
 	protected  double posYBegin;
+
 	protected int HP;
 	protected int maxHP;
+
 	protected boolean dead;
 	protected int damage;
+
 	protected boolean flinching;
 	protected long flinchTimer;
 
@@ -85,13 +88,6 @@ public abstract class Enemy extends Entity {
 	}
 
 	
-	public boolean notOnScreen() {
-		return posX - xmap- width > Main.width ||
-			posX - xmap + width < 0 ||
-			posY - ymap + height < 0 ||
-			posY - ymap - height > Main.height;
-	}
-	
 	public void getHit(int damage) {
 		if(dead || flinching) return;
 		HP -= damage;
@@ -103,21 +99,8 @@ public abstract class Enemy extends Entity {
 	
     @Override
 	public void render(GraphicsContext graphicsContext) {
-    	if (!dead) {
-    		graphicsContext.fillRect(
-    				posX -xmap- width / 2 + 10,
-    				posY -ymap- height + 10,
-    				40,
-    				5);
-    		graphicsContext.setFill(Color.RED);
-    		graphicsContext.fillRect(
-    				posX -xmap- width / 2 + 10,
-    				posY -ymap- height + 10,
-    				40 * (double)HP / (double)maxHP,
-    				5);
-    		graphicsContext.setFill(Color.WHITE);
-    	}
-    	
+
+    	//draw Animation of Enemy
 		if(facingRight) {
 			graphicsContext.drawImage(
 					animation.getImage(),

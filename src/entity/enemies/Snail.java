@@ -7,6 +7,7 @@ import entity.Animation;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import tilemap.TileMap;
 
 public class Snail extends Enemy{
@@ -25,7 +26,7 @@ public class Snail extends Enemy{
 		
 		width = 60;
 		height = 60;
-	    setEntityBoxSize(60,60);
+	    setEntityBoxSize(40,40 );
 		
 		// load sprites
 		try {
@@ -71,7 +72,7 @@ public class Snail extends Enemy{
 		if(falling) dy += fallSpeed;
 
 	}
-	
+	@Override
 	public void tick() {
 		// update position
 		falling = true;
@@ -104,6 +105,21 @@ public class Snail extends Enemy{
 	public void render(GraphicsContext graphicsContext) {
 		setMapPosittion();
 		if(notOnScreen()) return;
+		//HP of enemy
+		if (!dead) {
+			graphicsContext.fillRect(
+					posX -xmap- (double)width / 2 + 10,
+					posY -ymap- (double)height + 10,
+					40,
+					5);
+			graphicsContext.setFill(Color.RED);
+			graphicsContext.fillRect(
+					posX -xmap- (double)width / 2 + 10,
+					posY -ymap- (double)height + 10,
+					40 * (double)HP / (double)maxHP,
+					5);
+			graphicsContext.setFill(Color.WHITE);
+		}
 		super.render(graphicsContext);
 	}
 }
