@@ -30,8 +30,8 @@ public class Main extends Application {
 		private int oldFrame = 0;
 		
 		//GameStateManager
-		public GameStateManager gsm =new GameStateManager();
-		
+
+  	  public GameStateManager gsm =new GameStateManager();
 		// image
 //		private Image image ;
 		private Canvas canvas;

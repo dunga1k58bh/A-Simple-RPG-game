@@ -13,10 +13,8 @@ import tilemap.TileMap;
 public class Snail extends Enemy{
 
 	private Image[] sprites;
-	
 	public Snail(TileMap tm) {
 		super(tm);
-		
 		moveSpeed = 0.3;
 		maxSpeed = 1;
 		fallSpeed = 0.2;

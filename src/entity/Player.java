@@ -90,13 +90,10 @@ public class Player extends Entity{
     public void initSkill(){
         skill1 = new Skill1(tileMap);
         skill1.setPos(posX,posY);
-
     }
 
     @Override
     public void tick() {
-
-
         //tick
 
 
@@ -122,6 +119,7 @@ public class Player extends Entity{
 
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
+            skill1.facingRight = true;
             if (animationStep == -1) {
                 animationStep = 0;
             }
@@ -132,6 +130,7 @@ public class Player extends Entity{
             count1++;
             count2++;
         } else if (runningDirection == -1) {
+            skill1.facingRight = false;
             facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;

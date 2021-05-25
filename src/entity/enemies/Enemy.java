@@ -100,11 +100,12 @@ public abstract class Enemy extends Entity {
     @Override
 	public void render(GraphicsContext graphicsContext) {
 
+
     	//draw Animation of Enemy
 		if(facingRight) {
 			graphicsContext.drawImage(
 					animation.getImage(),
-					(posX -xmap- width / 2 ),
+					(posX -xmap- width / 2),
 					(posY -ymap- height ),
 					width,height);
 		}

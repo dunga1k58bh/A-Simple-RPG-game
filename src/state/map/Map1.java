@@ -41,6 +41,7 @@ public class Map1 extends GameState {
     private double camPosX = 0;
     private double camPosY = 0;
 
+
     public Map1(GameStateManager gsm){
         super(gsm);
 
@@ -77,7 +78,7 @@ public class Map1 extends GameState {
 			new Point2D(1800, 200)
 		};
         Monster2 m2 = new Monster2(tilemap1);
-        m2.setPosition(100,900);
+        m2.setPosition(300,900);
         enemies.add(m2);
 
 
@@ -94,7 +95,7 @@ public class Map1 extends GameState {
 
     }
     @Override
-    public void tick() {
+    public void tick(){
         if (player.getFacing() == 1) {
             camPosX = player.getPosX() - Main.width*1/3;
         }

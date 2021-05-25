@@ -27,12 +27,14 @@ public class TileMap {
     public Tile[][] tiles;
     private int tilesetCol;
     private int tilesetRow;
+
     //TileMap
     private int map[][];
     private int width;
     private int height;
     private int mapRow;
     private int mapCol;
+
     //For draw
     private int rowDraw;
     private int colDraw;

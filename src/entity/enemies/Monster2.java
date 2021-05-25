@@ -1,8 +1,6 @@
 package entity.enemies;
-
 import entity.Animation;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import tilemap.TileMap;
 
 
@@ -12,9 +10,12 @@ public class Monster2 extends Enemy{
     private final  int HURT = 0;
     private final int WALK = 1;
     private final int DEAD = 2;
+    private final int IDLE = 3;//Đứng yên
+    private final int JUMP = 4;
+    private final  int LASSERSWEPT = 5;
 
 
-    private Animation animations[];
+    private Animation[] animations;
     public Monster2(TileMap tm) {
         super(tm);
         moveSpeed = 0.3;
@@ -23,10 +24,13 @@ public class Monster2 extends Enemy{
         maxFallSpeed = 10.0;
         HP = maxHP = 3;
         damage = 1;
-
+        jumpStart =0.5;
+        stopJumpSpeed=0.5;
         width = 220;
-        height = 190;
-        animations = new Animation[5];
+        height =190;
+        setEntityBoxSize(220,190);
+
+        animations = new Animation[6];
         for (int i =0;i<animations.length;i++){
             animations[i] = new Animation();
         }
@@ -43,9 +47,23 @@ public class Monster2 extends Enemy{
         animations[DEAD].setWidthHeight(297,219);
         animations[DEAD].setFrames("res/enemies/monster2/death.png",24,4,6);
         animations[DEAD].setDelay(25);
+        //
+        animations[IDLE].setWidthHeight(214,182);
+        animations[IDLE].setFrames("res/enemies/monster2/idle.png",48,6,8);
+        animations[IDLE].setDelay(25);
+        //
+        animations[JUMP].setWidthHeight(235,259);
+        animations[JUMP].setFrames("res/enemies/monster2/jump.png",24,4,6);
+        animations[JUMP].setDelay(100);
+        //
+        animations[LASSERSWEPT].setWidthHeight(221,224);
+        animations[LASSERSWEPT].setFrames("res/enemies/monster2/lasser_swept.png",121,11,11);
+        animations[LASSERSWEPT].setDelay(25);
+
         right = true;
         facingRight = true;
-        currentAnimation = WALK;
+        jumping = false;
+        currentAnimation = LASSERSWEPT;
     }
     private void getNextPosition() {
         // movement
@@ -57,12 +75,14 @@ public class Monster2 extends Enemy{
             dx += moveSpeed;
             if(dx > maxSpeed) dx = maxSpeed;
         }
-        if (jumping){
-
-        }
+//        if (jumping){
+//           dy-= jumpStart;
+//           if(dy> -stopJumpSpeed) dy = -stopJumpSpeed;
+//        }else {
+//            dy = 0;
+//        }
         // falling
         if(falling) dy += fallSpeed;
-
     }
 
 
@@ -85,12 +105,10 @@ public class Monster2 extends Enemy{
             right = false;
             left = true;
             facingRight = false;
-            currentAnimation = DEAD;
         } else if ((left && dx == 0) || posX - posXBegin < -100) {
             right = true;
             left = false;
             facingRight = true;
-            currentAnimation = WALK;
         }
 
         // update animation

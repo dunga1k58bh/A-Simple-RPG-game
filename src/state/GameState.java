@@ -14,7 +14,6 @@ public abstract class GameState {
 	public GameState(GameStateManager gsm) {
 		this.gsm=gsm;
 	}
-
     public abstract void  init();
     public abstract void tick();
     public abstract void render(GraphicsContext g);
