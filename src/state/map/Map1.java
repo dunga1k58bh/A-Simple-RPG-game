@@ -6,6 +6,7 @@ import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.Player;
+import entity.enemies.Monster2;
 import entity.enemies.Snail;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,7 +35,7 @@ public class Map1 extends GameState {
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 200; //TODO
-    public final double playerStartingPosY = 100; //TODO
+    public final double playerStartingPosY = 500; //TODO
 
     //Camera position (On-map coord)
     private double camPosX = 0;
@@ -69,12 +70,17 @@ public class Map1 extends GameState {
 		enemies = new ArrayList<>();
 		Snail s;
 		Point2D[] points = new Point2D[] {
-			new Point2D(200, 100),
+			new Point2D(200, 900),
 			new Point2D(860, 200),
 			new Point2D(1525, 200),
 			new Point2D(1680, 200),
 			new Point2D(1800, 200)
 		};
+        Monster2 m2 = new Monster2(tilemap1);
+        m2.setPosition(100,900);
+        enemies.add(m2);
+
+
         for (Point2D point : points) {
             s = new Snail(tilemap1);
             s.setPosition(point.getX(), point.getY());

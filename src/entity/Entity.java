@@ -1,5 +1,6 @@
 package entity;
 
+import application.Main;
 import javafx.scene.canvas.GraphicsContext;
 import tilemap.Tile;
 import tilemap.TileMap;
@@ -147,6 +148,12 @@ public abstract class Entity {
     public void setMapPosittion(){
         xmap = tileMap.getCameraPosX();
         ymap = tileMap.getCameraPosY();
+    }
+    public boolean notOnScreen() {
+        return posX - xmap- width > Main.width ||
+                posX - xmap + width < 0 ||
+                posY - ymap + height < 0 ||
+                posY - ymap - height > Main.height;
     }
 
 }

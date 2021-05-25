@@ -1,6 +1,11 @@
 package entity;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 
 public class Animation {
 	
@@ -9,7 +14,10 @@ public class Animation {
 	private long startTime;
 	private long delay;
 	private boolean playedOnce;
-	
+
+	private int width;
+	private int height;
+
 	public Animation() {
 		playedOnce = false;
 	}
@@ -19,6 +27,67 @@ public class Animation {
 	public int getFrame() { return curFrame; }
 	public Image getImage() { return frames[curFrame]; }
 	public boolean hasPlayedOnce() { return playedOnce; }
+    public void setWidthHeight(int width, int height){
+		this.width = width;
+		this.height = height;
+	}
+	public int getWidth(){return width;}
+	public int getHeight(){return height;}
+
+
+	public void setFrames(String s,int length){
+		try {
+			BufferedImage spritesheet = ImageIO.read(
+					new FileInputStream(s)
+			);
+
+			frames = new Image[length];
+			for(int i = 0; i < frames.length; i++) {
+				frames[i] = SwingFXUtils.toFXImage(spritesheet.getSubimage(
+						i * width,
+						0,
+						width,
+						height),
+						null
+				);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		curFrame = 0;
+		startTime = System.nanoTime();
+		playedOnce = false;
+	}
+	public void setFrames(String s,int length,int row,int col){
+		try {
+			BufferedImage spritesheet = ImageIO.read(
+					new FileInputStream(s)
+			);
+
+			frames = new Image[length];
+			for(int i = 0 ;i< row;i++) {
+				for (int j = 0;j< col;j++) {
+					System.out.println("1");
+					if (i* col+j<length) {
+						frames[i * col +j] = SwingFXUtils.toFXImage(spritesheet.getSubimage(
+								j * width,
+								i * height,
+								width,
+								height),
+								null
+						);
+					}
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		curFrame = 0;
+		startTime = System.nanoTime();
+		playedOnce = false;
+	}
 	
 	public void setFrames(Image[] frames) {
 		this.frames = frames;
