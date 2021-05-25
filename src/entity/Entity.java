@@ -122,9 +122,14 @@ public abstract class Entity {
         if (posY+dy>tileMap.getHeight()-10||posY+dy<cheight) dy = 0;
 
          CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
-        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
+        //System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
-
+        if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
+            onGround = true;
+        }
+        else {
+            onGround = false;
+        }
 
         if (dy>0){//rơi xuống
             if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
