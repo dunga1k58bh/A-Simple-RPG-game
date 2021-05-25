@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
+import entity.enemies.Fly;
 import entity.Player;
 import entity.enemies.Monster2;
 import entity.enemies.Snail;
@@ -81,7 +82,14 @@ public class Map1 extends GameState {
         m2.setPosition(300,900);
         enemies.add(m2);
 
-
+        Fly fly = new Fly(tilemap1);
+        fly.setPos(700, 1000);
+        enemies.add(fly);
+        
+        Fly fly2 = new Fly(tilemap1);
+        fly2.setPos(500, 700);
+        enemies.add(fly2);
+        
         for (Point2D point : points) {
             s = new Snail(tilemap1);
             s.setPosition(point.getX(), point.getY());
