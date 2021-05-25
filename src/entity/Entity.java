@@ -14,6 +14,10 @@ public abstract class Entity {
     protected double dy;
     protected  boolean falling;
 
+    //flag
+    public boolean onGround;
+    public boolean onRoof;
+
     //TileMap
     protected TileMap tileMap;
     protected int tileSize;
@@ -125,12 +129,14 @@ public abstract class Entity {
                 dy = 0;
                 posY = (currRow+1) * tileSize-1;
                 falling = false;
+                onGround = true;
             }
         }
         if(dy<0){ //Bay lên
             if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
                 dy = 0;
                 posY =(currRow)*tileSize +cheight+1;
+                onGround = true;
                 //System.out.println("BAY");
             }
         }

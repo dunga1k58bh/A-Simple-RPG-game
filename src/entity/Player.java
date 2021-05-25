@@ -110,7 +110,7 @@ public class Player extends Entity{
         dy = dt * currentVelocityY;
 
 
-        CheckTileMapCollision();
+
         if (dy == 0) {
             currentVelocityY = 0;
         }
@@ -146,6 +146,7 @@ public class Player extends Entity{
         }
         //dy = 5 ;//Test tự rơi
         //CheckTileMapCollision();
+        CheckTileMapCollision();
         posX+=dx;
         posY+=dy;
 
