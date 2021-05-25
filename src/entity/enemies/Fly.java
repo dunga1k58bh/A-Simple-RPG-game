@@ -16,8 +16,8 @@ public class Fly extends Enemy{
 	public Fly(TileMap tm) {
 		super(tm);
 		
-		moveSpeed = 0.5;
-		maxSpeed = 1;
+		moveSpeed = 1;
+		maxSpeed = 2;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
 		HP = maxHP = 3;

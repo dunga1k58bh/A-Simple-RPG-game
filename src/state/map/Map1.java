@@ -71,6 +71,7 @@ public class Map1 extends GameState {
 	private void generateEnemies() {
 		enemies = new ArrayList<>();
 		Snail s;
+		Fly f;
 		Point2D[] points = new Point2D[] {
 			new Point2D(200, 900),
 			new Point2D(860, 200),
@@ -81,7 +82,7 @@ public class Map1 extends GameState {
         Monster2 m2 = new Monster2(tilemap1);
         m2.setPosition(300,900);
         enemies.add(m2);
-
+        
         Fly fly = new Fly(tilemap1);
         fly.setPos(700, 1000);
         enemies.add(fly);
@@ -92,8 +93,11 @@ public class Map1 extends GameState {
         
         for (Point2D point : points) {
             s = new Snail(tilemap1);
+            f = new Fly(tilemap1);
+            f.setPos(point.getX(), point.getY() - 100);
             s.setPosition(point.getX(), point.getY());
             enemies.add(s);
+            enemies.add(f);
         }
 		
 	}
