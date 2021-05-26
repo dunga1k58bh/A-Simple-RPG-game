@@ -37,14 +37,14 @@ public class Skill1  extends Entity{
         if(facingRight) {
             graphicsContext.drawImage(
                     skill1Animation.getImage(),
-                    (posX -xmap+ 200 - width/2),
+                    (posX -xmap + 200 - width/2),
                     (posY -ymap- height  ),
                     width,height);
         }
         else {
             graphicsContext.drawImage(
                     skill1Animation.getImage(),
-                    (posX -xmap -200 +width/2),
+                    (posX -xmap - 200 +width/2),
                     (posY -ymap- height ),
                     -width,height);
         }

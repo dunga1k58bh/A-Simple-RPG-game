@@ -1,6 +1,7 @@
 package entity;
 
 import entity.skills.Skill1;
+import entity.skills.Skill2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -25,6 +26,7 @@ public class Player extends Entity{
 
     //Skills
     private Skill1 skill1;
+    private Skill2 skill2;
 
 
 
@@ -90,6 +92,9 @@ public class Player extends Entity{
     public void initSkill(){
         skill1 = new Skill1(tileMap);
         skill1.setPos(posX,posY);
+
+        skill2 = new Skill2(tileMap);
+        skill2.setPos(posX,posY);
     }
 
     @Override
@@ -116,6 +121,7 @@ public class Player extends Entity{
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
             skill1.facingRight = true;
+            skill2.facingRight = true;
             if (animationStep == -1) {
                 animationStep = 0;
             }
@@ -127,6 +133,7 @@ public class Player extends Entity{
             count2++;
         } else if (runningDirection == -1) {
             skill1.facingRight = false;
+            skill2.facingRight = false;
             facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;
@@ -166,6 +173,9 @@ public class Player extends Entity{
         //Update Skill
         skill1.setPos(posX,posY);
         skill1.tick();
+
+        skill2.setPos(posX,posY);
+        skill2.tick();
     }
 
 
@@ -283,7 +293,7 @@ public class Player extends Entity{
         posY = posYTemp;
 
         if (key.skill1 == 1) skill1.render(graphicsContext);
-
+        if (key.skill2 == 1) skill2.render(graphicsContext);
 
 
 
@@ -328,6 +338,10 @@ public class Player extends Entity{
                     key.skill1 =1;
                     break;
                 }
+                case E -> {
+                    key.skill2 = 1;
+                    break;
+                }
             }
         }
         else {
@@ -353,6 +367,11 @@ public class Player extends Entity{
                     key.skill1 = 0;
                     break;
                 }
+                case E -> {
+                    key.skill2 = 0;
+                    break;
+                }
+
             }
         }
     }
