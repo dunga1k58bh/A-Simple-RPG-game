@@ -23,7 +23,8 @@ public class Skill2  extends Entity{
         frames[2]= new Image("SKill/Skill2-3.png");
         skill2Animation = new Animation();
         skill2Animation.setFrames(frames);
-        skill2Animation.setDelay(120);
+        skill2Animation.setDelay(500);
+
     }
     public void resetAnimation(){
         skill2Animation.setFrame(0);
@@ -37,44 +38,29 @@ public class Skill2  extends Entity{
         if(facingRight) {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap+ 100 - width/2),
-                    (posY -ymap- height  ),
-                    width,height);
+                    (posX -xmap+ 100 -skill2Animation.getImage().getWidth()/2),
+                    (posY -ymap-  skill2Animation.getImage().getHeight()),
+                    skill2Animation.getImage().getWidth(),
+                    skill2Animation.getImage().getHeight());
 
-            graphicsContext.drawImage(
-                    skill2Animation.getImage(),
-                    (posX -xmap+ 200 - width/2),
-                    (posY -ymap- height  ),
-                    width,height);
-
-            graphicsContext.drawImage(
-                    skill2Animation.getImage(),
-                    (posX -xmap+ 300 - width/2),
-                    (posY -ymap- height  ),
-                    width,height);
 
         }
         else {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap -100 +width/2),
-                    (posY -ymap- height ),
-                    -width,height);
-            graphicsContext.drawImage(
-                    skill2Animation.getImage(),
-                    (posX -xmap -200 +width/2),
-                    (posY -ymap- height ),
-                    -width,height);
-            graphicsContext.drawImage(
-                    skill2Animation.getImage(),
-                    (posX -xmap -300 +width/2),
-                    (posY -ymap- height ),
-                    -width,height);
+                    (posX -xmap -100 +skill2Animation.getImage().getWidth()/2),
+                    (posY -ymap- skill2Animation.getImage().getHeight() ),
+                    -skill2Animation.getImage().getWidth(),
+                    skill2Animation.getImage().getHeight());
         }
     }
 
     @Override
     public void tick() {
+
+        if(facingRight) posX+=7;
+        else posX-=7;
+
         skill2Animation.update();
     }
 }

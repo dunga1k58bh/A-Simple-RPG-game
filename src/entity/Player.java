@@ -27,6 +27,8 @@ public class Player extends Entity{
     //Skills
     private Skill1 skill1;
     private Skill2 skill2;
+    private boolean USESKILL1;
+    private boolean USESKILL2;
 
 
 
@@ -171,11 +173,12 @@ public class Player extends Entity{
             offset = animationStep2%2*3;
         }
         //Update Skill
-        skill1.setPos(posX,posY);
-        skill1.tick();
+        if(USESKILL2 ==false){
+            skill2.setPos(posX,posY);
+        }else{
+            skill2.tick();
+        }
 
-        skill2.setPos(posX,posY);
-        skill2.tick();
     }
 
 
@@ -336,10 +339,12 @@ public class Player extends Entity{
                 }
                 case Q -> {
                     key.skill1 =1;
+                    USESKILL1 = true;
                     break;
                 }
                 case E -> {
                     key.skill2 = 1;
+                    USESKILL2= true;
                     break;
                 }
             }
@@ -365,10 +370,12 @@ public class Player extends Entity{
                 }
                 case Q -> {
                     key.skill1 = 0;
+                    USESKILL1 = false;
                     break;
                 }
                 case E -> {
                     key.skill2 = 0;
+                    USESKILL2 = false;
                     break;
                 }
 
