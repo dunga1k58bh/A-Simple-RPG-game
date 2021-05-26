@@ -135,10 +135,6 @@ public class TileMap {
     }
 
 
-    //Anchor point: top left of VIRTUAL map, not screen
-    //return: binary value which has 8 bit. Pay attention to the last 2 bits:
-    //first bit is set to 1 if map cannot move along X
-    //second bit is set to 1 if map cannot move along Y
     public void setPos(double x, double y){
         this.x +=(x-this.x)*0.1;
         this.y +=(y-this.y)*0.1;

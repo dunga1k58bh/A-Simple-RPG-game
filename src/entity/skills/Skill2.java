@@ -23,14 +23,20 @@ public class Skill2  extends Entity{
         frames[2]= new Image("SKill/Skill2-3.png");
         skill2Animation = new Animation();
         skill2Animation.setFrames(frames);
-        skill2Animation.setDelay(500);
+        skill2Animation.setDelay(300);
 
     }
     public void resetAnimation(){
         skill2Animation.setFrame(0);
     }
 
-
+    public void setPos(double x, double y){
+        if(facingRight){
+            super.setPos(x+100, y);
+        }else{
+            super.setPos(x-100, y);
+        }
+    }
 
     @Override
     public void render(GraphicsContext graphicsContext) {
@@ -38,17 +44,15 @@ public class Skill2  extends Entity{
         if(facingRight) {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap+ 100 -skill2Animation.getImage().getWidth()/2),
+                    (posX -xmap+  -skill2Animation.getImage().getWidth()/2),
                     (posY -ymap-  skill2Animation.getImage().getHeight()),
                     skill2Animation.getImage().getWidth(),
                     skill2Animation.getImage().getHeight());
-
-
         }
         else {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap -100 +skill2Animation.getImage().getWidth()/2),
+                    (posX -xmap  +skill2Animation.getImage().getWidth()/2),
                     (posY -ymap- skill2Animation.getImage().getHeight() ),
                     -skill2Animation.getImage().getWidth(),
                     skill2Animation.getImage().getHeight());
