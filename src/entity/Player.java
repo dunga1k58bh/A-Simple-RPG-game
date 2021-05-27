@@ -27,6 +27,8 @@ public class Player extends Entity{
     //Skills
     private Skill1 skill1;
     private Skill2 skill2;
+
+
     private boolean USESKILL1;
     private boolean USESKILL2;
 
@@ -174,7 +176,7 @@ public class Player extends Entity{
         }
         //Update Skill
         if(USESKILL2 ==false){
-            skill2.setPos(posX,posY);
+                skill2.setPos(posX, posY);
         }else{
             skill2.tick();
         }

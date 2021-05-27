@@ -23,14 +23,20 @@ public class Skill2  extends Entity{
         frames[2]= new Image("SKill/Skill2-3.png");
         skill2Animation = new Animation();
         skill2Animation.setFrames(frames);
-        skill2Animation.setDelay(500);
+        skill2Animation.setDelay(100);
 
     }
     public void resetAnimation(){
         skill2Animation.setFrame(0);
     }
 
-
+    public  void setPos(double x, double y){
+        if (facingRight){
+            super.setPos(x + 50, y);
+        }else {
+            super.setPos(x - 50, y);
+        }
+    }
 
     @Override
     public void render(GraphicsContext graphicsContext) {
@@ -58,8 +64,8 @@ public class Skill2  extends Entity{
     @Override
     public void tick() {
 
-        if(facingRight) posX+=7;
-        else posX-=7;
+        if(facingRight) posX+=20;
+        else posX-=20;
 
         skill2Animation.update();
     }

@@ -29,7 +29,13 @@ public class Skill1  extends Entity{
         skill1Animation.setFrame(0);
     }
 
-
+    public  void setPos(double x, double y){
+        if (facingRight){
+            super.setPos(x + 50, y);
+        }else {
+            super.setPos(x - 50, y);
+        }
+    }
 
     @Override
     public void render(GraphicsContext graphicsContext) {
