@@ -148,19 +148,19 @@ public class Fly extends Enemy{
 		int random_int = (int)Math.floor(Math.random()*4);
 		if (random_int == UP) {
 			up = true;
-			down = false;	//left = false;	right = false;
+			down = false;	left = false;	right = false;
 		}
 		else if (random_int == DOWN) {
 			down = true;
-			up = false;		//left = false;	right = false;
+			up = false;		left = false;	right = false;
 		}
 		else if (random_int == LEFT) {
 			left = true;
-			right = false;	//up = false;		down = false;
+			right = false;	up = false;		down = false;
 		}
 		else if (random_int == RIGHT) {
 			right = true;
-			left = false;	//up = false;		down = false;
+			left = false;	up = false;		down = false;
 		}
 		
 		// update animation
