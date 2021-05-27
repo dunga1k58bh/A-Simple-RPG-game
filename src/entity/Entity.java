@@ -1,6 +1,8 @@
 package entity;
 
 import application.Main;
+import entity.enemies.Enemy;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import tilemap.Tile;
 import tilemap.TileMap;
@@ -136,7 +138,6 @@ public abstract class Entity {
         }
         System.out.println(dy);
         CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
-        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
 
         if(dy!=0) {
@@ -189,6 +190,17 @@ public abstract class Entity {
                 posX - xmap + width < 0 ||
                 posY - ymap + height < 0 ||
                 posY - ymap - height > Main.height;
+    }
+
+    //intersects beetween enemy and the entity object. If intersected return true;
+    public boolean intersects(Enemy e) {
+        Rectangle2D r1 = getRectangle();
+        Rectangle2D r2 = e.getRectangle();
+        return r1.intersects(r2);
+    }
+    //Return a rectangle surround the Entity for check intersects
+    public Rectangle2D getRectangle() {
+        return new Rectangle2D((int)posX - cwidth/2, (int)posY - cheight, cwidth, cheight);
     }
 
 }

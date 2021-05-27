@@ -40,7 +40,11 @@ public class TileMap {
     private int colDraw;
     private int rowBeginDraw;
     private int colBeginDraw;
-    private final double camSpeed = 0.8;
+    private final double camSpeed = 0.05;
+
+
+
+
     public TileMap(int tileSize) {
         this.tileSize = tileSize;
        colDraw = (int)Main.width/tileSize +2;
@@ -131,17 +135,18 @@ public class TileMap {
     }
 
     public void tick() {
-
     }
 
-
-    //Anchor point: top left of VIRTUAL map, not screen
-    //return: binary value which has 8 bit. Pay attention to the last 2 bits:
-    //first bit is set to 1 if map cannot move along X
-    //second bit is set to 1 if map cannot move along Y
+    public void OpenNextMap(int EnemyLength){     //If no Enemy open the gate to next map
+        if (EnemyLength == 0) {
+            for (int i = 19; i <= 21; i++) {
+                tiles[0][i].setType(Tile.ALLOW);
+            }
+        }
+    }
     public void setPos(double x, double y){
-        this.x +=(x-this.x)*0.1;
-        this.y +=(y-this.y)*0.1;
+        this.x +=(x-this.x)*camSpeed;
+        this.y +=(y-this.y)*camSpeed;
         //Đoạn này để đảm bảo chỉ vẽ những thứ có trong map
         if (this.x<xmin) {
             this.x = xmin;
