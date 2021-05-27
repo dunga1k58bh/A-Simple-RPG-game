@@ -30,6 +30,13 @@ public class Skill1  extends Entity{
     }
 
 
+    public void setPos(double x, double y){
+        if(facingRight){
+            super.setPos(x+300, y);
+        }else{
+            super.setPos(x-300, y);
+        }
+    }
 
     @Override
     public void render(GraphicsContext graphicsContext) {
@@ -37,14 +44,14 @@ public class Skill1  extends Entity{
         if(facingRight) {
             graphicsContext.drawImage(
                     skill1Animation.getImage(),
-                    (posX -xmap + 200 - width/2),
+                    (posX -xmap - width/2),
                     (posY -ymap- height  ),
                     width,height);
         }
         else {
             graphicsContext.drawImage(
                     skill1Animation.getImage(),
-                    (posX -xmap - 200 +width/2),
+                    (posX -xmap +width/2),
                     (posY -ymap- height ),
                     -width,height);
         }

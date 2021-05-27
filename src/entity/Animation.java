@@ -15,6 +15,7 @@ public class Animation {
 	private long delay;
 	private boolean playedOnce;
 
+
 	private int width;
 	private int height;
 

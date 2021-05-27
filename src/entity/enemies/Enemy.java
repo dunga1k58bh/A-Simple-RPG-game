@@ -5,6 +5,7 @@ import entity.Animation;
 import entity.Entity;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import tilemap.TileMap;
 
@@ -49,9 +50,7 @@ public abstract class Enemy extends Entity {
 	
 	// constructor
 	public Enemy(TileMap tm) {
-		super();
-		tileMap = tm;
-		tileSize = tm.getTileSize(); 
+		super(tm);
 	}
 	public double getx() { return (int)posX; }
 	public double gety() { return (int)posY; }
@@ -76,18 +75,6 @@ public abstract class Enemy extends Entity {
 		this.dx = dx;
 		this.dy = dy;
 	}
-	
-	public boolean intersects(Enemy e) {
-		Rectangle2D r1 = getRectangle();
-		Rectangle2D r2 = e.getRectangle();
-		return r1.intersects(r2);
-	}
-	
-	public Rectangle2D getRectangle() {
-		return new Rectangle2D((int)posX - cwidth, (int)posY - cheight, cwidth, cheight);
-	}
-
-	
 	public void getHit(int damage) {
 		if(dead || flinching) return;
 		HP -= damage;

@@ -109,14 +109,14 @@ public class Player extends Entity{
         }
 
         if (key.up == 1 && currentVelocityY >= 0 && onGround && !lock) {
-            System.out.println("OOOO");
+//            System.out.println("OOOO");
             lock = true;
             currentVelocityY = velocityY;
         }
 
 
 
-        System.out.println("On ground = " + onGround);
+//        System.out.println("On ground = " + onGround);
         currentVelocityY += dt * accelerationY;
         dy = dt * currentVelocityY;
 
@@ -153,7 +153,6 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
-        if(dy == 0 ) System.out.println("Dy = 0");
         CheckTileMapCollision();
         //System.out.println(posX+" "+posY);
         posX+=dx;
@@ -178,6 +177,8 @@ public class Player extends Entity{
         }else{
             skill2.tick();
         }
+        skill1.setPos(posX,posY);
+        skill1.tick();
 
     }
 

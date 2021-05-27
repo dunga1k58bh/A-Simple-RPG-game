@@ -49,7 +49,6 @@ public class Fly extends Enemy{
 			sprites[1] = new Image(new FileInputStream("res/enemies/fly/fly2.png"));
 			sprites[2] = new Image(new FileInputStream("res/enemies/fly/fly3.png"));
 			sprites[3] = new Image(new FileInputStream("res/enemies/fly/fly4.png"));
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

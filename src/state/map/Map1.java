@@ -41,6 +41,9 @@ public class Map1 extends GameState {
     private double camPosX = 0;
     private double camPosY = 0;
 
+    //Gate to next Map
+    private double gateX;
+    private double gateY;
 
     public Map1(GameStateManager gsm){
         super(gsm);
@@ -49,6 +52,10 @@ public class Map1 extends GameState {
         tilemap1 = new TileMap(48);
         tilemap1.loadTileSet("Map/TileSet.png");
         tilemap1.loadMap("res/Map/Map1.map");
+        //Set Position of Gate to nextMap
+        gateX = tilemap1.getWidth()-tilemap1.getTileSize();
+        gateY = tilemap1.getTileSize()*3;
+
         tilemap1.setPos(camPosX,camPosY);
         generateEnemies();
 
@@ -120,13 +127,21 @@ public class Map1 extends GameState {
         player.tick();
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
+			if(player.intersects(e)) e.getHit(1);
 			e.tick();
 			if(e.isDead()) {
 				enemies.remove(i);
 				i--;
 			}
 		}
-		
+
+		//Check to open gate
+		tilemap1.OpenNextMap(enemies.size());
+		//Check to move to next map
+		if(player.getPosX()>gateX&&player.getPosY()<gateY){
+		    gsm.setState(0);
+        }
+
     }
 
     @Override

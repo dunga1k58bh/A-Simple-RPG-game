@@ -23,7 +23,7 @@ public class Skill2  extends Entity{
         frames[2]= new Image("SKill/Skill2-3.png");
         skill2Animation = new Animation();
         skill2Animation.setFrames(frames);
-        skill2Animation.setDelay(300);
+        skill2Animation.setDelay(100);
 
     }
     public void resetAnimation(){
@@ -61,7 +61,6 @@ public class Skill2  extends Entity{
 
     @Override
     public void tick() {
-
         if(facingRight) posX+=7;
         else posX-=7;
 
