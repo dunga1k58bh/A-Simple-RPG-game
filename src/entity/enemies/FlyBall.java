@@ -2,6 +2,7 @@ package entity.enemies;
 
 import java.io.FileInputStream;
 import entity.Animation;
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import tilemap.TileMap;
@@ -10,12 +11,12 @@ public class FlyBall extends Enemy{
 	private boolean hit;
 	private boolean remove;
 	private Image[] sprites;
+	private double playerPosX;
+	private double playerPosY;
+	private double distance;
 	
 	public FlyBall(TileMap tm) {
 		super(tm);
-		
-		moveSpeed = 1;
-		maxSpeed = 7;
 		
 		width = 10;
 		height = 10;
@@ -38,10 +39,11 @@ public class FlyBall extends Enemy{
 		animation = new Animation();
 		animation.setFrames(sprites);
 		animation.setDelay(70);
-		
-		left = true;
 	}
-
+	public void getPlayerPos(Player player) {
+		playerPosX = player.getPosX();
+		playerPosY = player.getPosY();
+	}
 	
 	public void setHit() {
 		if(hit) return;
@@ -54,23 +56,28 @@ public class FlyBall extends Enemy{
 	}
 	
 	private void getNextPosition() {
+		if (playerPosX < posXBegin) {
+			left = true;
+			right = false;
+		}
+		if (playerPosX > posXBegin) {
+			left = false;
+			right = true;
+		}
+		if (playerPosY < posYBegin) {
+			up = true;
+			down = false;
+		}
+		if (playerPosY > posYBegin) {
+			up = false;
+			down = true;
+		}
+		
+		distance = Math.sqrt((playerPosX - posXBegin)*(playerPosX - posXBegin)
+							 + (playerPosY - posYBegin)*(playerPosY - posYBegin));
 		// movement
-		if(left) {
-			dx -= moveSpeed;
-			if(dx < -maxSpeed) dx = -maxSpeed;
-		}
-		else if(right) {
-			dx += moveSpeed;
-			if(dx > maxSpeed) dx = maxSpeed;
-		}
-		else if(up) {
-			dy -= moveSpeed;
-			if (dy < -maxSpeed) dy = -maxSpeed;
-		}
-		else if(down) {
-			dy += moveSpeed;
-			if (dy > maxSpeed) dy = maxSpeed;
-		}
+		dx = 5 *(playerPosX - posXBegin) / distance;
+		dy = 5 *(playerPosY - posYBegin) / distance;
 	}
 	
 	@Override
@@ -80,7 +87,7 @@ public class FlyBall extends Enemy{
 		CheckTileMapCollision();
 		posX += dx;
 		posY += dy;
-		if(dx == 0 && !hit) {
+		if((dx == 0 || dy == 0) && !hit) {
 			setHit();
 		}
 		

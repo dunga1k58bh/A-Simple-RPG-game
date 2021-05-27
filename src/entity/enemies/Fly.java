@@ -3,6 +3,7 @@ package entity.enemies;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import entity.Animation;
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -21,8 +22,12 @@ public class Fly extends Enemy{
 	private boolean firing;
 	private long firingTimer;
 	
-	public Fly(TileMap tm) {
+	// player
+	private Player player;
+	
+	public Fly(TileMap tm, Player p) {
 		super(tm);
+		player = p;
 		
 		moveSpeed = 1;
 		maxSpeed = 2;
@@ -65,10 +70,6 @@ public class Fly extends Enemy{
 		facingRight = true;
 	}
 	
-	//public void setFiring() {
-	//	firing = true;
-	//}
-	
 	private void getNextPosition() {
 		// movement
 		if(left) {
@@ -94,13 +95,14 @@ public class Fly extends Enemy{
 		if (firing) {
 			FlyBall fb = new FlyBall(tileMap);
 			fb.setPosition(posX, posY);
+			fb.getPlayerPos(player);
 			flyBalls.add(fb);
 			firingTimer = System.nanoTime();
 			firing = false;
 		}
 		if (!firing) {
 			long elapsed = (System.nanoTime() - firingTimer) / 1000000;
-			if (elapsed > 1500) firing = true;
+			if (elapsed > 2500) firing = true;
 		}
 		
 		// update fly balls
