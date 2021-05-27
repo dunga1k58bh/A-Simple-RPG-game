@@ -50,7 +50,7 @@ public class Map1 extends GameState {
         tilemap1.loadTileSet("Map/TileSet.png");
         tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.setPos(camPosX,camPosY);
-        generateEnemies();
+        //generateEnemies();
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
@@ -60,11 +60,13 @@ public class Map1 extends GameState {
 
     public void setPlayer(Player player) {
         this.player = player;
+        System.out.println("playerSet: " + player);
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player
         player.setTileMap(tilemap1);
         player.initSkill();
+        generateEnemies();
     }
     
 	private void generateEnemies() {
@@ -82,17 +84,17 @@ public class Map1 extends GameState {
         m2.setPosition(300,900);
         enemies.add(m2);
         
-        Fly fly = new Fly(tilemap1);
+        Fly fly = new Fly(tilemap1, player);
         fly.setPos(700, 1000);
         enemies.add(fly);
         
-        Fly fly2 = new Fly(tilemap1);
+        Fly fly2 = new Fly(tilemap1, player);
         fly2.setPos(500, 700);
         enemies.add(fly2);
         
         for (Point2D point : points) {
             s = new Snail(tilemap1);
-            f = new Fly(tilemap1);
+            f = new Fly(tilemap1, player);
             f.setPos(point.getX(), point.getY() - 100);
             s.setPosition(point.getX(), point.getY());
             enemies.add(s);
