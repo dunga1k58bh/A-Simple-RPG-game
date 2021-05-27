@@ -1,6 +1,7 @@
 package entity.enemies;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import entity.Animation;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -13,6 +14,13 @@ public class Fly extends Enemy{
 	public final static int DOWN = 1;
 	public final static int LEFT = 2;
 	public final static int RIGHT = 3;
+	
+	// fly ball
+	private ArrayList<FlyBall> flyBalls;
+	//private int flyBallDamage;
+	private boolean firing;
+	private long firingTimer;
+	
 	public Fly(TileMap tm) {
 		super(tm);
 		
@@ -22,6 +30,9 @@ public class Fly extends Enemy{
 		maxFallSpeed = 10.0;
 		HP = maxHP = 3;
 		damage = 1;
+		flyBalls = new ArrayList<FlyBall>();
+		//flyBallDamage = 1;
+		firing = true;
 		
 		width = 80;
 		height = 62;
@@ -55,6 +66,10 @@ public class Fly extends Enemy{
 		facingRight = true;
 	}
 	
+	//public void setFiring() {
+	//	firing = true;
+	//}
+	
 	private void getNextPosition() {
 		// movement
 		if(left) {
@@ -73,19 +88,37 @@ public class Fly extends Enemy{
 			dy += moveSpeed;
 			if (dy > maxSpeed) dy = maxSpeed;
 		}
-		
-		// falling
-		if(falling) dy += fallSpeed;
-
 	}
+	
 	@Override
 	public void tick() {
+		if (firing) {
+			FlyBall fb = new FlyBall(tileMap);
+			fb.setPosition(posX, posY);
+			flyBalls.add(fb);
+			firingTimer = System.nanoTime();
+			firing = false;
+		}
+		if (!firing) {
+			long elapsed = (System.nanoTime() - firingTimer) / 1000000;
+			if (elapsed > 1500) firing = true;
+		}
+		
+		// update fly balls
+		for(int i = 0; i < flyBalls.size(); i++) {
+			flyBalls.get(i).tick();
+			if(flyBalls.get(i).shouldRemove()) {
+				flyBalls.remove(i);
+				i--;
+			}
+		}
+		
 		// update position
-		//falling = true;
 		getNextPosition();
 		CheckTileMapCollision();
 		posX += dx;
 		posY += dy;
+		
 		// check flinching
 		if(flinching) {
 			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
@@ -115,19 +148,19 @@ public class Fly extends Enemy{
 		int random_int = (int)Math.floor(Math.random()*4);
 		if (random_int == UP) {
 			up = true;
-			down = false;	left = false;	right = false;
+			down = false;	//left = false;	right = false;
 		}
 		else if (random_int == DOWN) {
 			down = true;
-			up = false;		left = false;	right = false;
+			up = false;		//left = false;	right = false;
 		}
 		else if (random_int == LEFT) {
 			left = true;
-			right = false;	up = false;		down = false;
+			right = false;	//up = false;		down = false;
 		}
 		else if (random_int == RIGHT) {
 			right = true;
-			left = false;	up = false;		down = false;
+			left = false;	//up = false;		down = false;
 		}
 		
 		// update animation
@@ -137,6 +170,11 @@ public class Fly extends Enemy{
 	@Override
 	public void render(GraphicsContext graphicsContext) {
 		setMapPosittion();
+		// render fly balls
+		for(int i = 0; i < flyBalls.size(); i++) {
+			flyBalls.get(i).render(graphicsContext);
+		}
+		
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {

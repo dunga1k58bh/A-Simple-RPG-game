@@ -1,7 +1,6 @@
 package state.map;
 
 import java.util.ArrayList;
-
 import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
@@ -127,6 +126,7 @@ public class Map1 extends GameState {
 				i--;
 			}
 		}
+		
     }
 
     @Override
@@ -138,6 +138,7 @@ public class Map1 extends GameState {
 //		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
             enemy.render(g);
         }
+
     }
 
     @Override
