@@ -28,6 +28,8 @@ public abstract class Entity {
     protected int tileSize;
     protected  double xmap;
     protected  double ymap;
+    protected  int currRow;
+    protected  int currCol;
 
     //Left or right ??
     protected boolean facingRight;
@@ -131,8 +133,8 @@ public abstract class Entity {
     //Ý tưởng thì khá đơn giản : Tính 4 góc của hcn bao quanh nhân vật, xem 4 góc đó đang nằm ở Tile loại nào?
     //(trạng thái (posX+dx,posY+dy) tức là trạng thái sau (xem có cho phép không)) và tìm cách xử lý phù hợp
     public void CheckTileMapCollision(){
-        int currCol = (int)posX/tileSize;
-        int currRow = (int)posY/tileSize;
+        currCol = (int)posX/tileSize;
+        currRow = (int)posY/tileSize;
 
         if(posX+dx>xmax||posX+dx<xmin) dx = 0;
         if(posY+3*dy>ymax||posY+3*dy<ymin) {

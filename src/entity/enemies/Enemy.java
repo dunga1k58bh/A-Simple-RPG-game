@@ -7,6 +7,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import tilemap.Tile;
 import tilemap.TileMap;
 
 public abstract class Enemy extends Entity {
@@ -83,8 +84,20 @@ public abstract class Enemy extends Entity {
 		flinching = true;
 		flinchTimer = System.nanoTime();
 	}
-	
-    @Override
+
+	@Override
+	public void CheckTileMapCollision() {
+		super.CheckTileMapCollision();
+		CaculateCorrners(posX,posY+ 3*dy);
+		if(dy<0){ //Bay lên
+            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
+                dy = 0;
+                posY =(currRow)*tileSize +3;
+            }
+		}
+	}
+
+	@Override
 	public void render(GraphicsContext graphicsContext) {
 
 
