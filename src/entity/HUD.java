@@ -15,8 +15,8 @@ public class HUD {
 		player = p;
 		try {
 			image = new Image(new FileInputStream("res/hud/topbar.png"));
-			fontHP = new Font("Arial", 20);
-			fontMP = new Font("Arial", 15);
+			fontHP = Font.loadFont("file:res/Font/GameFont.otf", 20);
+			fontMP =  Font.loadFont("file:res/Font/GameFont.otf", 15);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
