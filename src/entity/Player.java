@@ -59,9 +59,19 @@ public class Player extends Entity{
     private Key key= new Key();
     private double lastdy;
 
-
-
+    // max HP, MP, level ...
+    public int maxHP, maxMP, level;
+    public int curEXP, levelEXP;
+    
     public Player() {
+    	curEXP = 10;
+    	levelEXP = 99;
+    	level = 1;
+    	HP = 400;
+    	MP = 400;
+    	maxHP = 500;
+    	maxMP = 500;
+    	
         setPosX(500);
         setPosY(300);
         setEntityBoxSize(30,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid

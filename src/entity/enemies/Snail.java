@@ -109,6 +109,7 @@ public class Snail extends Enemy{
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {
+			graphicsContext.setFill(Color.WHITE);
 			graphicsContext.fillRect(
 					posX -xmap- (double)width / 2 + 10,
 					posY -ymap- (double)height + 10,
@@ -120,7 +121,6 @@ public class Snail extends Enemy{
 					posY -ymap- (double)height + 10,
 					40 * (double)HP / (double)maxHP,
 					5);
-			graphicsContext.setFill(Color.WHITE);
 		}
 		super.render(graphicsContext);
 	}

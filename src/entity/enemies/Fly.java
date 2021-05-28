@@ -179,6 +179,7 @@ public class Fly extends Enemy{
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {
+			graphicsContext.setFill(Color.WHITE);
 			graphicsContext.fillRect(
 					posX -xmap- (double)width / 2 + 11,
 					posY -ymap- (double)height - 5,
@@ -190,7 +191,6 @@ public class Fly extends Enemy{
 					posY -ymap- (double)height - 5,
 					41 * (double)HP / (double)maxHP,
 					5);
-			graphicsContext.setFill(Color.WHITE);
 		}
 
 		super.render(graphicsContext);
