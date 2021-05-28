@@ -101,7 +101,7 @@ public abstract class Enemy extends Entity {
 				animation.getImage(),
 				(posX -xmap + width / 2 ),
 				(posY -ymap- height ),
-				-width,height);          //-width to flip image
+				-width,height);
 		}
 	}
 
