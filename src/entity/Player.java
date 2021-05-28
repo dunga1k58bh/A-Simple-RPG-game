@@ -115,14 +115,15 @@ public class Player extends Entity{
         }
 
         if (onGround) {
+            //System.out.println("ON GROUND");
             falling = false;
             lock = false;
+            lock2 = false;
             currentVelocityY = 0;
-            //System.out.println("YOYO");
         }
 
         if (onRoof) {
-            //System.out.println(onRoof);
+            //System.out.println("ON ROOF");
             currentVelocityY = 0;
         }
 
@@ -187,7 +188,6 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
-
         currentVelocityY += dt * accelerationY;
         dy = dt * currentVelocityY;
         CheckTileMapCollision();
@@ -402,28 +402,22 @@ public class Player extends Entity{
     public void keyIn(KeyEvent keyEvent) {
         //System.out.println("Left");
         if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
-            System.out.println("Key pressed");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
-                    break;
                 }
                 case DOWN -> {
                     key.down = 1;
-                    break;
                 }
                 case LEFT -> {
                     key.left = 1;
-                    break;
                 }
                 case RIGHT -> {
                     key.right = 1;
-                    break;
                 }
                 case Q -> {
                     key.skill1 =1;
                     USESKILL1 = true;
-                    break;
                 }
                 case E -> {
                     key.skill2 = 1;
@@ -433,7 +427,6 @@ public class Player extends Entity{
             }
         }
         else {
-            System.out.println("Key released");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;
