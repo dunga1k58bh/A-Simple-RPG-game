@@ -35,9 +35,9 @@ public class HUD {
 		g.drawImage(image, 0, 0);
 		g.setFill(Color.WHITE);
 		g.setFont(fontMP);
-		g.fillText(String.valueOf(player.HP) + " / " + String.valueOf(player.maxHP), 180, 85);
+		g.fillText(String.valueOf(player.MP) + " / " + String.valueOf(player.maxHP), 180, 85);
 		g.setFont(fontHP);
-		g.fillText(String.valueOf(player.MP) + " / " + String.valueOf(player.maxMP), 180, 40);
+		g.fillText(String.valueOf(player.HP) + " / " + String.valueOf(player.maxMP), 180, 40);
 		g.fillText(String.format("%4.2f", (double)player.curEXP / player.levelEXP) +"%", 42, 95);
 		g.setFill(Color.YELLOW);
 		g.fillText("Level " + player.level, 42, 65);

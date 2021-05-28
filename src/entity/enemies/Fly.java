@@ -112,6 +112,11 @@ public class Fly extends Enemy{
 				flyBalls.remove(i);
 				i--;
 			}
+			else {
+				if(flyBalls.get(i).intersects(player)) {
+					player.changeHP(-1);
+				}
+			}
 		}
 		
 		// update position

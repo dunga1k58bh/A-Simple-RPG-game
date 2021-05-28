@@ -73,6 +73,10 @@ public abstract class Entity {
     public void setHP(int HP) {
         this.HP = HP;
     }
+    public void changeHP(int c) {
+    	this.HP += c;
+    	if (HP <= 0)	HP = 0;
+    }
 
     public int getMP() {
         return MP;
@@ -80,6 +84,10 @@ public abstract class Entity {
 
     public void setMP(int MP) {
         this.MP = MP;
+    }
+    public void changeMP(int c) {
+    	this.MP += c;
+    	if (MP <= 0) MP = 0;
     }
 
     public double getPosX() {

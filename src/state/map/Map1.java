@@ -133,6 +133,7 @@ public class Map1 extends GameState {
         player.tick();
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
+			if (player.intersects(e)) player.changeHP(-5);
 			for (int j = 0; j < player.getSkills().length; j++){
 			    if(player.getSkills()[j].intersects(e)) e.getHit(1);
 			    e.tick();
