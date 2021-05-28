@@ -21,6 +21,7 @@ public class Player extends Entity{
     private int animationStep = 0;
     private int animationStep2 = 0;
     private int animationStep3 = 0;
+
     private int phs = 0;
     private int count1 = 0;
     private int count2 = 0;
@@ -54,6 +55,10 @@ public class Player extends Entity{
     private boolean lock = false;
     private boolean lock2 = false;
     private Key key= new Key();
+    private double lastdy;
+
+
+
     public Player() {
         setPosX(500);
         setPosY(300);
@@ -117,14 +122,11 @@ public class Player extends Entity{
         if (onGround) {
             falling = false;
             lock = false;
+            lock2 = false;
             currentVelocityY = 0;
             //System.out.println("YOYO");
         }
 
-        if (onRoof) {
-            //System.out.println(onRoof);
-            currentVelocityY = 0;
-        }
 
         if (lock) { //lock = true -> start jump animation
             if (dy < 0) {  //from ground to top phs = 0 -> animation phase 1
