@@ -67,7 +67,7 @@ public class Map1 extends GameState {
 
     public void setPlayer(Player player) {
         this.player = player;
-        System.out.println("playerSet: " + player);
+        //System.out.println("playerSet: " + player);
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player
@@ -88,8 +88,9 @@ public class Map1 extends GameState {
 			new Point2D(1800, 200)
 		};
         Monster2 m2 = new Monster2(tilemap1);
-        m2.setPosition(300,900);
+        m2.setPosition(700,900);
         enemies.add(m2);
+        m2.setTarget(player);
         
         Fly fly = new Fly(tilemap1, player);
         fly.setPos(700, 1000);
