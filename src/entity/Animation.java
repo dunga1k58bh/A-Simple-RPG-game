@@ -81,7 +81,7 @@ public class Animation {
 			frames = new Image[length];
 			for(int i = 0 ;i< row;i++) {
 				for (int j = 0;j< col;j++) {
-					System.out.println("1");
+					//System.out.println("1");
 					if (i* col+j<length) {
 						frames[i * col +j] = SwingFXUtils.toFXImage(spritesheet.getSubimage(
 								j * width,
