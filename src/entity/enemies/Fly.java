@@ -92,7 +92,7 @@ public class Fly extends Enemy{
 	
 	@Override
 	public void tick() {
-		if (firing) {
+		if (firing && !notOnScreen()) {
 			FlyBall fb = new FlyBall(tileMap);
 			fb.setPosition(posX, posY);
 			fb.getPlayerPos(player);

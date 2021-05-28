@@ -5,6 +5,7 @@ import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.enemies.Fly;
+import entity.HUD;
 import entity.Player;
 import entity.enemies.Monster2;
 import entity.enemies.Snail;
@@ -29,7 +30,8 @@ public class Map1 extends GameState {
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
     private final TileMap tilemap1;
-
+    private HUD hud;
+    
     //Music BackGround
     private final Music bgMusic;
 
@@ -73,6 +75,7 @@ public class Map1 extends GameState {
         //Vá»©t TileMap cho player
         player.setTileMap(tilemap1);
         player.initSkill();
+        hud = new HUD(player);
         generateEnemies();
     }
     
@@ -161,6 +164,7 @@ public class Map1 extends GameState {
 //		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
             enemy.render(g);
         }
+        hud.render(g);
 
     }
 
