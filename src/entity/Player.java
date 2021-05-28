@@ -21,6 +21,7 @@ public class Player extends Entity{
     private int animationStep = 0;
     private int animationStep2 = 0;
     private int animationStep3 = 0;
+
     private int phs = 0;
     private int count1 = 0;
     private int count2 = 0;
@@ -45,7 +46,7 @@ public class Player extends Entity{
     private final double velocityY = -15;
     private double currentVelocityX = 0;
     private double currentVelocityY = 0;
-    private final double accelerationX = 0.4;
+    private final double accelerationX = 0.4; //TODO
     private final double accelerationY = 0.7;
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private int lastRunningDirection = 0;
@@ -56,6 +57,10 @@ public class Player extends Entity{
     private boolean lock = false;
     private boolean lock2 = false;
     private Key key= new Key();
+    private double lastdy;
+
+
+
     public Player() {
         setPosX(500);
         setPosY(300);
@@ -126,17 +131,13 @@ public class Player extends Entity{
         }
 
         if (onGround) {
-            //System.out.println("ON GROUND");
             falling = false;
             lock = false;
             lock2 = false;
             currentVelocityY = 0;
+            //System.out.println("YOYO");
         }
 
-        if (onRoof) {
-            //System.out.println("ON ROOF");
-            currentVelocityY = 0;
-        }
 
         if (lock) { //lock = true -> start jump animation
             if (dy < 0) {  //from ground to top phs = 0 -> animation phase 1
@@ -204,6 +205,7 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
+
         currentVelocityY += dt * accelerationY;
         dy = dt * currentVelocityY;
         CheckTileMapCollision();
@@ -284,9 +286,9 @@ public class Player extends Entity{
                 }
             }
             if (phs == 1) {
-                //System.out.println("AnimationStep3 = " + animationStep3);
-                //System.out.println("Onground = " + onGround);
-                //System.out.println("Lock = " + lock);
+                System.out.println("AnimationStep3 = " + animationStep3);
+                System.out.println("Onground = " + onGround);
+                System.out.println("Lock = " + lock);
                 if (animationStep3 == 4) {
                     graphicsContext.drawImage(jumpUpperBody.get(animationStep3),0,0,jumpUpperBody.get(animationStep3).getWidth(),jumpUpperBody.get(animationStep3).getHeight(),posX-jumpUpperBody.get(animationStep3).getWidth()/2*facing,posY-jumpUpperBody.get(animationStep3).getHeight(),jumpUpperBody.get(animationStep3).getWidth()*facing,jumpUpperBody.get(animationStep3).getHeight());
                 }
@@ -424,22 +426,28 @@ public class Player extends Entity{
     public void keyIn(KeyEvent keyEvent) {
         //System.out.println("Left");
         if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
+            System.out.println("Key pressed");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
+                    break;
                 }
                 case DOWN -> {
                     key.down = 1;
+                    break;
                 }
                 case LEFT -> {
                     key.left = 1;
+                    break;
                 }
                 case RIGHT -> {
                     key.right = 1;
+                    break;
                 }
                 case Q -> {
                     key.skill1 =1;
                     USESKILL1 = true;
+                    break;
                 }
                 case E -> {
                     key.skill2 = 1;
@@ -451,6 +459,7 @@ public class Player extends Entity{
         }
 
         else {
+            System.out.println("Key released");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;

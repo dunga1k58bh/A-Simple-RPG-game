@@ -22,7 +22,6 @@ public abstract class Entity {
 
     //flag
     public boolean onGround;
-    public boolean onRoof;
 
     //TileMap
     protected TileMap tileMap;
@@ -43,8 +42,10 @@ public abstract class Entity {
 
 
     //Check TileMap Collision (Loại Tile )4 góc Hcn
+    protected  int BottomLeft1;  //present status
+    protected int BottomRight1;
 
-    protected int TopLeft;
+    protected int TopLeft;    //nexts
     protected int TopRight;
     protected int BottomLeft;
     protected int BottomRight;
@@ -118,11 +119,14 @@ public abstract class Entity {
         int RightCol = (int) (x+cwidth/2)/tileSize;
         int TopRow = (int) (y-cheight)/tileSize;
         int BottomRow = (int)(y/tileSize);
+        int BottomRow1 = (int) ((y-3*dy)/tileSize);
 
         TopLeft = tileMap.getType(TopRow,LeftCol); //Hàm này trả về loại Tile
         TopRight = tileMap.getType(TopRow,RightCol);
         BottomLeft = tileMap.getType(BottomRow,LeftCol);
         BottomRight = tileMap.getType(BottomRow,RightCol);
+        BottomLeft1 = tileMap.getType(BottomRow1,LeftCol);
+        BottomRight1 = tileMap.getType(BottomRow1,RightCol);
     }
     //Ý tưởng thì khá đơn giản : Tính 4 góc của hcn bao quanh nhân vật, xem 4 góc đó đang nằm ở Tile loại nào?
     //(trạng thái (posX+dx,posY+dy) tức là trạng thái sau (xem có cho phép không)) và tìm cách xử lý phù hợp
@@ -131,68 +135,52 @@ public abstract class Entity {
         int currRow = (int)posY/tileSize;
 
         if(posX+dx>xmax||posX+dx<xmin) dx = 0;
-        if(posY+dy>ymax||posY+dy<ymin) {
-            if (posY+dy>ymax) {
-                dy = 0;
-                onGround = true;
-            }
-            else onGround = false;
-            if (posY+dy<ymin){
-                dy=0;
-                onRoof = true;
-            }
-            else onRoof = false;
+        if(posY+3*dy>ymax||posY+3*dy<ymin) {
+            if(dy>0) onGround = true;
+//            if(dy<0) onRoof = true;
+            dy = 0;
         }
-        else {
-            onGround = false;
-            onRoof = false;
-        }
-        CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
+        CaculateCorrners(posX,posY+ 3*dy); //LMAO IELTS 10.0
         //Sau đây là 4 trường hợp chính
-
         if(dy!=0) {
-            if (BottomRight == Tile.BLOCK || BottomLeft == Tile.BLOCK) {
+            if ((BottomRight == Tile.BLOCK || BottomLeft == Tile.BLOCK)
+                    && (BottomLeft1 == Tile.ALLOW || BottomRight == Tile.ALLOW)) {
                 onGround = true;
             } else {
                 onGround = false;
             }
-            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK) {
-                onRoof = true;
-            }
-            else {
-                onRoof = false;
-            }
-            //if ()
         }
-        if (dy>0){//rơi xuống
-            if (BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK){
+//        System.out.println(BottomLeft1+" "+BottomRight1+" "+BottomLeft+" "+BottomRight);
+
+
+        if (dy>0){//falling
+            if ((BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK)
+                    &&(BottomLeft1==Tile.ALLOW||BottomRight==Tile.ALLOW )){
                 dy = 0;
                 posY = (currRow+1) * tileSize-1;
                 falling = false;
                 onGround = true;
-            }else{
-                onGround = false;
+//                System.out.println("Onground");
             }
         }
         if(dy<0){ //Bay lên
-            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
-                dy = 0;
-                posY =(currRow)*tileSize +3;
-                onRoof = true;
-            }
-            else {
-                onRoof = false;
-            }
+//            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
+//                dy = 0;
+//                posY =(currRow)*tileSize +3;
+//                onRoof = true;
+//                //System.out.println("BAY");
+//            }
+            onGround = false;
         }
         CaculateCorrners(posX+dx,posY);
         if (dx>0){ //Sang trái
-            if (TopRight == Tile.BLOCK || BottomRight == Tile.BLOCK ){
+            if (TopRight == Tile.BLOCK && BottomRight == Tile.BLOCK){
                 dx = 0;
                 posX = (currCol+1)*tileSize - cwidth/2-1;
             }
         }
         if (dx<0){//Sang Phải
-            if (TopLeft == Tile.BLOCK || BottomLeft == Tile.BLOCK){
+            if (TopLeft == Tile.BLOCK && BottomLeft == Tile.BLOCK){
                 dx=0;
                 posX = currCol*tileSize +cwidth/2+1;
             }
