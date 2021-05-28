@@ -130,13 +130,13 @@ public abstract class Entity {
 
         if(posX+dx>xmax||posX+dx<xmin) dx = 0;
         if(posY+dy>ymax||posY+dy<ymin) {
-            if(dy>0) onGround = true;
-            if(dy<0) onRoof = true;
+            if (dy > 0) onGround = true;
+            if (dy < 0) onRoof = true;
             dy = 0;
         }
-        System.out.println(dy);
+        //System.out.println(dy);
         CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
-        System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
+        //System.out.println(TopLeft+" "+TopRight+" "+BottomLeft+" "+BottomRight);
         //Sau đây là 4 trường hợp chính
 
         if(dy!=0) {
@@ -144,6 +144,12 @@ public abstract class Entity {
                 onGround = true;
             } else {
                 onGround = false;
+            }
+            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK) {
+                onRoof = true;
+            }
+            else {
+                onRoof = false;
             }
         }
 

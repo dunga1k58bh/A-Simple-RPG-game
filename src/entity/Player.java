@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 import utils.Key;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Player extends Entity{
     private Image standLowerBody = new Image("char/Small23-resources.assets-11235.png");
@@ -19,6 +20,7 @@ public class Player extends Entity{
     private Image jumpHead;
     private int animationStep = 0;
     private int animationStep2 = 0;
+    private int phs = 0;
     private int count1 = 0;
     private int count2 = 0;
     private int offset = 0;
@@ -42,7 +44,12 @@ public class Player extends Entity{
     private int lastRunningDirection = 0;
     private int facing = 1;
     private boolean lock = false;
+    private boolean lock2 = false;
     private Key key= new Key();
+    private double lastdy;
+    private int animationStep3;
+    private int count3;
+
     public Player() {
         setPosX(500);
         setPosY(300);
@@ -95,24 +102,54 @@ public class Player extends Entity{
     @Override
     public void tick() {
         //tick
-
         if (onGround) {
             lock = false;
+            lock2 = false;
             currentVelocityY = 0;
         }
 
+        currentVelocityY += dt * accelerationY;
+        lastdy = dy;
+        dy = dt * currentVelocityY;
+        //if (Math.abs(dy) < 1) dy = 0;
+
+        if (onRoof) {
+            //System.out.println(onRoof);
+            currentVelocityY = 0;
+        }
+        if (dy > 5 && !lock) { //falling without jump
+            phs = 2;
+        }
+        else phs = 0;
+        if (lock) { //lock = true -> start jump animation
+            if (dy < 0) {  //from ground to top phs = 0 -> animation phase 1
+                phs = 0;
+            }
+            else if ((currentVelocityY + dt * accelerationY * 1000) > 0 && !lock2) { //on top, dy changes its sign
+                lock2 = true;
+                phs = 1;
+            }
+            if (phs == 1) {
+                count3 ++;
+                //++;
+                //dy = 0;
+            }
+            if (count3 % 4 == 1) {
+                animationStep3 ++;
+            }
+            if (animationStep3 == 6) {
+                animationStep3 = 0;
+                count3 = 0;
+                phs = 2; //phs = 2 when complete phase 2 animation, phs = 2 -> animation phase 3
+            }
+        }
         if (key.up == 1 && currentVelocityY >= 0 && onGround && !lock) {
-            System.out.println("OOOO");
+            //System.out.println("OOOO");
             lock = true;
             currentVelocityY = velocityY;
         }
 
-
-
-        System.out.println("On ground = " + onGround);
-        currentVelocityY += dt * accelerationY;
-        dy = dt * currentVelocityY;
-
+        //System.out.println("On ground = " + onGround);
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
             skill1.facingRight = true;
@@ -144,7 +181,7 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
-        if(dy == 0 ) System.out.println("Dy = 0");
+        //if(dy == 0) //System.out.println("Dy = 0");
         CheckTileMapCollision();
         //System.out.println(posX+" "+posY);
         posX+=dx;
@@ -185,92 +222,112 @@ public class Player extends Entity{
         //render
         //Image image1 = new Image("char/Small33-resources.assets-14326.png"); //head
         //animationStep = 4;
-        switch (animationStep % 5) {
-            case -1 -> { //Draw stand animation
-                if (facing == 1) {
-                    graphicsContext.drawImage(standLowerBody, 0, 0, standLowerBody.getWidth(), standLowerBody.getHeight(), posX - 7, posY - 17, standLowerBody.getWidth() * facing, standLowerBody.getHeight());
-                    graphicsContext.drawImage(standUpperBody, 0, 0, standUpperBody.getWidth(), standUpperBody.getHeight(), posX - 14, posY - 35 + offset, standUpperBody.getWidth() * facing, standUpperBody.getHeight());
-                    graphicsContext.drawImage(head.get(0), 0, 0, head.get(0).getWidth(), head.get(0).getHeight(), posX - 15, posY - 66 + offset, head.get(0).getWidth() * facing, head.get(0).getHeight()); //head
-                } else if (facing == -1) {
+        if (lock) {
+            if (phs == 0) {
+                graphicsContext.drawImage(jumpUpperBody.get(0),0,0,jumpUpperBody.get(0).getWidth(),jumpUpperBody.get(0).getHeight(),posX,posY,jumpUpperBody.get(0).getWidth()*facing,jumpUpperBody.get(0).getHeight());
+                graphicsContext.drawImage(jumpLowerBody.get(0),0,0,jumpLowerBody.get(0).getWidth(),jumpLowerBody.get(0).getHeight(),posX,posY,jumpLowerBody.get(0).getWidth()*facing,jumpLowerBody.get(0).getHeight());
+            }
+            if (phs == 1) {
+                graphicsContext.drawImage(jumpUpperBody.get(animationStep3),0,0,jumpUpperBody.get(animationStep3).getWidth(),jumpUpperBody.get(animationStep3).getHeight(),posX,posY,jumpUpperBody.get(animationStep3).getWidth()*facing,jumpUpperBody.get(animationStep3).getHeight());
+            }
+            if (phs == 2) {
+                graphicsContext.drawImage(jumpUpperBody.get(5),0,0,jumpUpperBody.get(5).getWidth(),jumpUpperBody.get(5).getHeight(),posX,posY,jumpUpperBody.get(5).getWidth()*facing,jumpUpperBody.get(5).getHeight());
+                graphicsContext.drawImage(jumpLowerBody.get(1),0,0,jumpLowerBody.get(1).getWidth(),jumpLowerBody.get(1).getHeight(),posX,posY,jumpLowerBody.get(1).getWidth()*facing,jumpLowerBody.get(1).getHeight());
+            }
+        }
+        else {
+            if (phs == 2) {
+                graphicsContext.drawImage(jumpUpperBody.get(5),0,0,jumpUpperBody.get(5).getWidth(),jumpUpperBody.get(5).getHeight(),posX,posY,jumpUpperBody.get(5).getWidth()*facing,jumpUpperBody.get(5).getHeight());
+                graphicsContext.drawImage(jumpLowerBody.get(1),0,0,jumpLowerBody.get(1).getWidth(),jumpLowerBody.get(1).getHeight(),posX,posY,jumpLowerBody.get(1).getWidth()*facing,jumpLowerBody.get(1).getHeight());
+            }
+            switch (animationStep % 5) {
+                case -1 -> { //Draw stand animation
+                    if (facing == 1) {
+                        graphicsContext.drawImage(standLowerBody, 0, 0, standLowerBody.getWidth(), standLowerBody.getHeight(), posX - 7, posY - 17, standLowerBody.getWidth() * facing, standLowerBody.getHeight());
+                        graphicsContext.drawImage(standUpperBody, 0, 0, standUpperBody.getWidth(), standUpperBody.getHeight(), posX - 14, posY - 35 + offset, standUpperBody.getWidth() * facing, standUpperBody.getHeight());
+                        graphicsContext.drawImage(head.get(0), 0, 0, head.get(0).getWidth(), head.get(0).getHeight(), posX - 15, posY - 66 + offset, head.get(0).getWidth() * facing, head.get(0).getHeight()); //head
+                    } else if (facing == -1) {
                         graphicsContext.drawImage(standLowerBody, 0, 0, standLowerBody.getWidth(), standLowerBody.getHeight(), posX+20, posY - 17, standLowerBody.getWidth() * facing, standLowerBody.getHeight());
                         graphicsContext.drawImage(standUpperBody, 0, 0, standUpperBody.getWidth(), standUpperBody.getHeight(), posX+26, posY - 35 + offset, standUpperBody.getWidth() * facing, standUpperBody.getHeight());
                         graphicsContext.drawImage(head.get(0), 0, 0, head.get(0).getWidth(), head.get(0).getHeight(), posX+27, posY - 66 + offset, head.get(0).getWidth() * facing, head.get(0).getHeight()); //head
                     }
-                break;
+                    break;
 
-            }
-            case 0 -> { //Draw
-                if (facing == 1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0,head.get(1).getWidth(), head.get(1).getHeight(),posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                }
+                case 0 -> { //Draw
+                    if (facing == 1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0,head.get(1).getWidth(), head.get(1).getHeight(),posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
 
-                    //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0,runLowerBody.get(animationStep % runLowerBody.size()).getWidth(),runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth() * facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0,runLowerBody.get(animationStep % runLowerBody.size()).getWidth(),runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth() * facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
 
-                    //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 14, posY - 35 + offset,runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
-                } else if (facing == -1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0,head.get(1).getWidth(), head.get(1).getHeight(),posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 14, posY - 35 + offset,runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    } else if (facing == -1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0,head.get(1).getWidth(), head.get(1).getHeight(),posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
 
-                    //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0,runLowerBody.get(animationStep % runLowerBody.size()).getWidth(),runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 25, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth() * facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        //Image image2 = new Image("char/Small24-resources.assets-12840.png"); //down
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0,runLowerBody.get(animationStep % runLowerBody.size()).getWidth(),runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 25, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth() * facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
 
-                    //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 14 + 25, posY - 35 + offset,runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
-                }
+                        //Image image3 = new Image("char/Small6-resources.assets-12601.png"); //up
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 14 + 25, posY - 35 + offset,runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
 
-                break;
-            }
-            case 1 -> {
-                if (facing == 1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
-                } else if (facing == -1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3 + 30, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19 + 33, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    break;
                 }
-                break;
-            }
-            case 2 -> {
-                if (facing == 1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 2, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 10, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                case 1 -> {
+                    if (facing == 1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    } else if (facing == -1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3 + 30, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19 + 33, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
+                    break;
                 }
-                else if (facing == -1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 2 + 23, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 10 + 16, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                case 2 -> {
+                    if (facing == 1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 2, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 10, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
+                    else if (facing == -1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 2 + 23, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing,runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 10 + 16, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
+                    break;
                 }
-                break;
-            }
-            case 3 -> {
-                if (facing == 1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runLowerBody.size()).getWidth() / 2 + 4, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 13, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                case 3 -> {
+                    if (facing == 1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runLowerBody.size()).getWidth() / 2 + 4, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 13, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
+                    else if (facing == -1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 +25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runLowerBody.size()).getWidth() / 2 + 4 + 33, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 13 + 23, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
+                    break;
                 }
-                else if (facing == -1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 +25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runLowerBody.size()).getWidth() / 2 + 4 + 33, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 13 + 23, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                case 4 -> {
+                    if (facing == 1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset,head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 4, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 9, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    } else if (facing == -1) {
+                        graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset,head.get(1).getWidth()*facing, head.get(1).getHeight());
+                        graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 4 + 23, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                        graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 9 + 17, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                    }
+                    break;
                 }
-                break;
-            }
-            case 4 -> {
-                if (facing == 1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset,head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 4, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 9, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
-                } else if (facing == -1) {
-                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset,head.get(1).getWidth()*facing, head.get(1).getHeight());
-                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0, 0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(),posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 4 + 23, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
-                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 9 + 17, posY - 33 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
-                }
-                break;
             }
         }
+
 
         //Draw a small dot at player position for simple debug
         double radius = 3;
@@ -306,22 +363,22 @@ public class Player extends Entity{
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
-                    System.out.println("Key UP");
+                    //System.out.println("Key UP");
                     break;
                 }
                 case DOWN -> {
                     key.down = 1;
-                    System.out.println("Key DOWN");
+                   // System.out.println("Key DOWN");
                     break;
                 }
                 case LEFT -> {
                     key.left = 1;
-                    System.out.println("Key LEFT");
+                    //System.out.println("Key LEFT");
                     break;
                 }
                 case RIGHT -> {
                     key.right = 1;
-                    System.out.println("Key RIGHT");
+                    //System.out.println("Key RIGHT");
                     break;
                 }
                 case Q -> {
@@ -331,7 +388,7 @@ public class Player extends Entity{
             }
         }
         else {
-            System.out.println("Key released");
+            //System.out.println("Key released");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;
