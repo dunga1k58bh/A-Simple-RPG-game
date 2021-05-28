@@ -10,11 +10,12 @@ import java.io.FileInputStream;
 public class Animation {
 	
 	private Image[] frames;
+	private int length;
 	private int curFrame;
 	private long startTime;
 	private long delay;
 	private boolean playedOnce;
-
+    private int maxConsercutiveAnimation;        // max number of consercutive runs of animation
 
 	private int width;
 	private int height;
@@ -22,21 +23,31 @@ public class Animation {
 	public Animation() {
 		playedOnce = false;
 	}
-	
+
 	public void setDelay(long d) { delay = d; }
 	public void setFrame(int i) { curFrame = i; }
 	public int getFrame() { return curFrame; }
 	public Image getImage() { return frames[curFrame]; }
 	public boolean hasPlayedOnce() { return playedOnce; }
+	public void setPlayedOnce(boolean b){this.playedOnce=b;}
     public void setWidthHeight(int width, int height){
 		this.width = width;
 		this.height = height;
 	}
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}
-
+	public void setMaxConsercutiveAnimation(int i){
+		maxConsercutiveAnimation =i;
+	}
+	public int getMaxConsercutiveAnimation(){
+		return maxConsercutiveAnimation;
+	}
+	public int getLength(){
+		return frames.length;
+	}
 
 	public void setFrames(String s,int length){
+		this.length = length;
 		try {
 			BufferedImage spritesheet = ImageIO.read(
 					new FileInputStream(s)
@@ -59,6 +70,7 @@ public class Animation {
 		curFrame = 0;
 		startTime = System.nanoTime();
 		playedOnce = false;
+
 	}
 	public void setFrames(String s,int length,int row,int col){
 		try {
@@ -88,6 +100,7 @@ public class Animation {
 		curFrame = 0;
 		startTime = System.nanoTime();
 		playedOnce = false;
+
 	}
 	
 	public void setFrames(Image[] frames) {
