@@ -1,7 +1,9 @@
 package entity.enemies;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import entity.Animation;
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -13,8 +15,19 @@ public class Fly extends Enemy{
 	public final static int DOWN = 1;
 	public final static int LEFT = 2;
 	public final static int RIGHT = 3;
-	public Fly(TileMap tm) {
+	
+	// fly ball
+	private ArrayList<FlyBall> flyBalls;
+	//private int flyBallDamage;
+	private boolean firing;
+	private long firingTimer;
+	
+	// player
+	private Player player;
+	
+	public Fly(TileMap tm, Player p) {
 		super(tm);
+		player = p;
 		
 		moveSpeed = 1;
 		maxSpeed = 2;
@@ -22,6 +35,9 @@ public class Fly extends Enemy{
 		maxFallSpeed = 10.0;
 		HP = maxHP = 3;
 		damage = 1;
+		flyBalls = new ArrayList<FlyBall>();
+		//flyBallDamage = 1;
+		firing = true;
 		
 		width = 80;
 		height = 62;
@@ -38,7 +54,6 @@ public class Fly extends Enemy{
 			sprites[1] = new Image(new FileInputStream("res/enemies/fly/fly2.png"));
 			sprites[2] = new Image(new FileInputStream("res/enemies/fly/fly3.png"));
 			sprites[3] = new Image(new FileInputStream("res/enemies/fly/fly4.png"));
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -73,19 +88,38 @@ public class Fly extends Enemy{
 			dy += moveSpeed;
 			if (dy > maxSpeed) dy = maxSpeed;
 		}
-		
-		// falling
-		if(falling) dy += fallSpeed;
-
 	}
+	
 	@Override
 	public void tick() {
+		if (firing) {
+			FlyBall fb = new FlyBall(tileMap);
+			fb.setPosition(posX, posY);
+			fb.getPlayerPos(player);
+			flyBalls.add(fb);
+			firingTimer = System.nanoTime();
+			firing = false;
+		}
+		if (!firing) {
+			long elapsed = (System.nanoTime() - firingTimer) / 1000000;
+			if (elapsed > 2500) firing = true;
+		}
+		
+		// update fly balls
+		for(int i = 0; i < flyBalls.size(); i++) {
+			flyBalls.get(i).tick();
+			if(flyBalls.get(i).shouldRemove()) {
+				flyBalls.remove(i);
+				i--;
+			}
+		}
+		
 		// update position
-		//falling = true;
 		getNextPosition();
 		CheckTileMapCollision();
 		posX += dx;
 		posY += dy;
+		
 		// check flinching
 		if(flinching) {
 			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
@@ -137,6 +171,11 @@ public class Fly extends Enemy{
 	@Override
 	public void render(GraphicsContext graphicsContext) {
 		setMapPosittion();
+		// render fly balls
+		for(int i = 0; i < flyBalls.size(); i++) {
+			flyBalls.get(i).render(graphicsContext);
+		}
+		
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {

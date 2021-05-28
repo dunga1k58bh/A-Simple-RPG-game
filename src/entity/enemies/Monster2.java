@@ -1,6 +1,9 @@
 package entity.enemies;
 import entity.Animation;
+import entity.skills.LaserAttack;
+import entity.skills.Skill1;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import tilemap.TileMap;
 
 
@@ -13,16 +16,19 @@ public class Monster2 extends Enemy{
     private final int IDLE = 3;//Đứng yên
     private final int JUMP = 4;
     private final  int LASSERSWEPT = 5;
-
-
+    private LaserAttack laserAttack;
+    private Skill1 skill11;
     private Animation[] animations;
+
+    Image image ;
+
     public Monster2(TileMap tm) {
         super(tm);
         moveSpeed = 0.3;
         maxSpeed = 1;
         fallSpeed = 0.2;
         maxFallSpeed = 10.0;
-        HP = maxHP = 3;
+        HP = maxHP = 100;
         damage = 1;
         jumpStart =0.5;
         stopJumpSpeed=0.5;
@@ -33,6 +39,9 @@ public class Monster2 extends Enemy{
         this.ymin = height;
         this.ymax = tileMap.getHeight() -1;
         setEntityBoxSize(220,190);
+
+        laserAttack = new LaserAttack(tileMap);
+        skill11 = new Skill1(tileMap);
 
         animations = new Animation[6];
         for (int i =0;i<animations.length;i++){
@@ -64,10 +73,14 @@ public class Monster2 extends Enemy{
         animations[LASSERSWEPT].setFrames("res/enemies/monster2/lasser_swept.png",121,11,11);
         animations[LASSERSWEPT].setDelay(25);
 
+        flinching =false;
+
         right = true;
         facingRight = true;
         jumping = false;
-        currentAnimation = LASSERSWEPT;
+        currentAnimation = WALK;
+
+
     }
     private void getNextPosition() {
         // movement
@@ -114,7 +127,9 @@ public class Monster2 extends Enemy{
             left = false;
             facingRight = true;
         }
-
+        laserAttack.setPos(posX,posY);
+        laserAttack.ChangeDirection(facingRight);
+        laserAttack.tick();
         // update animation
         animations[currentAnimation].update();
     }
@@ -123,6 +138,7 @@ public class Monster2 extends Enemy{
     public void render(GraphicsContext graphicsContext){
         setMapPosittion();
 //        if(notOnScreen()) return;
+
         if(facingRight) {
             graphicsContext.drawImage(
                     animations[currentAnimation].getImage(),
@@ -140,5 +156,6 @@ public class Monster2 extends Enemy{
                     animations[currentAnimation].getHeight());
 
         }
+        laserAttack.render(graphicsContext);
     }
 }

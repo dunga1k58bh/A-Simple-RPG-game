@@ -1,6 +1,7 @@
 package entity;
 
 import entity.skills.Skill1;
+import entity.skills.Skill2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -27,6 +28,9 @@ public class Player extends Entity{
 
     //Skills
     private Skill1 skill1;
+    private Skill2 skill2;
+    private boolean USESKILL1;
+    private boolean USESKILL2;
 
 
 
@@ -97,6 +101,9 @@ public class Player extends Entity{
     public void initSkill(){
         skill1 = new Skill1(tileMap);
         skill1.setPos(posX,posY);
+
+        skill2 = new Skill2(tileMap);
+        skill2.setPos(posX,posY);
     }
 
     @Override
@@ -144,15 +151,16 @@ public class Player extends Entity{
             }
         }
         if (key.up == 1 && currentVelocityY >= 0 && onGround && !lock) {
-            //System.out.println("OOOO");
+
             lock = true;
             currentVelocityY = velocityY;
         }
 
-        //System.out.println("On ground = " + onGround);
+
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
             skill1.facingRight = true;
+            skill2.facingRight = true;
             if (animationStep == -1) {
                 animationStep = 0;
             }
@@ -164,6 +172,7 @@ public class Player extends Entity{
             count2++;
         } else if (runningDirection == -1) {
             skill1.facingRight = false;
+            skill2.facingRight = false;
             facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;
@@ -181,7 +190,7 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
-        //if(dy == 0) //System.out.println("Dy = 0");
+
         CheckTileMapCollision();
         //System.out.println(posX+" "+posY);
         posX+=dx;
@@ -201,8 +210,14 @@ public class Player extends Entity{
             offset = animationStep2%2*3;
         }
         //Update Skill
+        if(USESKILL2 ==false){
+            skill2.setPos(posX,posY);
+        }else{
+            skill2.tick();
+        }
         skill1.setPos(posX,posY);
         skill1.tick();
+
     }
 
 
@@ -340,7 +355,7 @@ public class Player extends Entity{
         posY = posYTemp;
 
         if (key.skill1 == 1) skill1.render(graphicsContext);
-
+        if (key.skill2 == 1) skill2.render(graphicsContext);
 
 
 
@@ -383,6 +398,12 @@ public class Player extends Entity{
                 }
                 case Q -> {
                     key.skill1 =1;
+                    USESKILL1 = true;
+                    break;
+                }
+                case E -> {
+                    key.skill2 = 1;
+                    USESKILL2= true;
                     break;
                 }
             }
@@ -408,8 +429,15 @@ public class Player extends Entity{
                 }
                 case Q -> {
                     key.skill1 = 0;
+                    USESKILL1 = false;
                     break;
                 }
+                case E -> {
+                    key.skill2 = 0;
+                    USESKILL2 = false;
+                    break;
+                }
+
             }
         }
     }
