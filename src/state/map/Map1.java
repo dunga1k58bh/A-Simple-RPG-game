@@ -67,7 +67,7 @@ public class Map1 extends GameState {
 
     public void setPlayer(Player player) {
         this.player = player;
-        System.out.println("playerSet: " + player);
+        //System.out.println("playerSet: " + player);
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player

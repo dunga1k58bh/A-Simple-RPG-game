@@ -153,9 +153,8 @@ public abstract class Entity {
                 posY = (currRow+1) * tileSize-1;
                 falling = false;
                 onGround = true;
-//                System.out.println("Onground");
             }else{
-//                onGround = false;
+                onGround = false;
             }
         }
         if(dy<0){ //Bay lên

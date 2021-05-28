@@ -133,8 +133,8 @@ public class Monster2 extends Enemy{
     @Override
     public void tick() {
         // update position
-        System.out.println("Current Animation "+currentAnimation);
-        System.out.println("FacingRight"+ facingRight);
+        //System.out.println("Current Animation "+currentAnimation);
+        //System.out.println("FacingRight"+ facingRight);
         getNextPosition();
         CheckTileMapCollision();
         posX += dx;
@@ -176,7 +176,7 @@ public class Monster2 extends Enemy{
             right = false;
             nextAnimation = WALK;
         }
-        System.out.println("COncursiv"+consercutiveAnimations);
+        //System.out.println("COncursiv"+consercutiveAnimations);
 
         laserAttack.setPos(posX,posY);
         laserAttack.ChangeDirection(facingRight);
@@ -199,7 +199,7 @@ public class Monster2 extends Enemy{
                             currentAnimation=random_int;
                     }
 
-                    System.out.println("Random" + currentAnimation);
+                    //System.out.println("Random" + currentAnimation);
                 }
                 if(player.getPosX()-posX>0){
                     right=true;facingRight=true;

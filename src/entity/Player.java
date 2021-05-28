@@ -43,7 +43,7 @@ public class Player extends Entity{
     private final double velocityY = -15;
     private double currentVelocityX = 0;
     private double currentVelocityY = 0;
-    private final double accelerationX = 0.4; //TODO
+    private final double accelerationX = 0.4;
     private final double accelerationY = 0.7;
     private int runningDirection = 0; //0 = not running, 1 = right, -1 = left
     private int lastRunningDirection = 0;
@@ -263,9 +263,9 @@ public class Player extends Entity{
                 }
             }
             if (phs == 1) {
-                System.out.println("AnimationStep3 = " + animationStep3);
-                System.out.println("Onground = " + onGround);
-                System.out.println("Lock = " + lock);
+                //System.out.println("AnimationStep3 = " + animationStep3);
+                //System.out.println("Onground = " + onGround);
+                //System.out.println("Lock = " + lock);
                 if (animationStep3 == 4) {
                     graphicsContext.drawImage(jumpUpperBody.get(animationStep3),0,0,jumpUpperBody.get(animationStep3).getWidth(),jumpUpperBody.get(animationStep3).getHeight(),posX-jumpUpperBody.get(animationStep3).getWidth()/2*facing,posY-jumpUpperBody.get(animationStep3).getHeight(),jumpUpperBody.get(animationStep3).getWidth()*facing,jumpUpperBody.get(animationStep3).getHeight());
                 }
