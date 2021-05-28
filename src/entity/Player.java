@@ -20,7 +20,6 @@ public class Player extends Entity{
     private Image jumpHead;
     private int animationStep = 0;
     private int animationStep2 = 0;
-    private int phs = 0;
     private int count1 = 0;
     private int count2 = 0;
     private int offset = 0;
@@ -49,16 +48,11 @@ public class Player extends Entity{
     //private double zzY = 0;
     //private double zzX = 0;
     private boolean lock = false;
-    private boolean lock2 = false;
     private Key key= new Key();
-    private double lastdy;
-    private int animationStep3;
-    private int count3;
-
     public Player() {
         setPosX(500);
         setPosY(300);
-        setEntityBoxSize(48,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
+        setEntityBoxSize(30,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
         //add default texture
 
         head.add(0,new Image("char/Small32-resources.assets-4440.png")); //standing
@@ -110,13 +104,14 @@ public class Player extends Entity{
     @Override
     public void tick() {
         //tick
+
         if (!onGround && !lock) { //falling
             falling = true;
         }
+
         if (onGround) {
             falling = false;
             lock = false;
-            lock2 = false;
             currentVelocityY = 0;
             //System.out.println("YOYO");
         }
@@ -187,6 +182,7 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
+
         currentVelocityY += dt * accelerationY;
         lastdy = dy;
         dy = dt * currentVelocityY;
@@ -236,6 +232,7 @@ public class Player extends Entity{
         //render
         //Image image1 = new Image("char/Small33-resources.assets-14326.png"); //head
         //animationStep = 4;
+
         if (falling) {
             if (facing == 1) {
                 graphicsContext.drawImage(jumpHead,0,0,jumpHead.getWidth(),jumpHead.getHeight(),posX+-24.0,posY+-76.0,jumpHead.getWidth()*facing,jumpHead.getHeight());
@@ -297,8 +294,7 @@ public class Player extends Entity{
                         graphicsContext.drawImage(standUpperBody, 0, 0, standUpperBody.getWidth(), standUpperBody.getHeight(), posX + 26, posY - 35 + offset, standUpperBody.getWidth() * facing, standUpperBody.getHeight());
                         graphicsContext.drawImage(head.get(0), 0, 0, head.get(0).getWidth(), head.get(0).getHeight(), posX + 27, posY - 66 + offset, head.get(0).getWidth() * facing, head.get(0).getHeight()); //head
                     }
-                    break;
-
+                break;
                 }
                 case 0 -> { //Draw
                     if (facing == 1) {
@@ -319,7 +315,18 @@ public class Player extends Entity{
                         graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0, 0, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(), runUpperBody.get(animationStep % runUpperBody.size()).getHeight(), posX - 14 + 25, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth() * facing, runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
                     }
 
-                    break;
+
+                break;
+            }
+            case 1 -> {
+                if (facing == 1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
+                } else if (facing == -1) {
+                    graphicsContext.drawImage(head.get(1), 0, 0, head.get(1).getWidth(), head.get(1).getHeight(), posX - 15 + 25, posY - 68 + offset, head.get(1).getWidth()*facing, head.get(1).getHeight());
+                    graphicsContext.drawImage(runLowerBody.get(animationStep % runLowerBody.size()), 0,0, runLowerBody.get(animationStep % runLowerBody.size()).getWidth(), runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), posX - runLowerBody.get(animationStep % runUpperBody.size()).getWidth() / 2 + 3 + 30, posY - runLowerBody.get(animationStep % runLowerBody.size()).getHeight(), runLowerBody.get(animationStep % runLowerBody.size()).getWidth()*facing, runLowerBody.get(animationStep % runLowerBody.size()).getHeight());
+                    graphicsContext.drawImage(runUpperBody.get(animationStep % runUpperBody.size()), 0,0,runUpperBody.get(animationStep % runUpperBody.size()).getWidth(),runUpperBody.get(animationStep % runUpperBody.size()).getHeight(),posX - 19 + 33, posY - 35 + offset, runUpperBody.get(animationStep % runUpperBody.size()).getWidth()*facing,runUpperBody.get(animationStep % runUpperBody.size()).getHeight());
                 }
                 case 1 -> {
                     if (facing == 1) {
@@ -369,16 +376,16 @@ public class Player extends Entity{
                     }
                     break;
                 }
+                break;
             }
         }
-
-
         //Draw a small dot at player position for simple debug
         double radius = 3;
         //Stoking
         graphicsContext.strokeOval(posX-radius, posY-radius, radius*2, radius*2);
         //Filling:
         graphicsContext.fillOval(posX-radius, posY-radius, radius*2, radius*2);
+
 
         posX = posXTemp;
         posY = posYTemp;
@@ -407,26 +414,18 @@ public class Player extends Entity{
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
-                    //zzY -= 0.5;
-                    //System.out.println("zzY = " + zzY);
                     break;
                 }
                 case DOWN -> {
                     key.down = 1;
-                    //zzY += 0.5;
-                    //System.out.println("zzY = " + zzY);
                     break;
                 }
                 case LEFT -> {
                     key.left = 1;
-                    //zzX -= 0.5;
-                    //System.out.println("zzX = " + zzX);
                     break;
                 }
                 case RIGHT -> {
                     key.right = 1;
-                    //zzX += 0.5;
-                    //System.out.println("zzX = " + zzX);
                     break;
                 }
                 case Q -> {
@@ -442,7 +441,7 @@ public class Player extends Entity{
             }
         }
         else {
-            //System.out.println("Key released");
+            System.out.println("Key released");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;

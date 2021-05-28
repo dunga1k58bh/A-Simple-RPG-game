@@ -192,6 +192,12 @@ public class Fly extends Enemy{
 					5);
 			graphicsContext.setFill(Color.WHITE);
 		}
+
 		super.render(graphicsContext);
+//		double radius = 3;
+//		//Stoking
+//		graphicsContext.strokeOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);
+//		//Filling:
+//		graphicsContext.fillOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);
 	}
 }

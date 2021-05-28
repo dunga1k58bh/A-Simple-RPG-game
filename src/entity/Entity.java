@@ -132,11 +132,10 @@ public abstract class Entity {
 
         if(posX+dx>xmax||posX+dx<xmin) dx = 0;
         if(posY+dy>ymax||posY+dy<ymin) {
-            if (dy > 0) onGround = true;
-            if (dy < 0) onRoof = true;
+            if(dy>0) onGround = true;
+            if(dy<0) onRoof = true;
             dy = 0;
         }
-        //System.out.println(dy);
         CaculateCorrners(posX,posY+dy); //LMAO IELTS 10.0
         //Sau đây là 4 trường hợp chính
 
@@ -145,12 +144,6 @@ public abstract class Entity {
                 onGround = true;
             } else {
                 onGround = false;
-            }
-            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK) {
-                onRoof = true;
-            }
-            else {
-                onRoof = false;
             }
         }
 
@@ -199,7 +192,7 @@ public abstract class Entity {
     }
 
     //intersects beetween enemy and the entity object. If intersected return true;
-    public boolean intersects(Enemy e) {
+    public boolean intersects(Entity e) {
         Rectangle2D r1 = getRectangle();
         Rectangle2D r2 = e.getRectangle();
         return r1.intersects(r2);
