@@ -50,7 +50,7 @@ public class Player extends Entity{
     public Player() {
         setPosX(500);
         setPosY(300);
-        setEntityBoxSize(48,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
+        setEntityBoxSize(30,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
         //add default texture
 
         head.add(0,new Image("char/Small32-resources.assets-4440.png")); //standing
@@ -285,13 +285,13 @@ public class Player extends Entity{
                 break;
             }
         }
-
         //Draw a small dot at player position for simple debug
         double radius = 3;
         //Stoking
         graphicsContext.strokeOval(posX-radius, posY-radius, radius*2, radius*2);
         //Filling:
         graphicsContext.fillOval(posX-radius, posY-radius, radius*2, radius*2);
+
 
         posX = posXTemp;
         posY = posYTemp;
