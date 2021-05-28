@@ -25,9 +25,9 @@ public class Player extends Entity{
     private int offset = 0;
 
     //Skills
-    private Skill1 skill1;
-    private Skill2 skill2;
 
+
+    private Entity[] skills;
 
     private boolean USESKILL1;
     private boolean USESKILL2;
@@ -70,7 +70,7 @@ public class Player extends Entity{
         runLowerBody.add(4,new Image("char/Small28-resources.assets-5528.png"));
 
         //jump animation contains 3 phases:
-        //Phase 1: from gound to highest-air (Example: https://drive.google.com/file/d/12mnGkDOkYaG6wl46t_2hhXUM60TrX_NP/view?usp=sharing)
+        //Phase 1: from ground to highest-air (Example: https://drive.google.com/file/d/12mnGkDOkYaG6wl46t_2hhXUM60TrX_NP/view?usp=sharing)
         //Phase 2: air-rolling (Example: https://drive.google.com/file/d/19lhi_kn1RBmVkM7ksC5QPMG8mFIGK23E/view?usp=sharing)
         //Phase 3: falling (Example: https://drive.google.com/file/d/1HrBG9Pz_xFWDgIKE4c9VnVCrhyeICt2Y/view?usp=sharing)
         jumpHead = new Image("char/Small32-resources.assets-4440.png");
@@ -93,12 +93,21 @@ public class Player extends Entity{
     }
 
 
-    public void initSkill(){
-        skill1 = new Skill1(tileMap);
-        skill1.setPos(posX,posY);
 
-        skill2 = new Skill2(tileMap);
-        skill2.setPos(posX,posY);
+
+    public void initSkill(){
+
+        skills = new Entity[2];
+        skills[0] = new Skill1(tileMap);
+        skills[1] = new Skill2(tileMap);
+
+        for (int i = 0; i < skills.length; i++){
+            skills[i].setPos(posX, posY);
+        }
+    }
+
+    public Entity[] getSkills(){
+        return skills;
     }
 
     @Override
@@ -124,8 +133,12 @@ public class Player extends Entity{
 
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
-            skill1.facingRight = true;
-            skill2.facingRight = true;
+
+//
+            for (int i = 0; i < skills.length; i++){
+                skills[i].facingRight = true;
+            }
+
             if (animationStep == -1) {
                 animationStep = 0;
             }
@@ -136,8 +149,9 @@ public class Player extends Entity{
             count1++;
             count2++;
         } else if (runningDirection == -1) {
-            skill1.facingRight = false;
-            skill2.facingRight = false;
+            for (int i = 0; i < skills.length; i++){
+                skills[i].facingRight = false;
+            }
             facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;
@@ -175,12 +189,17 @@ public class Player extends Entity{
         }
         //Update Skill
         if(USESKILL2 ==false){
-                skill2.setPos(posX, posY);
+                skills[1].setPos(posX, posY);
         }else{
-            skill2.tick();
+            skills[1].tick();
         }
-        skill1.setPos(posX,posY);
-        skill1.tick();
+
+        if(USESKILL1 == false) {
+            skills[0].setPos(posX, posY);
+        }
+        else{
+            skills[0].tick();
+        }
 
     }
 
@@ -298,8 +317,9 @@ public class Player extends Entity{
         posX = posXTemp;
         posY = posYTemp;
 
-        if (key.skill1 == 1) skill1.render(graphicsContext);
-        if (key.skill2 == 1) skill2.render(graphicsContext);
+        if (key.skill1 == 1) skills[0].render(graphicsContext);
+        if (key.skill2 == 1) skills[1].render(graphicsContext);
+
 
 
 
@@ -347,11 +367,13 @@ public class Player extends Entity{
                 }
                 case E -> {
                     key.skill2 = 1;
-                    USESKILL2= true;
+                    USESKILL2 = true;
                     break;
                 }
+
             }
         }
+
         else {
             System.out.println("Key released");
             switch (keyEvent.getCode()) {

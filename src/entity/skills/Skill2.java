@@ -17,13 +17,15 @@ public class Skill2  extends Entity{
         width = 70;
         height = 92;
 
-        frames = new Image[3];
-        frames[0]= new Image("Skill/Skill2-1.png");
-        frames[1]= new Image("SKill/Skill2-2.png");
-        frames[2]= new Image("SKill/Skill2-3.png");
+        frames = new Image[4];
+        frames[0]= new Image("Skill/Skill3-0.png");
+        frames[1]= new Image("SKill/Skill3-1.png");
+        frames[2]= new Image("SKill/Skill3-2.png");
+        frames[3]= new Image("SKill/Skill3-3.png");
         skill2Animation = new Animation();
         skill2Animation.setFrames(frames);
         skill2Animation.setDelay(100);
+        setEntityBoxSize(70,92);
 
     }
     public void resetAnimation(){
@@ -44,29 +46,28 @@ public class Skill2  extends Entity{
         if(facingRight) {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap+ 100 -skill2Animation.getImage().getWidth()/2),
+                    (posX -xmap+ 200 -skill2Animation.getImage().getWidth()/2),
                     (posY -ymap-  skill2Animation.getImage().getHeight()),
                     skill2Animation.getImage().getWidth(),
                     skill2Animation.getImage().getHeight());
-
 
         }
         else {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap -100 +skill2Animation.getImage().getWidth()/2),
+                    (posX -xmap -200 +skill2Animation.getImage().getWidth()/2),
                     (posY -ymap- skill2Animation.getImage().getHeight() ),
                     -skill2Animation.getImage().getWidth(),
                     skill2Animation.getImage().getHeight());
+
         }
     }
 
     @Override
     public void tick() {
 
-        if(facingRight) posX+=20;
-        else posX-=20;
 
         skill2Animation.update();
+
     }
 }

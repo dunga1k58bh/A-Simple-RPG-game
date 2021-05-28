@@ -193,7 +193,7 @@ public abstract class Entity {
     }
 
     //intersects beetween enemy and the entity object. If intersected return true;
-    public boolean intersects(Enemy e) {
+    public boolean intersects(Entity e) {
         Rectangle2D r1 = getRectangle();
         Rectangle2D r2 = e.getRectangle();
         return r1.intersects(r2);

@@ -129,15 +129,20 @@ public class Map1 extends GameState {
         player.tick();
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
-			if(player.intersects(e)) e.getHit(1);
-			e.tick();
+			for (int j = 0; j < player.getSkills().length; j++){
+			    if(player.getSkills()[j].intersects(e)) e.getHit(1);
+			    e.tick();
+			}
 			if(e.isDead()) {
 				enemies.remove(i);
 				i--;
 			}
 		}
 
-		//Check to open gate
+
+
+
+        //Check to open gate
 		tilemap1.OpenNextMap(enemies.size());
 		//Check to move to next map
 		if(player.getPosX()>gateX&&player.getPosY()<gateY){
