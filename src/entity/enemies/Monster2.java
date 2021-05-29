@@ -43,7 +43,7 @@ public class Monster2 extends Enemy{
         maxSpeed = 3;
         fallSpeed = 3;
         maxFallSpeed = 10.0;
-        HP = maxHP = 100;
+        HP = maxHP = 5;
         damage = 1;
         jumpStart =3;
         stopJumpSpeed=5;

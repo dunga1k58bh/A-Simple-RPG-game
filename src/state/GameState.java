@@ -2,6 +2,7 @@ package state;
 
 
 
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 
@@ -14,7 +15,7 @@ public abstract class GameState {
 	public GameState(GameStateManager gsm) {
 		this.gsm=gsm;
 	}
-    public abstract void  init();
+	public abstract  void setPlayer(Player player);
     public abstract void tick();
     public abstract void render(GraphicsContext g);
     public abstract void keyPressed( KeyEvent k);
