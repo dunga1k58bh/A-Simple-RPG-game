@@ -19,7 +19,7 @@ import state.GameState;
 import state.GameStateManager;
 import tilemap.TileMap;
 
-public class Map2 extends GameState {
+public class Map3 extends GameState {
 
     //OVERALL DESCRIPTION:
     //this class owns tilemap obj and stores a reference to player object which playstate owns. Playstate will pass player obj to this class.
@@ -31,9 +31,9 @@ public class Map2 extends GameState {
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
-    private  TileMap tilemap2;
-    private final Gate gatetoNextMap;
-    private final Gate gateToPreviousMap;
+    private  TileMap tilemap3;
+    private Gate gatetoNextMap;
+    private Gate gateToPreviousMap;
     private HUD hud;
 
     //Music BackGround
@@ -42,6 +42,7 @@ public class Map2 extends GameState {
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
     public final double playerStartingPosY = 200; //TODO
+
     //Is this map clear ?
     public boolean isclear;
 
@@ -49,18 +50,19 @@ public class Map2 extends GameState {
     private double camPosX = 0;
     private double camPosY = 0;
 
-    public Map2(GameStateManager gsm){
+    public Map3(GameStateManager gsm){
         super(gsm);
         try {
-            bg= new Image(new FileInputStream("res/bg/bgMap2.png"));
+            bg= new Image(new FileInputStream("res/bg/bgMap3.png"));
             bgMusic = new Music("res/Audio/bgMusic0.wav");
-            tilemap2 = new TileMap(48);
-            tilemap2.loadTileSet("Map/TileSet.png");
-            tilemap2.loadMap("res/Map/Map2.map");
+            tilemap3 = new TileMap(48);
+            tilemap3.loadTileSet("Map/TileSet.png");
+            tilemap3.loadMap("res/Map/Map3.map");
         }catch (Exception e){
             e.printStackTrace();
         }
-         tilemap2.setPos(camPosX,camPosY);
+
+        tilemap3.setPos(camPosX,camPosY);
         //generateEnemies();
 
         //Set Cycle music background and Play
@@ -68,10 +70,10 @@ public class Map2 extends GameState {
         bgMusic.setVolume(0.1);
         bgMusic.startMusic();
         //the gate
-        gateToPreviousMap = new Gate(tilemap2);
-        gateToPreviousMap.setPos(24,336);
-        gatetoNextMap = new Gate(tilemap2);
-        gatetoNextMap.setPos(2856,336);
+        gateToPreviousMap = new Gate(tilemap3);
+        gateToPreviousMap.setPos(24,240);
+        gatetoNextMap = new Gate(tilemap3);
+        gatetoNextMap.setPos(1368,192);
     }
     @Override
     public void setPlayer(Player player) {
@@ -80,7 +82,7 @@ public class Map2 extends GameState {
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player
-        player.setTileMap(tilemap2);
+        player.setTileMap(tilemap3);
         player.initSkill();
         hud = new HUD(player);
         generateEnemies();
@@ -97,28 +99,10 @@ public class Map2 extends GameState {
                 new Point2D(1680, 200),
                 new Point2D(1800, 200)
         };
-        Monster2 m2 = new Monster2(tilemap2);
+        Monster2 m2 = new Monster2(tilemap3);
         m2.setPosition(700,900);
         enemies.add(m2);
         m2.setTarget(player);
-
-        Fly fly = new Fly(tilemap2, player);
-        fly.setPos(700, 1000);
-        enemies.add(fly);
-
-        Fly fly2 = new Fly(tilemap2, player);
-        fly2.setPos(500, 700);
-        enemies.add(fly2);
-
-        for (Point2D point : points) {
-            s = new Snail(tilemap2);
-            f = new Fly(tilemap2, player);
-            f.setPos(point.getX(), point.getY() - 100);
-            s.setPosition(point.getX(), point.getY());
-            enemies.add(s);
-            enemies.add(f);
-        }
-
     }
 
 
@@ -131,9 +115,9 @@ public class Map2 extends GameState {
             camPosX = player.getPosX() - Main.width*2/3;
         }
         camPosY = player.getPosY() - Main.height*2/3;
-        tilemap2.setPos(camPosX,camPosY);
+        tilemap3.setPos(camPosX,camPosY);
 
-        tilemap2.tick();
+        tilemap3.tick();
         player.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
@@ -148,7 +132,7 @@ public class Map2 extends GameState {
             }
         }
         //Check to open gate
-        tilemap2.OpenNextMap(enemies.size());
+        tilemap3.OpenNextMap(enemies.size());
         changeMap();
     }
     public void changeMap(){
@@ -169,7 +153,7 @@ public class Map2 extends GameState {
     @Override
     public void render(GraphicsContext g) {
         g.drawImage(bg,0,0, Main.width, Main.height);
-        tilemap2.draw(g);
+        tilemap3.draw(g);
         for (Enemy enemy : enemies) {
 //		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
             enemy.render(g);
@@ -196,3 +180,4 @@ public class Map2 extends GameState {
         player.keyIn(k);
     }
 }
+

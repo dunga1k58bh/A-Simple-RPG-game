@@ -5,8 +5,9 @@ import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.enemies.Fly;
-import entity.Dropping;
-import entity.HUD;
+import entity.somethings.Dropping;
+import entity.somethings.Gate;
+import entity.somethings.HUD;
 import entity.Player;
 import entity.enemies.Monster2;
 import entity.enemies.Snail;
@@ -16,7 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import state.GameState;
 import state.GameStateManager;
-import state.PlayState;
 import tilemap.TileMap;
 
 public class Map1 extends GameState {
@@ -33,14 +33,20 @@ public class Map1 extends GameState {
     private ArrayList<Enemy> enemies;
     private ArrayList<Dropping> droppings;
     private final TileMap tilemap1;
+    private Gate gatetoNextMap;
     private HUD hud;
     
     //Music BackGround
     private final Music bgMusic;
 
     //starting position of player on map (On-map coord)
-    public final double playerStartingPosX = 200; //TODO
-    public final double playerStartingPosY = 700; //TODO
+    private final double playerStartingPosX = 200; //TODO
+    private final double playerStartingPosY = 700; //TODO
+    //position of player on map if return the old Map
+    private final double playerReturnPosX =  2300;
+    private final double playerReturnPosY =  100;
+    //Is this map clear ?
+    public boolean isclear;
 
     //Camera position (On-map coord)
     private double camPosX = 0;
@@ -50,9 +56,7 @@ public class Map1 extends GameState {
     private double gateX;
     private double gateY;
     //Gate to previous Map
-
-    private boolean moveToNextMap;
-    private boolean moveToPreviousMap;
+    // null
 
     public Map1(GameStateManager gsm) {
         super(gsm);
@@ -61,9 +65,6 @@ public class Map1 extends GameState {
         tilemap1 = new TileMap(48);
         tilemap1.loadTileSet("Map/TileSet.png");
         tilemap1.loadMap("res/Map/Map1.map");
-        //Set Position of Gate to nextMap
-        gateX = tilemap1.getWidth() - tilemap1.getTileSize();
-        gateY = tilemap1.getTileSize() * 3;
         tilemap1.setPos(camPosX, camPosY);
         //generateEnemies();
 
@@ -72,13 +73,21 @@ public class Map1 extends GameState {
         bgMusic.setVolume(0.1);
         bgMusic.startMusic();
 
+        isclear = false;          // this map is not clear at the time it init()
+        gatetoNextMap = new Gate(tilemap1);
+        gatetoNextMap.setPos(2376,192);
+        gsm.setNextMap(true);
     }
     @Override
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        player.setPosX(playerStartingPosX);
-        player.setPosY(playerStartingPosY);
+        if(gsm.getNextMap()== true) {
+            player.setPos(playerStartingPosX,playerStartingPosY);
+        }else{
+            player.setPos(playerReturnPosX,playerReturnPosY);
+        }
+        gsm.setNextMap(false);
         //Vá»©t TileMap cho player
         player.setTileMap(tilemap1);
         player.initSkill();
@@ -134,21 +143,21 @@ public class Map1 extends GameState {
         tilemap1.setPos(camPosX,camPosY);
 
         tilemap1.tick();
+        for(int i = 0; i < enemies.size(); i++) {
+            Enemy e = enemies.get(i);
+            if (player.intersects(e)) player.changeHP(-5);
+            for (int j = 0; j < player.getSkills().length; j++){
+                if(player.getSkills()[j].intersects(e)) e.getHit(1);
+                e.tick();
+            }
+            if(e.isDead()) {
+                Dropping d = new Dropping(tilemap1, e);
+                droppings.add(d);
+                enemies.remove(i);
+                i--;
+            }
+        }
         player.tick();
-		for(int i = 0; i < enemies.size(); i++) {
-			Enemy e = enemies.get(i);
-			if (player.intersects(e)) player.changeHP(-5);
-			for (int j = 0; j < player.getSkills().length; j++){
-			    if(player.getSkills()[j].intersects(e)) e.getHit(1);
-			    e.tick();
-			}
-			if(e.isDead()) {
-				Dropping d = new Dropping(tilemap1, e);
-				droppings.add(d);
-				enemies.remove(i);
-				i--;
-			}
-		}
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();
@@ -160,30 +169,37 @@ public class Map1 extends GameState {
 			}
 		}
 
-
-
         //Check to open gate
 		tilemap1.OpenNextMap(enemies.size());
-		//Check to move to next map
-		if(player.getPosX()>gateX&&player.getPosY()<gateY){
-		    gsm.nextMap();
-            gsm.setPlayer(player);
-        }
+        changeMap(); // change the map if can be :
     }
+
+    public void changeMap(){
+        if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
+        //Check to move to next map
+        if(isclear&&player.intersects(gatetoNextMap)){   //Move to nextMap
+            gsm.nextMap();            // move to next map
+            gsm.setNextMap(true);
+            gsm.setPlayer(player);    //set player to next map
+            gsm.setNextMap(false);
+        }//map 1 dont have the gate to previous map
+    }
+
     @Override
     public void render(GraphicsContext g) {
         g.drawImage(bg,0,0, Main.width, Main.height);
         tilemap1.draw(g);
-        player.render(g);
         for (Enemy enemy : enemies) {
 //		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
             enemy.render(g);
         }
+        player.render(g);
         hud.render(g);
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.render(g);
 		}
+		if(isclear) gatetoNextMap.render(g);
     }
 
     @Override
