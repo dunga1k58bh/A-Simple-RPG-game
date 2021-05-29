@@ -32,7 +32,6 @@ public class Monster2 extends Enemy{
     int random_int;
 
     private final LaserAttack laserAttack;
-    private Skill1 skill11;
     private Animation[] animations;
 
     Image image ;
@@ -42,7 +41,7 @@ public class Monster2 extends Enemy{
         moveSpeed = 1;
         maxSpeed = 3;
         fallSpeed = 0.2;
-        HP = maxHP = 1000;
+        HP = maxHP = 15;
         damage = 1;
         jumpStart =10;
         width = 220;
@@ -54,13 +53,12 @@ public class Monster2 extends Enemy{
         setEntityBoxSize(170,190);
 
         laserAttack = new LaserAttack(tileMap);
-        skill11 = new Skill1(tileMap);
 
         animations = new Animation[7];
         for (int i =0;i<animations.length;i++){
             animations[i] = new Animation();
         }
-        //
+        // the animations
         animations[HURT].setWidthHeight(220, 190);
         animations[HURT].setFrames("res/enemies/monster2/hurt.png", 5);
         animations[HURT].setDelay(25);
@@ -94,7 +92,7 @@ public class Monster2 extends Enemy{
         //
         animations[LASERATTACK].setWidthHeight(215,182);
         animations[LASERATTACK].setFrames("res/enemies/monster2/laser_attack.png",60,6,10);
-        animations[LASERATTACK].setDelay(50);
+        animations[LASERATTACK].setDelay(30);
         animations[LASERATTACK].setMaxConsercutiveAnimation(1);
 
 
@@ -146,7 +144,9 @@ public class Monster2 extends Enemy{
 //        System.out.println("Beinghit"+ beingHit);
         if(currentAnimation!= JUMP)  falling = true;
         if (HP < 0.2 *maxHP ){
+            moveSpeed=1.5;
             maxSpeed=5;
+            animations[WALK].setMaxConsercutiveAnimation(2);
         }
 
         // check flinching
@@ -165,9 +165,13 @@ public class Monster2 extends Enemy{
         }
         setNextAnimation();
 
+
+        if (isDead()) currentAnimation =DEAD;     // What we do with the current animation and action
         if (currentAnimation == WALK ){
             jumping = false;
-            nextAnimation=-1;
+            random_int = (int)(Math.random() * (6 - 2 + 1) + 2); // random from 2 to 6,
+            if (random_int<=3) nextAnimation = random_int;   //33% random jump or laser , game will harder if this percent is higer
+            else nextAnimation=-1;
         }else if(currentAnimation == JUMP){
             jumping=true;
             nextAnimation=WALK;
@@ -179,10 +183,11 @@ public class Monster2 extends Enemy{
 //           System.out.println("Random"+random);
            nextAnimation = random;
         }else if(currentAnimation == LASERATTACK){
-            if(18<=animations[LASERATTACK].getFrame()&&animations[LASERATTACK].getFrame()<42){
+            if(24<=animations[LASERATTACK].getFrame()&&animations[LASERATTACK].getFrame()<36){
                 laserAttack.setBeingUsed(true);
             }else{
                 laserAttack.setBeingUsed(false);
+                laserAttack.rsAnimation();
             }
             jumping = false;
             left = false;
@@ -194,8 +199,14 @@ public class Monster2 extends Enemy{
             right = false;
             jumping = false;
             nextAnimation = WALK;
+
+        }else if(currentAnimation == DEAD){
+            left = false;
+            right=false;
+            jumping =false;
+            //threre no animations any more
         }
-//        System.out.println("COncursiv"+consercutiveAnimations);
+//      System.out.println("COncursiv"+consercutiveAnimations);
         getNextPosition();
         CheckTileMapCollision();
         posX += dx;
@@ -204,9 +215,14 @@ public class Monster2 extends Enemy{
         laserAttack.ChangeDirection(facingRight);
         laserAttack.tick();
         // update animation
-        animations[currentAnimation].update();
+        if(currentAnimation!=DEAD||animations[DEAD].hasPlayedOnce()==false) {
+            animations[currentAnimation].update();
+        }else{
+            animations[DEAD].setFrame(23);
+        }
     }
 
+    //set the next animation an action if this action is done;
     public void setNextAnimation(){
         if (beingHit) currentAnimation = HURT;
         if(animations[currentAnimation].hasPlayedOnce()==true) {
@@ -238,6 +254,9 @@ public class Monster2 extends Enemy{
     }
     public void setTarget(Player player){////Possition X of Player
       this.player=player;
+    }
+    public LaserAttack getLaserAttack(){
+        return laserAttack;
     }
 
     @Override

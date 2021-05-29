@@ -27,12 +27,11 @@ public class Map3 extends GameState {
 
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
-    private ArrayList<Enemy> enemies;
     private  TileMap tilemap3;
     private Gate gatetoNextMap;
     private Gate gateToPreviousMap;
     private HUD hud;
-
+    private Monster2 boss;
     //Music BackGround
     private  Music bgMusic;
 
@@ -85,11 +84,9 @@ public class Map3 extends GameState {
     }
 
     private void generateEnemies() {
-        enemies = new ArrayList<>();
-        Monster2 m2 = new Monster2(tilemap3);
-        m2.setPosition(800,600);
-        enemies.add(m2);
-        m2.setTarget(player);
+        boss = new Monster2(tilemap3);
+        boss.setPosition(800,600);
+        boss.setTarget(player);
     }
 
 
@@ -105,30 +102,26 @@ public class Map3 extends GameState {
         tilemap3.setPos(camPosX,camPosY);
         tilemap3.tick();
         player.tick();
-        for(int i = 0; i < enemies.size(); i++) {
-            Enemy e = enemies.get(i);
             if (player.getKey().skill1 == 1) {
-            	if (player.getSkill1().intersects(e)) {
-            		e.getHit(2);
+            	if (player.getSkill1().intersects(boss)) {
+            		boss.getHit(2);
             	}
             }
             if (player.getKey().skill2 == 1) {
-            	if (player.getSkill2().intersects(e)) {
-            		e.getHit(1);
+            	if (player.getSkill2().intersects(boss)) {
+            		boss.getHit(1);
             	}
             }
-            e.tick();
-            if(e.isDead()) {
-                enemies.remove(i);
-                i--;
+            boss.tick();
+            if (player.intersects(boss.getLaserAttack())&&boss.getLaserAttack().getBeingUsed()){
+                player.changeHP(-2);
             }
-        }
         //Check to open gate
-        tilemap3.OpenNextMap(enemies.size());
+        tilemap3.OpenNextMap(boss.isDead()?0:1);
         changeMap();
     }
     public void changeMap(){
-        if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
+        if(boss.isDead()) isclear = true;    ///if there no enemy the map is clear
         //Check to move to next map
         if(isclear&&player.intersects(gatetoNextMap)){//Move to nextMap
             bgMusic.pauseMusic();
@@ -148,10 +141,7 @@ public class Map3 extends GameState {
     public void render(GraphicsContext g) {
         g.drawImage(bg,0,0, Main.width, Main.height);
         tilemap3.draw(g);
-        for (Enemy enemy : enemies) {
-//		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
-            enemy.render(g);
-        }
+        boss.render(g);
         player.render(g);
         hud.render(g);
         if(isclear) gatetoNextMap.render(g);
