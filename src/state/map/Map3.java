@@ -124,7 +124,7 @@ public class Map3 extends GameState {
             if (player.intersects(e)) player.changeHP(-5);
             if(player.getSkill1().intersects(e)) {
                 e.getHit(1);
-
+                e.tick();
             }
             if(e.isDead()) {
                 enemies.remove(i);

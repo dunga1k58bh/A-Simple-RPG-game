@@ -497,11 +497,11 @@ public class Player extends Entity{
                     USESKILL1 = true;
                 }
 
-//                else if(skill1.hasPlayedOnce()) {
-//                    key.skill1 = 0;
-//                    USESKILL1 = false;
-//                    skill1.setPlayedOnce(false);
-//                }
+                else if(skill1.hasPlayedOnce()) {
+                    key.skill1 = 0;
+                    USESKILL1 = false;
+                    skill1.setPlayedOnce(false);
+                }
 
                 else{
                     key.skill1 = 0;
@@ -510,11 +510,7 @@ public class Player extends Entity{
                 }
 
             }
-            if(skill1.hasPlayedOnce()) {
-                key.skill1 = 0;
-                USESKILL1 = false;
-                skill1.setPlayedOnce(false);
-            }
+
 
         }
 

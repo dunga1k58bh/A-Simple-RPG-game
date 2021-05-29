@@ -71,8 +71,8 @@ public class Skill1  extends Entity{
     @Override
     public void tick() {
          skill1Animation.update();
-//         if(facingRight) posX += 10;
-//
-//         else posX -= 10;
+         if(facingRight) posX += 10;
+
+         else posX -= 10;
     }
 }

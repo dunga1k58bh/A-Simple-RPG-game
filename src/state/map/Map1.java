@@ -152,6 +152,7 @@ public class Map1 extends GameState {
             }
 
             e.tick();
+
             if(e.isDead()) {
                 Dropping d = new Dropping(tilemap1, e);
                 droppings.add(d);
