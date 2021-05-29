@@ -11,6 +11,8 @@ public class GameStateManager {
    private double hardlevel;
    protected static ArrayList<GameState> gameStates; // State mutilple choice
    protected static ArrayList<GameState> mapStates;  // Map State
+
+
    private int currentState;
    private int currentMap;
    private boolean nextMap;  // if not it previous
@@ -18,7 +20,7 @@ public class GameStateManager {
 
          gameStates= new ArrayList<>();
          mapStates = new ArrayList<>();
-         currentMap = 2;
+         currentMap = 0;
          gameStates.add(new MenuState(this));// 0
          gameStates.add(new PlayState(this));// 1
          gameStates.add(new SettingState(this));//
