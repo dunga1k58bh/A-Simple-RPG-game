@@ -21,8 +21,8 @@ public abstract class Entity {
     protected  boolean falling;
 
     //Time entity
-
     private long timeLoad;
+    
     //flag
     public boolean onGround;
 

@@ -12,6 +12,8 @@ import utils.attackType;
 
 import java.util.ArrayList;
 
+import javax.security.auth.kerberos.KerberosTicket;
+
 public class Player extends Entity{
     private Image standLowerBody = new Image("char/Small23-resources.assets-11235.png");
     private Image standUpperBody = new Image("char/Small5-resources.assets-1687.png");
@@ -32,16 +34,10 @@ public class Player extends Entity{
     private int offset = 0;
 
     //Skills
-
-
     private Skill1 skill1;
     private Skill2 skill2;
     long startimeSkill1;
     long startimeSkill2;
-
-    private boolean USESKILL1;
-    private boolean USESKILL2;
-
 
 
     private int jump = 0;  //this variable is set to 1 whenever player is on-air
@@ -68,6 +64,7 @@ public class Player extends Entity{
     public int maxHP, maxMP, level;
     public int curEXP, levelEXP;
     public int HPpotNum, MPpotNum;
+    public int HPinc, MPinc;
     private int atkType = attackType.RANGED;
 
     private Animation currentAttackAnimation = new utils.animation.attackAnimation.ranged();
@@ -76,10 +73,9 @@ public class Player extends Entity{
 
     private boolean lock3;
     private boolean debug;
-
-    public int HPinc, MPinc;
     
     public Player() {
+    	facingRight = true;
     	HPinc = MPinc = 50;
     	HPpotNum = 5;
     	MPpotNum = 5;
@@ -134,19 +130,20 @@ public class Player extends Entity{
         setPosY(y);
     }
 
-    public void initSkill(){
-        skill1 = new Skill1(tileMap);
-        skill1.setPos(posX, posY);
-
-        skill2 = new Skill2(tileMap);
-        skill2.setPos(posX, posY);
-    }
-
     public int getAttackType() {
         return atkType;
     }
+    
     public Skill1 getSkill1(){
         return skill1;
+    }
+    
+    public Skill2 getSkill2(){
+        return skill2;
+    }
+    
+    public Key getKey() {
+    	return key;
     }
 
     @Override
@@ -210,12 +207,10 @@ public class Player extends Entity{
 
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
-            skill1.facingRight = true;
-            skill2.facingRight = true;
-
             if (animationStep == -1) {
                 animationStep = 0;
             }
+            facingRight = true;
             facing = runningDirection;
             lastRunningDirection = runningDirection;
             currentVelocityX = velocityX;
@@ -223,13 +218,11 @@ public class Player extends Entity{
             count1++;
             count2++;
         } else if (runningDirection == -1) {
-            skill1.facingRight = false;
-            skill2.facingRight = false;
-
             facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;
             }
+            facingRight = false;
             lastRunningDirection = runningDirection;
             currentVelocityX = velocityX;
             dx =- dt * Math.max(velocityX,0);
@@ -264,18 +257,23 @@ public class Player extends Entity{
             animationStep2 ++;
             offset = animationStep2%2*3;
         }
+        
         //Update Skill
-        if(USESKILL2 ==false){
-                skill2.setPos(posX, posY);
-        }else{
-            skill2.tick();
+        if (key.skill1 == 1) {
+        	if (!skill1.shouldRemove()) {
+        		skill1.tick();
+        	}
+        	else {
+        		key.skill1 = 0;
+        	}
         }
-
-        if(USESKILL1 == false) {
-            skill1.setPos(posX, posY);
-        }
-        else{
-            skill1.tick();
+        if (key.skill2 == 1) {
+        	if (!skill2.shouldRemove()) {
+        		skill2.tick();
+        	}
+        	else {
+        		key.skill2 = 0;
+        	}
         }
     }
 
@@ -522,14 +520,6 @@ public class Player extends Entity{
                     zzX += 0.5;
                     System.out.println("zzX = "+zzX);
                 }
-                case Q -> {
-                    key.skill1 =1;
-                    USESKILL1 = true;
-                }
-                case E -> {
-                    key.skill2 = 1;
-                    USESKILL2 = true;
-                }
                 case ENTER -> {
                     debug = !debug;
                 }
@@ -538,7 +528,7 @@ public class Player extends Entity{
                 }
             }
         }
-        else {
+        else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)){
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;
@@ -574,30 +564,31 @@ public class Player extends Entity{
                 case A -> {
                     key.attack = 0;
                 }
-            }
-        }
-
-        if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
-            if (keyEvent.getCode() == KeyCode.Q ) {
-                if (System.nanoTime()/1000000 - startimeSkill1 >= skill1.getTimeLoad()) {
-                    startimeSkill1 = System.nanoTime()/1000000;
-                    key.skill1 = 1;
-                    USESKILL1 = true;
+                case Q -> {
+                	skill1 = new Skill1(tileMap);
+                	if (MP < skill1.getManaCost()) {
+                		skill1.setRemove();
+                		break;
+                	}
+                	MP -= skill1.getManaCost();
+                	skill1.facingRight = facingRight;
+                	skill1.setPos(posX, posY);
+                	key.skill1 = 1;
                 }
-                else if(skill1.hasPlayedOnce()) {
-                    key.skill1 = 0;
-                    USESKILL1 = false;
-                    skill1.setPlayedOnce(false);
-                }
-                else{
-                    key.skill1 = 0;
-                    USESKILL1 = false;
+                case E -> {
+                	skill2 = new Skill2(tileMap);
+                	if (MP < skill2.getManaCost()) {
+                		skill2.setRemove();
+                		break;
+                	}
+                	MP -= skill2.getManaCost();
+                	skill2.facingRight = facingRight;
+                	skill2.setPos(posX, posY);
+                	key.skill2 = 1;
                 }
             }
         }
     }
-
-
 
 
 

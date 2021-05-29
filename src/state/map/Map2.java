@@ -80,7 +80,6 @@ public class Map2 extends GameState {
         player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player
         player.setTileMap(tilemap2);
-        player.initSkill();
         hud = new HUD(player);
         generateEnemies();
         bgMusic.startMusic();
@@ -138,9 +137,17 @@ public class Map2 extends GameState {
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             if (player.intersects(e)) player.changeHP(-5);
-
-            if(player.getSkill1().intersects(e)) e.getHit(1);
-                e.tick();
+            if (player.getKey().skill1 == 1) {
+            	if (player.getSkill1().intersects(e)) {
+            		e.getHit(2);
+            	}
+            }
+            if (player.getKey().skill2 == 1) {
+            	if (player.getSkill2().intersects(e)) {
+            		e.getHit(1);
+            	}
+            }
+            e.tick();
 
             if(e.isDead()) {
                 enemies.remove(i);

@@ -90,7 +90,6 @@ public class Map1 extends GameState {
         gsm.setNextMap(false);
         //Vá»©t TileMap cho player
         player.setTileMap(tilemap1);
-        player.initSkill();
         hud = new HUD(player);
         generateEnemies();
         bgMusic.startMusic();
@@ -147,13 +146,18 @@ public class Map1 extends GameState {
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             if (player.intersects(e)) player.changeHP(-5);
-            if(player.getSkill1().intersects(e)) {
-                e.getHit(1);
-
+            if (player.getKey().skill1 == 1) {
+            	if (player.getSkill1().intersects(e)) {
+            		e.getHit(2);
+            	}
             }
-
+            if (player.getKey().skill2 == 1) {
+            	if (player.getSkill2().intersects(e)) {
+            		e.getHit(1);
+            	}
+            }
+            
             e.tick();
-
             if(e.isDead()) {
                 Dropping d = new Dropping(tilemap1, e);
                 droppings.add(d);

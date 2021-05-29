@@ -85,7 +85,7 @@ public class Snail extends Enemy{
 		// check flinching
 		if(flinching) {
 			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
-			if(elapsed > 400) flinching = false;
+			if(elapsed > 1000) flinching = false;
 		}
 		
 		// if it hits a wall, go other direction
