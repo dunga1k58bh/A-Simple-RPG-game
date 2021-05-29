@@ -18,7 +18,7 @@ public class Fly extends Enemy{
 	
 	// fly ball
 	private ArrayList<FlyBall> flyBalls;
-	//private int flyBallDamage;
+	private int flyBallDamage;
 	private boolean firing;
 	private long firingTimer;
 	
@@ -36,7 +36,7 @@ public class Fly extends Enemy{
 		HP = maxHP = 3;
 		damage = 1;
 		flyBalls = new ArrayList<FlyBall>();
-		//flyBallDamage = 1;
+		flyBallDamage = 1;
 		firing = true;
 		
 		width = 80;
@@ -114,7 +114,9 @@ public class Fly extends Enemy{
 			}
 			else {
 				if(flyBalls.get(i).intersects(player)) {
-					player.changeHP(-1);
+					flyBalls.remove(i);
+					i--;
+					player.changeHP(-flyBallDamage);
 				}
 			}
 		}

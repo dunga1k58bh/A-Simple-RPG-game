@@ -67,8 +67,10 @@ public class Player extends Entity{
     public int maxHP, maxMP, level;
     public int curEXP, levelEXP;
     public int HPpotNum, MPpotNum;
+    public int HPinc, MPinc;
     
     public Player() {
+    	HPinc = MPinc = 50;
     	HPpotNum = 5;
     	MPpotNum = 5;
     	curEXP = 10;
@@ -484,7 +486,18 @@ public class Player extends Entity{
                     key.right = 0;
                     break;
                 }
-
+                case DIGIT1 -> {
+                	if (HPpotNum > 0 && HP < maxHP) {
+                		HPpotNum--;
+                		HP += HPinc;
+                	}
+                }
+                case DIGIT2 -> {
+                	if (MPpotNum > 0 && MP < maxMP) {
+                		MPpotNum--;
+                		MP += MPinc;
+                	}
+                }
             }
         }
 
