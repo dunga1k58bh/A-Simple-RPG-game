@@ -63,7 +63,6 @@ public class Player extends Entity{
     private boolean lock = false;
     private boolean lock2 = false;
     private Key key= new Key();
-    private double lastdy;
 
     // max HP, MP, level ...
     public int maxHP, maxMP, level;
@@ -72,9 +71,10 @@ public class Player extends Entity{
     private int atkType = attackType.RANGED;
 
     private Animation currentAttackAnimation = new utils.animation.attackAnimation.ranged();
-    private int count4;
+    private Animation currentStandAnimation;
+    private Animation curentRunAnimation;
+
     private boolean lock3;
-    private int animationStep4;
     private boolean debug;
 
     public int HPinc, MPinc;
@@ -135,8 +135,6 @@ public class Player extends Entity{
     }
 
     public void initSkill(){
-
-
         skill1 = new Skill1(tileMap);
         skill1.setPos(posX, posY);
 
@@ -147,8 +145,6 @@ public class Player extends Entity{
     public int getAttackType() {
         return atkType;
     }
-    public Entity[] getSkills(){
-        return skills;
     public Skill1 getSkill1(){
         return skill1;
     }
@@ -214,8 +210,6 @@ public class Player extends Entity{
 
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
-
-//
             skill1.facingRight = true;
             skill2.facingRight = true;
 
@@ -283,7 +277,6 @@ public class Player extends Entity{
         else{
             skill1.tick();
         }
-
     }
 
 
@@ -480,21 +473,22 @@ public class Player extends Entity{
             }
         }
         //Draw a small dot at player position for simple debug
-        double radius = 3;
-        //Stoking
-        graphicsContext.strokeOval(posX-radius, posY-radius, radius*2, radius*2);
-        //Filling:
-        graphicsContext.fillOval(posX-radius, posY-radius, radius*2, radius*2);
-
-
+        if (debug) {
+            double radius = 3;
+            //Stoking
+            graphicsContext.strokeOval(posX-radius, posY-radius, radius*2, radius*2);
+            //Filling:
+            graphicsContext.fillOval(posX-radius, posY-radius, radius*2, radius*2);
+        }
         posX = posXTemp;
         posY = posYTemp;
 
-        if (key.skill1 == 1) skill1.render(graphicsContext);
-        if (key.skill2 == 1) skill2.render(graphicsContext);
-
-
-
+        if (key.skill1 == 1) {
+            skill1.render(graphicsContext);
+        }
+        if (key.skill2 == 1) {
+            skill2.render(graphicsContext);
+        }
     }
 
     public int getFacing() {
@@ -502,14 +496,11 @@ public class Player extends Entity{
     }
 
     private void drawWalkAnimation(int s) {
-
+        return;
     }
 
     public void keyIn(KeyEvent keyEvent) {
-        //System.out.println("Left");
-
-        if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
-            //System.out.println("Key pressed");
+        if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) { //KEY PRESSED
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
@@ -541,17 +532,13 @@ public class Player extends Entity{
                 }
                 case ENTER -> {
                     debug = !debug;
-                    key.attack = 1;
                 }
                 case A -> {
                     key.attack = 1;
                 }
             }
         }
-
-
         else {
-            //System.out.println("Key released");
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;
@@ -581,40 +568,33 @@ public class Player extends Entity{
                 		MP += MPinc;
                 	}
                 }
-            }
-        }
-
-        if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
-            if (keyEvent.getCode() == KeyCode.Q ) {
-
-                if (System.nanoTime()/1000000 - startimeSkill1 >= skill1.getTimeLoad()) {
-                    startimeSkill1 = System.nanoTime()/1000000;
-                    key.skill1 = 1;
-                    USESKILL1 = true;
-                }
-
-                else if(skill1.hasPlayedOnce()) {
-                    key.skill1 = 0;
-                    USESKILL1 = false;
-                    skill1.setPlayedOnce(false);
-                }
-
-                else{
-                    key.skill1 = 0;
-                    USESKILL1 = false;
-
-                }
                 case ENTER -> {
-                    //key.attack = 0;
+                    debug = false;
                 }
                 case A -> {
                     key.attack = 0;
                 }
             }
-
-
         }
 
+        if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
+            if (keyEvent.getCode() == KeyCode.Q ) {
+                if (System.nanoTime()/1000000 - startimeSkill1 >= skill1.getTimeLoad()) {
+                    startimeSkill1 = System.nanoTime()/1000000;
+                    key.skill1 = 1;
+                    USESKILL1 = true;
+                }
+                else if(skill1.hasPlayedOnce()) {
+                    key.skill1 = 0;
+                    USESKILL1 = false;
+                    skill1.setPlayedOnce(false);
+                }
+                else{
+                    key.skill1 = 0;
+                    USESKILL1 = false;
+                }
+            }
+        }
     }
 
 
