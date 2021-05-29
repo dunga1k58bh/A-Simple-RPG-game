@@ -109,12 +109,15 @@ public class Map3 extends GameState {
             }
             if (player.getKey().skill2 == 1) {
             	if (player.getSkill2().intersects(boss)) {
-            		boss.getHit(1);
+            		boss.getHit(2);
             	}
             }
             boss.tick();
             if (player.intersects(boss.getLaserAttack())&&boss.getLaserAttack().getBeingUsed()){
-                player.changeHP(-2);
+                player.getHit(boss.getLaserAttack().getDamage());
+            }
+            if (player.intersects(boss)){
+                player.getHit(20);
             }
         //Check to open gate
         tilemap3.OpenNextMap(boss.isDead()?0:1);

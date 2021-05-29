@@ -10,6 +10,9 @@ import tilemap.TileMap;
 public abstract class Entity {
     protected int HP;
     protected int MP;
+    protected boolean dead;
+
+
     protected double posX = 0;
     protected double posY = 0;
     protected double xmin;
@@ -37,8 +40,13 @@ public abstract class Entity {
     //Left or right ??
     protected boolean facingRight;
 
+    //if entity being attack it cant be attack for a while
+    protected boolean flinching;
+    protected long flinchTimer;
+    protected boolean beingHit;
 
-    //Entity box (Hiểu đơn giản là kích cỡ hcn bao quanh Entity)
+
+    //Entity box size
     protected int cheight;
     protected int cwidth;
     // dimensions
@@ -177,7 +185,7 @@ public abstract class Entity {
 
         if (dy>0){//falling
             if ((BottomRight == Tile.BLOCK||BottomLeft == Tile.BLOCK)
-                    &&(BottomLeft1==Tile.ALLOW||BottomRight==Tile.ALLOW )){
+                    &&(BottomLeft1==Tile.ALLOW||BottomRight==Tile.ALLOW||BottomRight1==Tile.DEAD||BottomLeft1==Tile.DEAD)){
                 dy = 0;
                 posY = (currRow+1) * tileSize-1;
                 falling = false;
@@ -185,13 +193,7 @@ public abstract class Entity {
 //                System.out.println("Onground");
             }
         }
-        if(dy<0){ //Bay lên
-//            if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
-//                dy = 0;
-//                posY =(currRow)*tileSize +3;
-//                onRoof = true;
-//                //System.out.println("BAY");
-//            }
+        if(dy<0){
             onGround = false;
         }
         CaculateCorrners(posX+dx,posY);
@@ -207,6 +209,18 @@ public abstract class Entity {
                 posX = currCol*tileSize +cwidth/2+1;
             }
         }
+        if (BottomLeft == Tile.DEAD || BottomRight == Tile.DEAD){
+            getHit(50);
+        }
+    }
+    public void getHit(int damage) {
+        if(dead || flinching) return;
+        HP -= damage;
+        if(HP < 0) HP = 0;
+        if(HP == 0) dead = true;
+        flinching = true;
+        flinchTimer = System.nanoTime();
+        beingHit = true;
     }
     public void setMapPosittion(){
         xmap = tileMap.getCameraPosX();

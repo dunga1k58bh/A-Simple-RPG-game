@@ -18,12 +18,9 @@ public abstract class Enemy extends Entity {
 	protected int HP;
 	protected int maxHP;
 
-	protected boolean dead;
 	protected int damage;
 
-	protected boolean flinching;
-	protected long flinchTimer;
-    protected boolean beingHit;
+
 
 	
 	// animation
@@ -74,15 +71,6 @@ public abstract class Enemy extends Entity {
 	public void setVector(double dx, double dy) {
 		this.dx = dx;
 		this.dy = dy;
-	}
-	public void getHit(int damage) {
-		if(dead || flinching) return;
-		HP -= damage;
-		if(HP < 0) HP = 0;
-		if(HP == 0) dead = true;
-		flinching = true;
-		flinchTimer = System.nanoTime();
-		beingHit = true;
 	}
 
 	@Override

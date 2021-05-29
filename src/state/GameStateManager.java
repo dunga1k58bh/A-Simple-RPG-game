@@ -7,8 +7,8 @@ import javafx.scene.input.KeyEvent;
 import state.map.*;
 import java.util.ArrayList;
 public class GameStateManager {
-	
-     
+
+   private double hardlevel;
    protected static ArrayList<GameState> gameStates; // State mutilple choice
    protected static ArrayList<GameState> mapStates;  // Map State
    private int currentState;
@@ -22,11 +22,14 @@ public class GameStateManager {
          gameStates.add(new MenuState(this));// 0
          gameStates.add(new PlayState(this));// 1
          gameStates.add(new SettingState(this));//
-         currentState = 1;
+         currentState = 0;
      }
+     //for basic control
      public void setState(int state) {
     	 currentState = state;
      }
+
+     //control the Mapstate
      public void nextMap(){
          currentMap++;
      }
@@ -46,6 +49,11 @@ public class GameStateManager {
      public boolean getNextMap(){
          return  nextMap;
      }
+
+     //
+    public void setHardlevel(double hardlevel){
+         this.hardlevel = hardlevel;
+    }
 
      public void tick() {
     	gameStates.get(currentState).tick();

@@ -149,6 +149,15 @@ public class Player extends Entity{
     @Override
     public void tick() {
         //tick
+
+        //player cant be attack if flinching is true
+        if(flinching) {
+            long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
+            if(elapsed > 1000) flinching = false; // player cant be attacked in 1000ms if he has been attacked before
+        }
+
+
+
         switch (atkType) {
             case attackType.RANGED -> {
 
@@ -236,6 +245,7 @@ public class Player extends Entity{
             animationStep = -1;
             count2++;
         }
+
 
         currentVelocityY += dt * accelerationY;
         dy = dt * currentVelocityY;

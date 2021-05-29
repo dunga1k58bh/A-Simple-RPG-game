@@ -12,6 +12,7 @@ import tilemap.TileMap;
 public class LaserAttack extends Entity {
     private Animation animation;
     private boolean beingused;
+    private int damage;
     public LaserAttack(TileMap tileMap){
         super(tileMap);
 
@@ -22,7 +23,7 @@ public class LaserAttack extends Entity {
         animation.setDelay(30);
         facingRight = true;
         setEntityBoxSize(732,60);
-
+        damage = 150;
     }
     public void ChangeDirection(boolean facingRight){
         this.facingRight = facingRight;
@@ -72,6 +73,9 @@ public class LaserAttack extends Entity {
         }else{
             return new Rectangle2D((int)posX-cwidth, (int)posY+cheight/2 , cwidth, cheight);
         }
+    }
+    public int getDamage(){
+        return  damage;
     }
     public void rsAnimation(){
         animation.setFrame(0);

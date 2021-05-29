@@ -42,7 +42,7 @@ public class Monster2 extends Enemy{
         maxSpeed = 3;
         fallSpeed = 0.2;
         HP = maxHP = 15;
-        damage = 1;
+        damage = 50;
         jumpStart =10;
         width = 220;
         height =190;
