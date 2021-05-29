@@ -1,6 +1,8 @@
-package entity;
+package entity.somethings;
 
 import java.io.FileInputStream;
+
+import entity.Animation;
 import entity.enemies.Enemy;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -15,8 +17,8 @@ public class Dropping extends Enemy{
 	public Dropping(TileMap tm, Enemy enemy) {
 		super(tm);
 		
-		posX = enemy.posX;
-		posY = enemy.posY;
+		posX = enemy.getPosX();
+		posY = enemy.getPosY();
 		
 		width = 20;
 		height = 20;

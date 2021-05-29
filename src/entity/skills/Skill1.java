@@ -25,15 +25,14 @@ public class Skill1  extends Entity{
         frames[4]= new Image("SKill/Skill4-4.png");
         frames[5]= new Image("SKill/Skill4-5.png");
 
-
+        setTimeLoad(3000);
         skill1Animation = new Animation();
         skill1Animation.setFrames(frames);
         skill1Animation.setDelay(200);
-        setEntityBoxSize(70,92);
+        setEntityBoxSize(170,192);
     }
-    public void resetAnimation(){
-        skill1Animation.setFrame(0);
-    }
+
+
 
     public  void setPos(double x, double y){
         if (facingRight){
@@ -62,10 +61,18 @@ public class Skill1  extends Entity{
         }
     }
 
+    public boolean hasPlayedOnce() {
+        return skill1Animation.hasPlayedOnce();
+    }
+
+    public void setPlayedOnce(boolean b){
+        skill1Animation.setPlayedOnce(b);
+    }
     @Override
     public void tick() {
          skill1Animation.update();
-         if(facingRight) posX += 10;
-         else posX -= 10;
+//         if(facingRight) posX += 10;
+//
+//         else posX -= 10;
     }
 }

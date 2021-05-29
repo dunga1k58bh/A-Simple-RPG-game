@@ -12,32 +12,32 @@ public class PlayState extends GameState{
     //Playstate owns unique player object and several maps obj. player obj will be passed to map obj for control
     private Player player ;
     private int currentMap;
-    private  ArrayList<GameState> mapStates ;
+    private  ArrayList<GameState> mapStates ;   ///mapStates have been init in GamstateManager
     public PlayState(GameStateManager gsm){
         super(gsm);
-        this.currentMap = gsm.getCurrentMap();
-        this.mapStates = gsm.getmapStates();
-        player = new Player();
-        mapStates.get(currentMap).setPlayer(player);
+        player = new Player();                    /// the unique Player
+        this.currentMap = gsm.getCurrentMap();    /// the current Map
+        this.mapStates = gsm.getmapStates();      /// the array of map
+        mapStates.get(currentMap).setPlayer(player);   ///pass the player to current MapState
     }
 
-    @Override
+
+
+    @Override       //not use
     public void setPlayer(Player player) {
 
     }
 
-    public void nextMap(){
-    }
 
     @Override
     public void tick() {
-        this.currentMap = gsm.getCurrentMap();
-        System.out.println(currentMap);
+        this.currentMap = gsm.getCurrentMap(); // Update the current mapstate if the mapState  changes
+//        System.out.println(currentMap);
         mapStates.get(currentMap).tick();
     }
 
     @Override
-    public void render(GraphicsContext g) {
+    public void render(GraphicsContext g) {            //render the current map
         mapStates.get(currentMap).render(g);
           //g.strokeText("PlayState",300,300);
     }

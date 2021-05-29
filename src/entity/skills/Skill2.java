@@ -12,20 +12,24 @@ public class Skill2  extends Entity{
     private Image[] frames;
     private Animation skill2Animation;
 
+
     public  Skill2(TileMap tileMap) {
         super(tileMap);
         width = 70;
         height = 92;
+
 
         frames = new Image[4];
         frames[0]= new Image("Skill/Skill3-0.png");
         frames[1]= new Image("SKill/Skill3-1.png");
         frames[2]= new Image("SKill/Skill3-2.png");
         frames[3]= new Image("SKill/Skill3-3.png");
+
+        setTimeLoad(3000);
         skill2Animation = new Animation();
         skill2Animation.setFrames(frames);
         skill2Animation.setDelay(100);
-        setEntityBoxSize(70,92);
+        setEntityBoxSize(200,300);
 
     }
     public void resetAnimation(){
@@ -34,9 +38,9 @@ public class Skill2  extends Entity{
 
     public  void setPos(double x, double y){
         if (facingRight){
-            super.setPos(x + 50, y);
+            super.setPos(x + 200, y);
         }else {
-            super.setPos(x - 50, y);
+            super.setPos(x - 200, y);
         }
     }
 
@@ -46,7 +50,7 @@ public class Skill2  extends Entity{
         if(facingRight) {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap+ 200 -skill2Animation.getImage().getWidth()/2),
+                    (posX -xmap -skill2Animation.getImage().getWidth()/2),
                     (posY -ymap-  skill2Animation.getImage().getHeight()),
                     skill2Animation.getImage().getWidth(),
                     skill2Animation.getImage().getHeight());
@@ -55,8 +59,8 @@ public class Skill2  extends Entity{
         else {
             graphicsContext.drawImage(
                     skill2Animation.getImage(),
-                    (posX -xmap -200 +skill2Animation.getImage().getWidth()/2),
-                    (posY -ymap- skill2Animation.getImage().getHeight() ),
+                    (posX - xmap + skill2Animation.getImage().getWidth()/2),
+                    (posY - ymap - skill2Animation.getImage().getHeight() ),
                     -skill2Animation.getImage().getWidth(),
                     skill2Animation.getImage().getHeight());
 
@@ -68,6 +72,7 @@ public class Skill2  extends Entity{
 
 
         skill2Animation.update();
+
 
     }
 }

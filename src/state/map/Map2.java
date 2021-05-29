@@ -1,11 +1,13 @@
 package state.map;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.enemies.Fly;
-import entity.HUD;
+import entity.somethings.Gate;
+import entity.somethings.HUD;
 import entity.Player;
 import entity.enemies.Monster2;
 import entity.enemies.Snail;
@@ -24,47 +26,52 @@ public class Map2 extends GameState {
     //this class also owns player's on-map cord
     //this class owns camera position
 
-    private final Image bg= new Image("bg/bgMap1.png");
+    private  Image bg;
 
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
-    private final TileMap tilemap2;
+    private  TileMap tilemap2;
+    private final Gate gatetoNextMap;
+    private final Gate gateToPreviousMap;
     private HUD hud;
 
     //Music BackGround
-    private final Music bgMusic;
+    private  Music bgMusic;
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
     public final double playerStartingPosY = 200; //TODO
+    //Is this map clear ?
+    public boolean isclear;
 
     //Camera position (On-map coord)
     private double camPosX = 0;
     private double camPosY = 0;
 
-    //Gate to next Map
-    private double gateX;
-    private double gateY;
-
     public Map2(GameStateManager gsm){
         super(gsm);
-
-        bgMusic = new Music("res/Audio/bgMusic0.wav");
-        tilemap2 = new TileMap(48);
-        tilemap2.loadTileSet("Map/TileSet.png");
-        tilemap2.loadMap("res/Map/Map2.map");
-        //Set Position of Gate to nextMap
-        gateX = tilemap2.getWidth()- tilemap2.getTileSize();
-        gateY = tilemap2.getTileSize()*3;
-
-        tilemap2.setPos(camPosX,camPosY);
+        try {
+            bg= new Image(new FileInputStream("res/bg/bgMap2.png"));
+            bgMusic = new Music("res/Audio/bgMusic0.wav");
+            tilemap2 = new TileMap(48);
+            tilemap2.loadTileSet("Map/TileSet.png");
+            tilemap2.loadMap("res/Map/Map2.map");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+         tilemap2.setPos(camPosX,camPosY);
         //generateEnemies();
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
         bgMusic.setVolume(0.1);
         bgMusic.startMusic();
+        //the gate
+        gateToPreviousMap = new Gate(tilemap2);
+        gateToPreviousMap.setPos(24,336);
+        gatetoNextMap = new Gate(tilemap2);
+        gatetoNextMap.setPos(2856,336);
     }
     @Override
     public void setPlayer(Player player) {
@@ -131,10 +138,10 @@ public class Map2 extends GameState {
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             if (player.intersects(e)) player.changeHP(-5);
-            for (int j = 0; j < player.getSkills().length; j++){
-                if(player.getSkills()[j].intersects(e)) e.getHit(1);
+
+            if(player.getSkill1().intersects(e)) e.getHit(1);
                 e.tick();
-            }
+
             if(e.isDead()) {
                 enemies.remove(i);
                 i--;
@@ -142,11 +149,21 @@ public class Map2 extends GameState {
         }
         //Check to open gate
         tilemap2.OpenNextMap(enemies.size());
+        changeMap();
+    }
+    public void changeMap(){
+        if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
         //Check to move to next map
-        if(player.getPosX()>gateX&&player.getPosY()<gateY){
-            gsm.setState(0);
+        if(isclear&&player.intersects(gatetoNextMap)){   //Move to nextMap
+            gsm.nextMap();            // move to next map
+            gsm.setNextMap(true);     //It mean the player is being move to the NEXT map
+            gsm.setPlayer(player);    //set player to next map
+            gsm.setNextMap(false);
         }
-
+        if(player.intersects(gateToPreviousMap)){
+            gsm.previousMap();     //gsm.getNextMap is false in defalt so setPlayer will set player to returnPos
+            gsm.setPlayer(player);
+        }
     }
 
     @Override
@@ -159,7 +176,8 @@ public class Map2 extends GameState {
         }
         player.render(g);
         hud.render(g);
-
+        if(isclear) gatetoNextMap.render(g);
+        gateToPreviousMap.render(g);
     }
 
     @Override
