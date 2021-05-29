@@ -27,11 +27,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER" level="application" />
-    <orderEntry type="library" name="JavaFx" level="project" />
-    <orderEntry type="library" name="javafx.base" level="application" />
-    <orderEntry type="library" name="javafx-swt" level="application" />
-    <orderEntry type="library" name="java" level="project" />
-    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" exported="" name="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER" level="application" />
+    <orderEntry type="library" exported="" name="JavaFx" level="project" />
+    <orderEntry type="library" exported="" name="javafx.base" level="application" />
+    <orderEntry type="library" exported="" name="javafx-swt" level="application" />
+    <orderEntry type="library" exported="" name="java" level="project" />
+    <orderEntry type="library" exported="" name="lib" level="project" />
   </component>
 </module>

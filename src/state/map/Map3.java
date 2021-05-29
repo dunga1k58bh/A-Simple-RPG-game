@@ -1,11 +1,11 @@
 package state.map;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.enemies.Fly;
-import entity.somethings.Dropping;
 import entity.somethings.Gate;
 import entity.somethings.HUD;
 import entity.Player;
@@ -19,32 +19,30 @@ import state.GameState;
 import state.GameStateManager;
 import tilemap.TileMap;
 
-public class Map1 extends GameState {
+public class Map3 extends GameState {
 
     //OVERALL DESCRIPTION:
     //this class owns tilemap obj and stores a reference to player object which playstate owns. Playstate will pass player obj to this class.
     //this class also owns player's on-map cord
     //this class owns camera position
 
-    private final Image bg= new Image("bg/bgMap1.png");
+    private  Image bg;
 
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
-    private ArrayList<Dropping> droppings;
-    private final TileMap tilemap1;
+    private  TileMap tilemap3;
     private Gate gatetoNextMap;
+    private Gate gateToPreviousMap;
     private HUD hud;
-    
+
     //Music BackGround
-    private final Music bgMusic;
+    private  Music bgMusic;
 
     //starting position of player on map (On-map coord)
-    private final double playerStartingPosX = 200; //TODO
-    private final double playerStartingPosY = 700; //TODO
-    //position of player on map if return the old Map
-    private final double playerReturnPosX =  2300;
-    private final double playerReturnPosY =  100;
+    public final double playerStartingPosX = 100;//TODO
+    public final double playerStartingPosY = 200; //TODO
+
     //Is this map clear ?
     public boolean isclear;
 
@@ -52,84 +50,61 @@ public class Map1 extends GameState {
     private double camPosX = 0;
     private double camPosY = 0;
 
-    //Gate to next Map
-    private double gateX;
-    private double gateY;
-    //Gate to previous Map
-    // null
-
-    public Map1(GameStateManager gsm) {
+    public Map3(GameStateManager gsm){
         super(gsm);
+        try {
+            bg= new Image(new FileInputStream("res/bg/bgMap3.png"));
+            bgMusic = new Music("res/Audio/bgMusic0.wav");
+            tilemap3 = new TileMap(48);
+            tilemap3.loadTileSet("Map/TileSet.png");
+            tilemap3.loadMap("res/Map/Map3.map");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        bgMusic = new Music("res/Audio/bgMusic0.wav");
-        tilemap1 = new TileMap(48);
-        tilemap1.loadTileSet("Map/TileSet.png");
-        tilemap1.loadMap("res/Map/Map1.map");
-        tilemap1.setPos(camPosX, camPosY);
+        tilemap3.setPos(camPosX,camPosY);
         //generateEnemies();
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
         bgMusic.setVolume(0.1);
         bgMusic.startMusic();
-
-        isclear = false;          // this map is not clear at the time it init()
-        gatetoNextMap = new Gate(tilemap1);
-        gatetoNextMap.setPos(2376,192);
-        gsm.setNextMap(true);
+        //the gate
+        gateToPreviousMap = new Gate(tilemap3);
+        gateToPreviousMap.setPos(24,240);
+        gatetoNextMap = new Gate(tilemap3);
+        gatetoNextMap.setPos(1368,192);
     }
     @Override
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        if(gsm.getNextMap()== true) {
-            player.setPos(playerStartingPosX,playerStartingPosY);
-        }else{
-            player.setPos(playerReturnPosX,playerReturnPosY);
-        }
-        gsm.setNextMap(false);
+        player.setPosX(playerStartingPosX);
+        player.setPosY(playerStartingPosY);
         //Vá»©t TileMap cho player
-        player.setTileMap(tilemap1);
+        player.setTileMap(tilemap3);
         player.initSkill();
         hud = new HUD(player);
         generateEnemies();
     }
-    
-	private void generateEnemies() {
-		enemies = new ArrayList<>();
-		droppings = new ArrayList<>();
-		Snail s;
-		Fly f;
-		Point2D[] points = new Point2D[] {
-			new Point2D(200, 900),
-			new Point2D(860, 200),
-			new Point2D(1525, 200),
-			new Point2D(1680, 200),
-			new Point2D(1800, 200)
-		};
-        Monster2 m2 = new Monster2(tilemap1);
+
+    private void generateEnemies() {
+        enemies = new ArrayList<>();
+        Snail s;
+        Fly f;
+        Point2D[] points = new Point2D[] {
+                new Point2D(200, 900),
+                new Point2D(860, 200),
+                new Point2D(1525, 200),
+                new Point2D(1680, 200),
+                new Point2D(1800, 200)
+        };
+        Monster2 m2 = new Monster2(tilemap3);
         m2.setPosition(700,900);
         enemies.add(m2);
         m2.setTarget(player);
-        
-        Fly fly = new Fly(tilemap1, player);
-        fly.setPos(700, 1000);
-        enemies.add(fly);
-        
-        Fly fly2 = new Fly(tilemap1, player);
-        fly2.setPos(500, 700);
-        enemies.add(fly2);
-        
-        for (Point2D point : points) {
-            s = new Snail(tilemap1);
-            f = new Fly(tilemap1, player);
-            f.setPos(point.getX(), point.getY() - 100);
-            s.setPosition(point.getX(), point.getY());
-            enemies.add(s);
-            enemies.add(f);
-        }
-		
-	}
+    }
+
 
     @Override
     public void tick(){
@@ -140,70 +115,53 @@ public class Map1 extends GameState {
             camPosX = player.getPosX() - Main.width*2/3;
         }
         camPosY = player.getPosY() - Main.height*2/3;
-        tilemap1.setPos(camPosX,camPosY);
+        tilemap3.setPos(camPosX,camPosY);
 
-        tilemap1.tick();
+        tilemap3.tick();
+        player.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             if (player.intersects(e)) player.changeHP(-5);
             if(player.getSkill1().intersects(e)) {
                 e.getHit(1);
-
+                e.tick();
             }
-
-            e.tick();
-
             if(e.isDead()) {
-                Dropping d = new Dropping(tilemap1, e);
-                droppings.add(d);
                 enemies.remove(i);
                 i--;
             }
         }
-        player.tick();
-
-		for(int i = 0; i < droppings.size(); i++) {
-			Dropping d = droppings.get(i);
-			d.tick();
-			if (d.intersects(player)) {
-				if (d.type == d.HPpot) player.HPpotNum++;
-				else if (d.type == d.MPpot) player.MPpotNum++;
-				droppings.remove(i);
-				i--;
-			}
-		}
-
         //Check to open gate
-		tilemap1.OpenNextMap(enemies.size());
-        changeMap(); // change the map if can be :
+        tilemap3.OpenNextMap(enemies.size());
+        changeMap();
     }
-
     public void changeMap(){
         if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
         //Check to move to next map
         if(isclear&&player.intersects(gatetoNextMap)){   //Move to nextMap
             gsm.nextMap();            // move to next map
-            gsm.setNextMap(true);
+            gsm.setNextMap(true);     //It mean the player is being move to the NEXT map
             gsm.setPlayer(player);    //set player to next map
             gsm.setNextMap(false);
-        }//map 1 dont have the gate to previous map
+        }
+        if(player.intersects(gateToPreviousMap)){
+            gsm.previousMap();     //gsm.getNextMap is false in defalt so setPlayer will set player to returnPos
+            gsm.setPlayer(player);
+        }
     }
 
     @Override
     public void render(GraphicsContext g) {
         g.drawImage(bg,0,0, Main.width, Main.height);
-        tilemap1.draw(g);
+        tilemap3.draw(g);
         for (Enemy enemy : enemies) {
 //		    System.out.println(enemies.get(0).getPosX()+" "+ enemies.get(0).getPosY());
             enemy.render(g);
         }
         player.render(g);
         hud.render(g);
-		for(int i = 0; i < droppings.size(); i++) {
-			Dropping d = droppings.get(i);
-			d.render(g);
-		}
-		if(isclear) gatetoNextMap.render(g);
+        if(isclear) gatetoNextMap.render(g);
+        gateToPreviousMap.render(g);
     }
 
     @Override
@@ -222,3 +180,4 @@ public class Map1 extends GameState {
         player.keyIn(k);
     }
 }
+

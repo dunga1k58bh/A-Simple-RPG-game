@@ -1,6 +1,7 @@
 package state;
 
 
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import state.map.*;
@@ -8,22 +9,49 @@ import java.util.ArrayList;
 public class GameStateManager {
 	
      
-   protected static ArrayList<GameState> gameStates;
+   protected static ArrayList<GameState> gameStates; // State mutilple choice
+   protected static ArrayList<GameState> mapStates;  // Map State
    private int currentState;
-
+   private int currentMap;
+   private boolean nextMap;  // if not it previous
      public GameStateManager()  {
 
          gameStates= new ArrayList<>();
-         gameStates.add(new MenuState(this));//0
-         gameStates.add(new PlayState(this));//1
-         //gameStates.add(new Map1(this));
+         mapStates = new ArrayList<>();
+         mapStates.add(new Map1(this));//////0
+         mapStates.add(new Map2(this));//////1
+         mapStates.add(new Map3(this));/////2
+         currentMap = 0;
+
+         gameStates.add(new MenuState(this));// 0
+         gameStates.add(new PlayState(this));// 1
+         gameStates.add(new SettingState(this));//2
 
          currentState = 1;
-         
      }
      public void setState(int state) {
     	 currentState = state;
      }
+     public void nextMap(){
+         currentMap++;
+     }
+     public void previousMap(){currentMap--;}
+     public ArrayList<GameState> getmapStates(){
+         return mapStates;
+     }
+     public int getCurrentMap(){
+         return currentMap;
+     }
+     public void setPlayer(Player player){
+         mapStates.get(currentMap).setPlayer(player);
+     }
+     public void setNextMap(boolean b){
+         this.nextMap = b;
+     }
+     public boolean getNextMap(){
+         return  nextMap;
+     }
+
      public void tick() {
     	gameStates.get(currentState).tick();
      }

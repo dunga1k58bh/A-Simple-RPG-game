@@ -4,6 +4,7 @@ import entity.skills.Skill1;
 import entity.skills.Skill2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import utils.Key;
 import utils.animation.Animation;
@@ -33,7 +34,10 @@ public class Player extends Entity{
     //Skills
 
 
-    private Entity[] skills;
+    private Skill1 skill1;
+    private Skill2 skill2;
+    long startimeSkill1;
+    long startimeSkill2;
 
     private boolean USESKILL1;
     private boolean USESKILL2;
@@ -73,7 +77,10 @@ public class Player extends Entity{
     private int animationStep4;
     private boolean debug;
 
+    public int HPinc, MPinc;
+    
     public Player() {
+    	HPinc = MPinc = 50;
     	HPpotNum = 5;
     	MPpotNum = 5;
     	curEXP = 10;
@@ -129,21 +136,21 @@ public class Player extends Entity{
 
     public void initSkill(){
 
-        skills = new Entity[2];
-        skills[0] = new Skill1(tileMap);
-        skills[1] = new Skill2(tileMap);
 
-        for (int i = 0; i < skills.length; i++){
-            skills[i].setPos(posX, posY);
-        }
+        skill1 = new Skill1(tileMap);
+        skill1.setPos(posX, posY);
+
+        skill2 = new Skill2(tileMap);
+        skill2.setPos(posX, posY);
     }
-
 
     public int getAttackType() {
         return atkType;
     }
     public Entity[] getSkills(){
         return skills;
+    public Skill1 getSkill1(){
+        return skill1;
     }
 
     @Override
@@ -209,9 +216,8 @@ public class Player extends Entity{
         if (runningDirection == 1) {
 
 //
-            for (int i = 0; i < skills.length; i++){
-                skills[i].facingRight = true;
-            }
+            skill1.facingRight = true;
+            skill2.facingRight = true;
 
             if (animationStep == -1) {
                 animationStep = 0;
@@ -223,9 +229,9 @@ public class Player extends Entity{
             count1++;
             count2++;
         } else if (runningDirection == -1) {
-            for (int i = 0; i < skills.length; i++){
-                skills[i].facingRight = false;
-            }
+            skill1.facingRight = false;
+            skill2.facingRight = false;
+
             facing = runningDirection;
             if (animationStep == -1) {
                 animationStep = 0;
@@ -266,16 +272,16 @@ public class Player extends Entity{
         }
         //Update Skill
         if(USESKILL2 ==false){
-                skills[1].setPos(posX, posY);
+                skill2.setPos(posX, posY);
         }else{
-            skills[1].tick();
+            skill2.tick();
         }
 
         if(USESKILL1 == false) {
-            skills[0].setPos(posX, posY);
+            skill1.setPos(posX, posY);
         }
         else{
-            skills[0].tick();
+            skill1.tick();
         }
 
     }
@@ -484,8 +490,11 @@ public class Player extends Entity{
         posX = posXTemp;
         posY = posYTemp;
 
-        if (key.skill1 == 1) skills[0].render(graphicsContext);
-        if (key.skill2 == 1) skills[1].render(graphicsContext);
+        if (key.skill1 == 1) skill1.render(graphicsContext);
+        if (key.skill2 == 1) skill2.render(graphicsContext);
+
+
+
     }
 
     public int getFacing() {
@@ -498,6 +507,7 @@ public class Player extends Entity{
 
     public void keyIn(KeyEvent keyEvent) {
         //System.out.println("Left");
+
         if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
             //System.out.println("Key pressed");
             switch (keyEvent.getCode()) {
@@ -539,6 +549,7 @@ public class Player extends Entity{
             }
         }
 
+
         else {
             //System.out.println("Key released");
             switch (keyEvent.getCode()) {
@@ -558,15 +569,40 @@ public class Player extends Entity{
                     key.right = 0;
                     break;
                 }
-                case Q -> {
+                case DIGIT1 -> {
+                	if (HPpotNum > 0 && HP < maxHP) {
+                		HPpotNum--;
+                		HP += HPinc;
+                	}
+                }
+                case DIGIT2 -> {
+                	if (MPpotNum > 0 && MP < maxMP) {
+                		MPpotNum--;
+                		MP += MPinc;
+                	}
+                }
+            }
+        }
+
+        if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
+            if (keyEvent.getCode() == KeyCode.Q ) {
+
+                if (System.nanoTime()/1000000 - startimeSkill1 >= skill1.getTimeLoad()) {
+                    startimeSkill1 = System.nanoTime()/1000000;
+                    key.skill1 = 1;
+                    USESKILL1 = true;
+                }
+
+                else if(skill1.hasPlayedOnce()) {
                     key.skill1 = 0;
                     USESKILL1 = false;
-                    break;
+                    skill1.setPlayedOnce(false);
                 }
-                case E -> {
-                    key.skill2 = 0;
-                    USESKILL2 = false;
-                    break;
+
+                else{
+                    key.skill1 = 0;
+                    USESKILL1 = false;
+
                 }
                 case ENTER -> {
                     //key.attack = 0;
@@ -575,8 +611,15 @@ public class Player extends Entity{
                     key.attack = 0;
                 }
             }
+
+
         }
+
     }
+
+
+
+
 
     //Method does not control animation
     private void jump() {

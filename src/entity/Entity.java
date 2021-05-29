@@ -20,6 +20,9 @@ public abstract class Entity {
     protected double dy;
     protected  boolean falling;
 
+    //Time entity
+
+    private long timeLoad;
     //flag
     public boolean onGround;
 
@@ -109,6 +112,15 @@ public abstract class Entity {
         this.posX = x;
         this.posY = y;
     }
+
+    public void setTimeLoad(long timeLoad){
+        this.timeLoad = timeLoad;
+    }
+
+    public long getTimeLoad(){
+        return timeLoad;
+    }
+
 
     public void setTileMap(TileMap tileMap){
         this.tileMap = tileMap;

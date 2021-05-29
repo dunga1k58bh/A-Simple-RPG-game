@@ -1,6 +1,7 @@
 package state;
 
 import application.Main;
+import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -14,8 +15,7 @@ public class MenuState extends GameState{
     private int currentOption= 1;
 	private Font font,titleFont ;
 	private int PlayState=1,
-	            LoadState=2,
-	            AboutState=3;
+	            SettingState=2;
 
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
@@ -25,18 +25,17 @@ public class MenuState extends GameState{
 //
 	    options = new String[]{
 				"Play",
-				"Load",
-				"About",
+				"Setting",
 				"Exit",
 		};
 
 	}
 
 	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		
+	public void setPlayer(Player player) {
+
 	}
+
 
 	@Override
 	public void tick() {
@@ -85,7 +84,7 @@ public class MenuState extends GameState{
 		}
 		//seliction
 		if (k.getCode() == KeyCode.ENTER){
-			if (currentOption ==3+1) System.exit(0);
+			if (currentOption ==options.length) System.exit(0);
 			//Select Current Option
 			gsm.setState(currentOption);
 		}
