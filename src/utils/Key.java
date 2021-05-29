@@ -7,4 +7,5 @@ public class Key {
     public int right = 0;
     public int skill1 = 0;
     public int skill2 = 0;
+    public int attack = 0;
 }
