@@ -5,6 +5,7 @@ import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.enemies.Fly;
+import entity.Dropping;
 import entity.HUD;
 import entity.Player;
 import entity.enemies.Monster2;
@@ -29,6 +30,7 @@ public class Map1 extends GameState {
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
+    private ArrayList<Dropping> droppings;
     private final TileMap tilemap1;
     private HUD hud;
     
@@ -81,6 +83,7 @@ public class Map1 extends GameState {
     
 	private void generateEnemies() {
 		enemies = new ArrayList<>();
+		droppings = new ArrayList<>();
 		Snail s;
 		Fly f;
 		Point2D[] points = new Point2D[] {
@@ -139,11 +142,22 @@ public class Map1 extends GameState {
 			    e.tick();
 			}
 			if(e.isDead()) {
+				Dropping d = new Dropping(tilemap1, e);
+				droppings.add(d);
 				enemies.remove(i);
 				i--;
 			}
 		}
-
+		for(int i = 0; i < droppings.size(); i++) {
+			Dropping d = droppings.get(i);
+			d.tick();
+			if (d.intersects(player)) {
+				if (d.type == d.HPpot) player.HPpotNum++;
+				else if (d.type == d.MPpot) player.MPpotNum++;
+				droppings.remove(i);
+				i--;
+			}
+		}
 
 
 
@@ -166,7 +180,10 @@ public class Map1 extends GameState {
             enemy.render(g);
         }
         hud.render(g);
-
+		for(int i = 0; i < droppings.size(); i++) {
+			Dropping d = droppings.get(i);
+			d.render(g);
+		}
     }
 
     @Override

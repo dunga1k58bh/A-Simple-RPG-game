@@ -62,8 +62,11 @@ public class Player extends Entity{
     // max HP, MP, level ...
     public int maxHP, maxMP, level;
     public int curEXP, levelEXP;
+    public int HPpotNum, MPpotNum;
     
     public Player() {
+    	HPpotNum = 5;
+    	MPpotNum = 5;
     	curEXP = 10;
     	levelEXP = 99;
     	level = 1;
