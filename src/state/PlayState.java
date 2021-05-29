@@ -3,6 +3,9 @@ package state;
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import state.map.Map1;
+import state.map.Map2;
+import state.map.Map3;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,9 @@ public class PlayState extends GameState{
         player = new Player();                    /// the unique Player
         this.currentMap = gsm.getCurrentMap();    /// the current Map
         this.mapStates = gsm.getmapStates();      /// the array of map
+        mapStates.add(new Map1(gsm));   //0
+        mapStates.add(new Map2(gsm));   //1
+        mapStates.add(new Map3(gsm));   //2
         mapStates.get(currentMap).setPlayer(player);   ///pass the player to current MapState
     }
 

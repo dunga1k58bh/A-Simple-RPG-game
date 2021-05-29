@@ -5,6 +5,7 @@ import entity.skills.LaserAttack;
 import entity.skills.Skill1;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import tilemap.Tile;
 import tilemap.TileMap;
 
 
@@ -18,8 +19,8 @@ public class Monster2 extends Enemy{
 
     //Action+Animation
     private final int IDLE = 0;
-    private final int JUMP = 1;
-    private final int WALK = 2;
+    private final int WALK = 1;
+    private final int JUMP = 2;
     private final int LASERATTACK =3;
     private final int DEAD = 4;
    //Đứng yên
@@ -29,9 +30,8 @@ public class Monster2 extends Enemy{
 
     //attack action
     int random_int;
-    private boolean laserattack;
 
-    private LaserAttack laserAttack;
+    private final LaserAttack laserAttack;
     private Skill1 skill11;
     private Animation[] animations;
 
@@ -41,12 +41,10 @@ public class Monster2 extends Enemy{
         super(tm);
         moveSpeed = 1;
         maxSpeed = 3;
-        fallSpeed = 3;
-        maxFallSpeed = 10.0;
-        HP = maxHP = 5;
+        fallSpeed = 0.2;
+        HP = maxHP = 1000;
         damage = 1;
-        jumpStart =3;
-        stopJumpSpeed=5;
+        jumpStart =10;
         width = 220;
         height =190;
         xmin = width/2+1;
@@ -65,13 +63,13 @@ public class Monster2 extends Enemy{
         //
         animations[HURT].setWidthHeight(220, 190);
         animations[HURT].setFrames("res/enemies/monster2/hurt.png", 5);
-        animations[HURT].setDelay(100);
+        animations[HURT].setDelay(25);
         animations[HURT].setMaxConsercutiveAnimation(1);
         //
         animations[WALK].setWidthHeight(212,189);
         animations[WALK].setFrames("res/enemies/monster2/walk.png",19,4,5);
         animations[WALK].setDelay(25);
-        animations[WALK].setMaxConsercutiveAnimation(6);
+        animations[WALK].setMaxConsercutiveAnimation(4);
 
         //
         animations[DEAD].setWidthHeight(297,219);
@@ -86,7 +84,7 @@ public class Monster2 extends Enemy{
         //
         animations[JUMP].setWidthHeight(235,259);
         animations[JUMP].setFrames("res/enemies/monster2/jump.png",24,4,6);
-        animations[JUMP].setDelay(50);
+        animations[JUMP].setDelay(75);
         animations[JUMP].setMaxConsercutiveAnimation(1);
         //
         animations[LASERSWEPT].setWidthHeight(221,224);
@@ -96,7 +94,7 @@ public class Monster2 extends Enemy{
         //
         animations[LASERATTACK].setWidthHeight(215,182);
         animations[LASERATTACK].setFrames("res/enemies/monster2/laser_attack.png",60,6,10);
-        animations[LASERATTACK].setDelay(25);
+        animations[LASERATTACK].setDelay(50);
         animations[LASERATTACK].setMaxConsercutiveAnimation(1);
 
 
@@ -111,44 +109,56 @@ public class Monster2 extends Enemy{
     }
     private void getNextPosition() {
         // movement
-        if(left) {
+        if (left) {
             dx -= moveSpeed;
-            if(dx < -maxSpeed) dx = -maxSpeed;
-        }
-         else if(right) {
+            if (dx < -maxSpeed) dx = -maxSpeed;
+        } else if (right) {
             dx += moveSpeed;
-            if(dx > maxSpeed) dx = maxSpeed;
-        }else{
-             dx=0;
+            if (dx > maxSpeed) dx = maxSpeed;
+        } else {
+            dx = 0;
         }
-        if (jumping){
-            dy -=jumpStart;
-            if (dy<=-stopJumpSpeed) dy = -stopJumpSpeed;
-        }
+        if (jumping) {
+            if (animations[currentAnimation].getFrame() == 0){    // Begin jump
+                dy = -jumpStart;                                  //
+            } else {
+            if(jumpStart > 0)jumpStart -= 0.2;                    //jumpspeed --
+            }
+    }
         // falling
         if(falling) dy += fallSpeed;
+        if(dy>0){                                                  //if falling
+            fallSpeed+=0.01;                                       //fallspedd ++
+        }
+        if(onGround){                                              //ifOnground return the begin value
+            fallSpeed = 0.2;
+            jumpStart = 10;
+        }
+
     }
 
 
     @Override
     public void tick() {
+        falling = true;
         // update position
 //        System.out.println("Current Animation "+currentAnimation);
-//        System.out.println("FacingRight"+ facingRight);
-        getNextPosition();
-        CheckTileMapCollision();
-        posX += dx;
-        posY += dy;
+//        System.out.println("Beinghit"+ beingHit);
+        if(currentAnimation!= JUMP)  falling = true;
+        if (HP < 0.2 *maxHP ){
+            maxSpeed=5;
+        }
+
         // check flinching
         if (flinching) {
             long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
-            if (elapsed > 400) flinching = false;
+            if (elapsed > 1000) flinching = false;
         }
-        if(posX-posYBegin>300){
+        if(posX-posYBegin>500){           // change direction if go too far from the begin Pos
             right=false;
             left=true;
             facingRight=false;
-        }else if(posX-posXBegin<-300){
+        }else if(posX-posXBegin<-500){
             right=true;
             left=false;
             facingRight=true;
@@ -160,24 +170,36 @@ public class Monster2 extends Enemy{
             nextAnimation=-1;
         }else if(currentAnimation == JUMP){
             jumping=true;
-            if(animations[JUMP].getFrame()>=(int)animations[JUMP].getLength()/2) {
-                jumping=false;
-                falling=true;
-            }
             nextAnimation=WALK;
         }else if(currentAnimation == IDLE){
            jumping =false;
            left = false;
            right= false;
-           nextAnimation = LASERATTACK;
+           int random = (int)(Math.random() * (3 - 2 + 1) + 2);
+//           System.out.println("Random"+random);
+           nextAnimation = random;
         }else if(currentAnimation == LASERATTACK){
+            if(18<=animations[LASERATTACK].getFrame()&&animations[LASERATTACK].getFrame()<42){
+                laserAttack.setBeingUsed(true);
+            }else{
+                laserAttack.setBeingUsed(false);
+            }
             jumping = false;
             left = false;
             right = false;
             nextAnimation = WALK;
+            flinching = true; // can be attack
+        }else if(currentAnimation == HURT){
+            left = false;
+            right = false;
+            jumping = false;
+            nextAnimation = WALK;
         }
 //        System.out.println("COncursiv"+consercutiveAnimations);
-
+        getNextPosition();
+        CheckTileMapCollision();
+        posX += dx;
+        posY += dy;
         laserAttack.setPos(posX,posY);
         laserAttack.ChangeDirection(facingRight);
         laserAttack.tick();
@@ -186,10 +208,13 @@ public class Monster2 extends Enemy{
     }
 
     public void setNextAnimation(){
+        if (beingHit) currentAnimation = HURT;
         if(animations[currentAnimation].hasPlayedOnce()==true) {
+            beingHit = false;
+            System.out.println(animations[currentAnimation].hasPlayedOnce());
             consercutiveAnimations++;
             animations[currentAnimation].setPlayedOnce(false);
-            if(consercutiveAnimations == animations[currentAnimation].getMaxConsercutiveAnimation()) {
+            if(consercutiveAnimations >= animations[currentAnimation].getMaxConsercutiveAnimation()) {
                 consercutiveAnimations=0;
                 if (nextAnimation != -1) {
                     currentAnimation = nextAnimation;
@@ -215,7 +240,12 @@ public class Monster2 extends Enemy{
       this.player=player;
     }
 
-
+    @Override
+    public void CheckTileMapCollision() {
+        tileMap.setTile(0,10,12, Tile.ALLOW);
+        super.CheckTileMapCollision();
+        tileMap.setTile(0,10,12,Tile.BLOCK);
+    }
 
     @Override
     public void render(GraphicsContext graphicsContext){
@@ -245,6 +275,6 @@ public class Monster2 extends Enemy{
         graphicsContext.strokeOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);
         //Filling:
         graphicsContext.fillOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);
-        if(currentAnimation == LASERATTACK)  laserAttack.render(graphicsContext);
+        if(laserAttack.getBeingUsed())  laserAttack.render(graphicsContext);
     }
 }

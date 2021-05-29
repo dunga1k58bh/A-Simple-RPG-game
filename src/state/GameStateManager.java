@@ -18,15 +18,10 @@ public class GameStateManager {
 
          gameStates= new ArrayList<>();
          mapStates = new ArrayList<>();
-         mapStates.add(new Map1(this));//////0
-         mapStates.add(new Map2(this));//////1
-         mapStates.add(new Map3(this));/////2
-         currentMap = 0;
-
+         currentMap = 2;
          gameStates.add(new MenuState(this));// 0
          gameStates.add(new PlayState(this));// 1
-         gameStates.add(new SettingState(this));//2
-
+         gameStates.add(new SettingState(this));//
          currentState = 1;
      }
      public void setState(int state) {

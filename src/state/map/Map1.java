@@ -37,7 +37,8 @@ public class Map1 extends GameState {
     private HUD hud;
     
     //Music BackGround
-    private final Music bgMusic;
+    private final Music bgMusic; //will be played when player in this map // in the setPlayer() method
+                                 //and stop when player leave this map    // in the ChangeMap() method
 
     //starting position of player on map (On-map coord)
     private final double playerStartingPosX = 200; //TODO
@@ -71,7 +72,6 @@ public class Map1 extends GameState {
         //Set Cycle music background and Play
         bgMusic.setCycle();
         bgMusic.setVolume(0.1);
-        bgMusic.startMusic();
 
         isclear = false;          // this map is not clear at the time it init()
         gatetoNextMap = new Gate(tilemap1);
@@ -93,6 +93,7 @@ public class Map1 extends GameState {
         player.initSkill();
         hud = new HUD(player);
         generateEnemies();
+        bgMusic.startMusic();
     }
     
 	private void generateEnemies() {
@@ -182,6 +183,7 @@ public class Map1 extends GameState {
         if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
         //Check to move to next map
         if(isclear&&player.intersects(gatetoNextMap)){   //Move to nextMap
+            bgMusic.pauseMusic();
             gsm.nextMap();            // move to next map
             gsm.setNextMap(true);
             gsm.setPlayer(player);    //set player to next map

@@ -68,6 +68,11 @@ public class TileMap {
         for (int i = 1;i<=21;i++) tiles[0][i].setType(Tile.BLOCK);
         tiles[1][2].setType(Tile.DEAD);
     }
+    public void setTile(int row,int begincol,int endcol,int type){
+        for (int i= begincol;i<=endcol;i++){
+            tiles[row][i].setType(type);
+        }
+    }
 
     public int getTileSize() {
         return tileSize;

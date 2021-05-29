@@ -10,7 +10,7 @@ import tilemap.TileMap;
 
 public class LaserAttack extends Entity {
     private Animation animation;
-
+    private boolean beingused;
     public LaserAttack(TileMap tileMap){
         super(tileMap);
 
@@ -31,6 +31,12 @@ public class LaserAttack extends Entity {
         }else{
             super.setPos(x-80,y-170);
         }
+    }
+    public  void setBeingUsed(boolean b){
+        beingused = b;
+    }
+    public boolean getBeingUsed(){
+        return beingused;
     }
     @Override
     public void render(GraphicsContext graphicsContext) {

@@ -23,8 +23,7 @@ public abstract class Enemy extends Entity {
 
 	protected boolean flinching;
 	protected long flinchTimer;
-
-
+    protected boolean beingHit;
 
 	
 	// animation
@@ -83,6 +82,7 @@ public abstract class Enemy extends Entity {
 		if(HP == 0) dead = true;
 		flinching = true;
 		flinchTimer = System.nanoTime();
+		beingHit = true;
 	}
 
 	@Override

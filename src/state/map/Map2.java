@@ -66,7 +66,6 @@ public class Map2 extends GameState {
         //Set Cycle music background and Play
         bgMusic.setCycle();
         bgMusic.setVolume(0.1);
-        bgMusic.startMusic();
         //the gate
         gateToPreviousMap = new Gate(tilemap2);
         gateToPreviousMap.setPos(24,336);
@@ -84,6 +83,7 @@ public class Map2 extends GameState {
         player.initSkill();
         hud = new HUD(player);
         generateEnemies();
+        bgMusic.startMusic();
     }
 
     private void generateEnemies() {
@@ -155,12 +155,14 @@ public class Map2 extends GameState {
         if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
         //Check to move to next map
         if(isclear&&player.intersects(gatetoNextMap)){   //Move to nextMap
+            bgMusic.pauseMusic();
             gsm.nextMap();            // move to next map
             gsm.setNextMap(true);     //It mean the player is being move to the NEXT map
             gsm.setPlayer(player);    //set player to next map
             gsm.setNextMap(false);
         }
         if(player.intersects(gateToPreviousMap)){
+            bgMusic.pauseMusic();
             gsm.previousMap();     //gsm.getNextMap is false in defalt so setPlayer will set player to returnPos
             gsm.setPlayer(player);
         }

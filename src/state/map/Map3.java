@@ -5,13 +5,10 @@ import java.util.ArrayList;
 import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
-import entity.enemies.Fly;
 import entity.somethings.Gate;
 import entity.somethings.HUD;
 import entity.Player;
 import entity.enemies.Monster2;
-import entity.enemies.Snail;
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -54,7 +51,7 @@ public class Map3 extends GameState {
         super(gsm);
         try {
             bg= new Image(new FileInputStream("res/bg/bgMap3.png"));
-            bgMusic = new Music("res/Audio/bgMusic0.wav");
+            bgMusic = new Music("res/Audio/bgMusic5.mp3");
             tilemap3 = new TileMap(48);
             tilemap3.loadTileSet("Map/TileSet.png");
             tilemap3.loadMap("res/Map/Map3.map");
@@ -68,7 +65,6 @@ public class Map3 extends GameState {
         //Set Cycle music background and Play
         bgMusic.setCycle();
         bgMusic.setVolume(0.1);
-        bgMusic.startMusic();
         //the gate
         gateToPreviousMap = new Gate(tilemap3);
         gateToPreviousMap.setPos(24,240);
@@ -81,33 +77,25 @@ public class Map3 extends GameState {
         //System.out.println("playerSet: " + player);
         player.setPosX(playerStartingPosX);
         player.setPosY(playerStartingPosY);
-        //Vá»©t TileMap cho player
+        // pass player to TileMap
         player.setTileMap(tilemap3);
         player.initSkill();
         hud = new HUD(player);
         generateEnemies();
+        bgMusic.startMusic();
     }
 
     private void generateEnemies() {
         enemies = new ArrayList<>();
-        Snail s;
-        Fly f;
-        Point2D[] points = new Point2D[] {
-                new Point2D(200, 900),
-                new Point2D(860, 200),
-                new Point2D(1525, 200),
-                new Point2D(1680, 200),
-                new Point2D(1800, 200)
-        };
         Monster2 m2 = new Monster2(tilemap3);
-        m2.setPosition(700,900);
+        m2.setPosition(800,600);
         enemies.add(m2);
         m2.setTarget(player);
     }
 
 
     @Override
-    public void tick(){
+    public void tick(){                           //Tick of game
         if (player.getFacing() == 1) {
             camPosX = player.getPosX() - Main.width*1/3;
         }
@@ -116,16 +104,15 @@ public class Map3 extends GameState {
         }
         camPosY = player.getPosY() - Main.height*2/3;
         tilemap3.setPos(camPosX,camPosY);
-
         tilemap3.tick();
         player.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
-            if (player.intersects(e)) player.changeHP(-5);
-            if(player.getSkill1().intersects(e)) {
-                e.getHit(1);
-                e.tick();
+            if (player.intersects(e)) {
+                player.changeHP(-5);
+                e.getHit(-1);
             }
+                e.tick();
             if(e.isDead()) {
                 enemies.remove(i);
                 i--;
@@ -138,13 +125,15 @@ public class Map3 extends GameState {
     public void changeMap(){
         if(enemies.size()==0) isclear = true;    ///if there no enemy the map is clear
         //Check to move to next map
-        if(isclear&&player.intersects(gatetoNextMap)){   //Move to nextMap
+        if(isclear&&player.intersects(gatetoNextMap)){//Move to nextMap
+            bgMusic.pauseMusic();
             gsm.nextMap();            // move to next map
             gsm.setNextMap(true);     //It mean the player is being move to the NEXT map
             gsm.setPlayer(player);    //set player to next map
             gsm.setNextMap(false);
         }
         if(player.intersects(gateToPreviousMap)){
+            bgMusic.pauseMusic();
             gsm.previousMap();     //gsm.getNextMap is false in defalt so setPlayer will set player to returnPos
             gsm.setPlayer(player);
         }
