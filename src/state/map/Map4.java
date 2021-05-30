@@ -31,6 +31,7 @@ public class Map4 extends GameState {
     private Gate gateToPreviousMap;
     private HUD hud;
     private Monster2 boss;
+    private int hardLevel;
     //Music BackGround
     private  Music bgMusic;
 
@@ -56,7 +57,8 @@ public class Map4 extends GameState {
         }catch (Exception e){
             e.printStackTrace();
         }
-
+        
+        hardLevel = gsm.getHardLevel();
         tilemap.setPos(camPosX,camPosY);
         //generateEnemies();
 
@@ -83,7 +85,7 @@ public class Map4 extends GameState {
     }
 
     private void generateEnemies() {
-        boss = new Monster2(tilemap);
+        boss = new Monster2(tilemap, hardLevel);
         boss.setPosition(800,600);
         boss.setTarget(player);
     }
