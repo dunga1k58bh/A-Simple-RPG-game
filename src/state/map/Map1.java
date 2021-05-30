@@ -80,6 +80,7 @@ public class Map1 extends GameState {
         gatetoNextMap.setPos(2376,192);
         gsm.setNextMap(true);
     }
+
     @Override
     public void setPlayer(Player player) {
         this.player = player;
@@ -147,7 +148,7 @@ public class Map1 extends GameState {
         tilemap1.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
-            if (player.intersects(e)) player.changeHP(-5);
+            if (player.intersects(e)) player.getHit(50);
             if (player.getKey().skill1 == 1) {
             	if (player.getSkill1().intersects(e)) {
             		e.getHit(player.getSkill1().getDamage());
@@ -158,7 +159,6 @@ public class Map1 extends GameState {
             		e.getHit(player.getSkill2().getDamage());
             	}
             }
-            
             e.tick();
             if(e.isDead()) {
                 Dropping d = new Dropping(tilemap1, e);
@@ -168,7 +168,13 @@ public class Map1 extends GameState {
             }
         }
         player.tick();
+        if (player.isDead()){
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setDead(false);
 
+        }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();
@@ -179,10 +185,10 @@ public class Map1 extends GameState {
 				i--;
 			}
 		}
-
         //Check to open gate
 		tilemap1.OpenNextMap(enemies.size());
         changeMap(); // change the map if can be :
+
     }
 
     public void changeMap(){

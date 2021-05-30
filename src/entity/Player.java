@@ -537,7 +537,7 @@ public class Player extends Entity{
                 case ENTER -> {
                     debug = !debug;
                 }
-                case A -> {
+                case Q -> {
                     key.attack = 1;
                 }
             }
@@ -577,10 +577,10 @@ public class Player extends Entity{
                 case ENTER -> {
                     debug = false;
                 }
-                case A -> {
+                case Q -> {
                     key.attack = 0;
                 }
-                case Q -> {
+                case W-> {
                 	if (skill1Lock) {
                 		long elapsed = (System.nanoTime() - skill1Timer) / 1000000;
                 		if (elapsed > skill1.getTimeLoad()) {

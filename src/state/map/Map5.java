@@ -7,7 +7,6 @@ import application.Main;
 import entity.somethings.Gate;
 import entity.somethings.HUD;
 import entity.Player;
-import entity.enemies.Monster2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -30,9 +29,8 @@ public class Map5 extends GameState {
     private Gate gatetoNextMap;
     private Gate gateToPreviousMap;
     private HUD hud;
-    private Monster2 boss;
     //Music BackGround
-    private  Music bgMusic;
+    public   Music bgMusic;
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
@@ -48,15 +46,14 @@ public class Map5 extends GameState {
     public Map5(GameStateManager gsm){
         super(gsm);
         try {
-            bg= new Image(new FileInputStream("res/bg/bgMap4.png"));
-            bgMusic = new Music("res/Audio/bgMusic5.mp3");
+            bg= new Image(new FileInputStream("res/bg/bgMap5.png"));
+            bgMusic = new Music("res/Audio/Victory-TwoStepsFromHell.mp3");
             tilemap = new TileMap(48);
             tilemap.loadTileSet("Map/TileSet.png");
             tilemap.loadMap("res/Map/Map5.map");
         }catch (Exception e){
             e.printStackTrace();
         }
-
         tilemap.setPos(camPosX,camPosY);
         //generateEnemies();
 
@@ -130,10 +127,10 @@ public class Map5 extends GameState {
 //
         player.keyIn(k);
     }
-
     @Override
     public void keyReleased(KeyEvent k) {
         player.keyIn(k);
     }
+
 }
 

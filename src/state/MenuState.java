@@ -9,6 +9,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.io.FileInputStream;
+
 public class MenuState extends GameState{
     private Image image;
     private  String[] options;
@@ -19,13 +21,18 @@ public class MenuState extends GameState{
 
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
-//		image = new Image("Menu/menubg.jpg");
-		font = Font.loadFont("file:res/Font/njnaruto.ttf",48);
-		titleFont = Font.loadFont("file:res/Font/njnaruto.ttf",100);
+		try {
+			image = new Image(new FileInputStream("res/Menu/menuBg.png"));
+			font = Font.loadFont("file:res/Font/njnaruto.ttf", 48);
+			titleFont = Font.loadFont("file:res/Font/njnaruto.ttf", 100);
 //
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	    options = new String[]{
 				"Play",
 				"Setting",
+				"Key Control",
 				"Exit",
 		};
 
