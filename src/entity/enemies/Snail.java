@@ -19,7 +19,7 @@ public class Snail extends Enemy{
 		maxSpeed = 1;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
-		HP = maxHP = 3;
+		HP = maxHP = 1000;
 		damage = 1;
 		
 		width = 60;

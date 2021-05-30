@@ -48,11 +48,11 @@ public class Map4 extends GameState {
     public Map4(GameStateManager gsm){
         super(gsm);
         try {
-            bg= new Image(new FileInputStream("res/bg/bgMap3.png"));
+            bg= new Image(new FileInputStream("res/bg/bgMap4.png"));
             bgMusic = new Music("res/Audio/bgMusic5.mp3");
             tilemap = new TileMap(48);
             tilemap.loadTileSet("Map/TileSet.png");
-            tilemap.loadMap("res/Map/Map5.map");
+            tilemap.loadMap("res/Map/Map4.map");
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -52,7 +52,7 @@ public class Map3 extends GameState {
     public Map3(GameStateManager gsm){
         super(gsm);
         try {
-            bg= new Image(new FileInputStream("res/bg/bgMap2.png"));
+            bg= new Image(new FileInputStream("res/bg/bgMap3.gif"));
             bgMusic = new Music("res/Audio/bgMusic0.wav");
             tileMap = new TileMap(48);
             tileMap.loadTileSet("Map/TileSet.png");

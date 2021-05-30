@@ -29,7 +29,7 @@ public class Map1 extends GameState {
     private final Image bg= new Image("bg/bgMap1.png");
 
     //only reference
-    private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
+    private Player player; //Both player and camera can move
     private ArrayList<Enemy> enemies;
     private ArrayList<Dropping> droppings;
     private final TileMap tilemap1;

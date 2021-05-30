@@ -87,6 +87,9 @@ public class MenuState extends GameState{
 			if (currentOption ==options.length) System.exit(0);
 			//Select Current Option
 			gsm.setState(currentOption);
+
+
+
 		}
 	}
 

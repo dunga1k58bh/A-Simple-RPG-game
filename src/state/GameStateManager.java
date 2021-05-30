@@ -20,7 +20,7 @@ public class GameStateManager {
 
          gameStates= new ArrayList<>();
          mapStates = new ArrayList<>();
-         currentMap = 0;
+         currentMap = 4;
          gameStates.add(new MenuState(this));// 0
          gameStates.add(new PlayState(this));// 1
          gameStates.add(new SettingState(this));//
