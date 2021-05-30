@@ -6,6 +6,7 @@ import Audio.Music;
 import application.Main;
 import entity.enemies.Enemy;
 import entity.enemies.Fly;
+import entity.somethings.Dropping;
 import entity.somethings.Gate;
 import entity.somethings.HUD;
 import entity.Player;
@@ -31,6 +32,7 @@ public class Map3 extends GameState {
     //only reference
     private Player player; //Both player and tilemap can move, map can move then player stays, map can't move and player will move
     private ArrayList<Enemy> enemies;
+    private ArrayList<Dropping> droppings;
     private  TileMap tileMap;
     private final Gate gatetoNextMap;
     private final Gate gateToPreviousMap;
@@ -87,6 +89,7 @@ public class Map3 extends GameState {
 
     private void generateEnemies() {
         enemies = new ArrayList<>();
+        droppings = new ArrayList<>();
         Snail s;
         Fly f;
         Point2D[] points = new Point2D[] {
@@ -150,10 +153,24 @@ public class Map3 extends GameState {
             e.tick();
 
             if(e.isDead()) {
+                Dropping d = new Dropping(tileMap, e);
+                droppings.add(d);
                 enemies.remove(i);
                 i--;
             }
         }
+        
+		for(int i = 0; i < droppings.size(); i++) {
+			Dropping d = droppings.get(i);
+			d.tick();
+			if (d.intersects(player)) {
+				if (d.type == d.HPpot) player.HPpotNum++;
+				else if (d.type == d.MPpot) player.MPpotNum++;
+				droppings.remove(i);
+				i--;
+			}
+		}
+		
         //Check to open gate
         tileMap.OpenNextMap(enemies.size());
         changeMap();
@@ -185,6 +202,10 @@ public class Map3 extends GameState {
         }
         player.render(g);
         hud.render(g);
+		for(int i = 0; i < droppings.size(); i++) {
+			Dropping d = droppings.get(i);
+			d.render(g);
+		}
         if(isclear) gatetoNextMap.render(g);
         gateToPreviousMap.render(g);
     }
