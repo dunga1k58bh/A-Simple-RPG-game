@@ -51,17 +51,13 @@ public class Skill1  extends Entity{
     }
 
     public  void setPos(double x, double y){
-        if (facingRight){
-            super.setPos(x + 10, y);
-        }else {
-            super.setPos(x - 10, y);
-        }
+        super.setPos(x + 10*facing, y);
     }
     
     
     @Override
     public void tick() {
-         if(facingRight) posX += 10;
+         if(facing==1) posX += 10;
          else posX -= 10;
          if (skill1Animation.hasPlayedOnce()) {
         	 remove = true;
@@ -73,19 +69,6 @@ public class Skill1  extends Entity{
     public void render(GraphicsContext graphicsContext) {
         setMapPosittion();
         if(notOnScreen()) return;
-        if(facingRight) {
-            graphicsContext.drawImage(
-                    skill1Animation.getImage(),
-                    (posX - xmap - width/2),
-                    (posY - ymap - height),
-                    width, height);
-        }
-        else {
-            graphicsContext.drawImage(
-                    skill1Animation.getImage(),
-                    (posX - xmap + width/2),
-                    (posY - ymap - height),
-                    -width, height);
-        }
+        graphicsContext.drawImage(skill1Animation.getImage(), (posX - xmap - width/2*facing), (posY - ymap - height), width*facing, height);
     }
 }

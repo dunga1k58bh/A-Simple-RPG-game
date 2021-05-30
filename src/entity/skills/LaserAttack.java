@@ -21,19 +21,15 @@ public class LaserAttack extends Entity {
         animation.setWidthHeight(732,133);
         animation.setFrames("res/enemies/monster2/laser.png",24,2,6);
         animation.setDelay(30);
-        facingRight = true;
+        facing = 1;
         setEntityBoxSize(732,60);
         damage = 150;
     }
-    public void ChangeDirection(boolean facingRight){
-        this.facingRight = facingRight;
+    public void ChangeDirection(int facing){
+        this.facing = facing;
     }
     public void setPos(double x , double y){
-        if(facingRight) {
-            super.setPos(x + 80, y - 90);
-        }else{
-            super.setPos(x-80,y-90);
-        }
+        super.setPos(x + 80*facing, y - 90);
     }
     public  void setBeingUsed(boolean b){
         beingused = b;
@@ -44,20 +40,11 @@ public class LaserAttack extends Entity {
     @Override
     public void render(GraphicsContext graphicsContext) {
         setMapPosittion();
-        if(facingRight) {
-            graphicsContext.drawImage(
-                    animation.getImage(),
-                    (posX -xmap ),
-                    (posY -ymap -70),
-                    animation.getWidth(),animation.getHeight());
-        }
-        else {
-            graphicsContext.drawImage(
-                    animation.getImage(),
-                    (posX -xmap ),
-                    (posY -ymap -70),
-                    -animation.getWidth(),animation.getHeight());
-        }
+        graphicsContext.drawImage(
+                animation.getImage(),
+                (posX -xmap ),
+                (posY -ymap -70),
+                animation.getWidth()*facing,animation.getHeight());
         //Draw a small dot at Monster position for simple debug
         double radius = 3;
         //Stoking
@@ -68,11 +55,7 @@ public class LaserAttack extends Entity {
     }
     @Override
     public Rectangle2D getRectangle(){
-        if (facingRight) {
-            return new Rectangle2D((int) posX, (int) posY - cheight / 2, cwidth, cheight);
-        }else{
-            return new Rectangle2D((int)posX-cwidth, (int)posY+cheight/2 , cwidth, cheight);
-        }
+        return new Rectangle2D((int) posX, (int) posY - cheight / 2*facing, cwidth, cheight);
     }
     public int getDamage(){
         return  damage;

@@ -2,7 +2,6 @@ package entity.enemies;
 import entity.Animation;
 import entity.Player;
 import entity.skills.LaserAttack;
-import entity.skills.Skill1;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import tilemap.Tile;
@@ -101,7 +100,7 @@ public class Monster2 extends Enemy{
         flinching =false;
 
         right = true;
-        facingRight = true;
+        facing = 1;
         jumping = false;
         currentAnimation = WALK;
         nextAnimation=-1;//THat mean there no nex
@@ -159,11 +158,11 @@ public class Monster2 extends Enemy{
         if(posX-posYBegin>500){           // change direction if go too far from the begin Pos
             right=false;
             left=true;
-            facingRight=false;
+            facing =-1;
         }else if(posX-posXBegin<-500){
             right=true;
             left=false;
-            facingRight=true;
+            facing = 1;
         }
         setNextAnimation();
 
@@ -214,7 +213,7 @@ public class Monster2 extends Enemy{
         posX += dx;
         posY += dy;
         laserAttack.setPos(posX,posY);
-        laserAttack.ChangeDirection(facingRight);
+        laserAttack.ChangeDirection(facing);
         laserAttack.tick();
         // update animation
         if(currentAnimation!=DEAD||animations[DEAD].hasPlayedOnce()==false) {
@@ -245,10 +244,12 @@ public class Monster2 extends Enemy{
 //                    System.out.println("Random" + currentAnimation);
                 }
                 if(player.getPosX()-posX>0){
-                    right=true;facingRight=true;
+                    right=true;
+                    facing = -1;
                     left=false;
                 }else{
-                    right=false;facingRight=false;
+                    right=false;
+                    facing =-1;
                     left=true;
                 }
             }
@@ -265,37 +266,20 @@ public class Monster2 extends Enemy{
     public void CheckTileMapCollision() {
         tileMap.setTile(0,10,12, Tile.ALLOW);
         super.CheckTileMapCollision();
-        tileMap.setTile(0,10,12,Tile.BLOCK);
+        tileMap.setTile(0,10,12, Tile.BLOCK);
     }
 
     @Override
     public void render(GraphicsContext graphicsContext){
         setMapPosittion();
-//        if(notOnScreen()) return;
 
-        if(facingRight) {
-            graphicsContext.drawImage(
-                    animations[currentAnimation].getImage(),
-                    (posX -xmap+ (double)animations[currentAnimation].getWidth()/2-15),
-                    (posY -ymap- (double)animations[currentAnimation].getHeight()+15),
-                    -animations[currentAnimation].getWidth(),
-                    animations[currentAnimation].getHeight());
+        graphicsContext.drawImage(
+                animations[currentAnimation].getImage(),
+                (posX -xmap+ ((double)animations[currentAnimation].getWidth()/2-15)*facing),
+                (posY -ymap- (double)animations[currentAnimation].getHeight()+15),
+                -animations[currentAnimation].getWidth(),
+                animations[currentAnimation].getHeight());
 
-        }else{
-            graphicsContext.drawImage(
-                    animations[currentAnimation].getImage(),
-                    (posX -xmap- (double)animations[currentAnimation].getWidth()/2 ),
-                    (posY -ymap- (double)animations[currentAnimation].getHeight()+15),
-                    animations[currentAnimation].getWidth(),
-                    animations[currentAnimation].getHeight());
-
-        }
-        //Draw a small dot at Monster position for simple debug
-        double radius = 3;
-        //Stoking
-        graphicsContext.strokeOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);
-        //Filling:
-        graphicsContext.fillOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);
         if(laserAttack.getBeingUsed())  laserAttack.render(graphicsContext);
     }
 }

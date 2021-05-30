@@ -49,11 +49,7 @@ public class Skill2  extends Entity{
     }
 
     public  void setPos(double x, double y){
-        if (facingRight){
-            super.setPos(x + 200, y);
-        }else {
-            super.setPos(x - 200, y);
-        }
+        super.setPos(x + 200*facing, y);
     }
     
     
@@ -69,19 +65,10 @@ public class Skill2  extends Entity{
     public void render(GraphicsContext graphicsContext) {
         setMapPosittion();
         if(notOnScreen()) return;
-        if(facingRight) {
-            graphicsContext.drawImage(
-                    skill2Animation.getImage(),
-                    (posX - xmap - width/2),
-                    (posY - ymap - height),
-                    width, height);
-        }
-        else {
-            graphicsContext.drawImage(
-                    skill2Animation.getImage(),
-                    (posX - xmap + width/2),
-                    (posY - ymap - height),
-                    -width, height);
-        }
+        graphicsContext.drawImage(
+                skill2Animation.getImage(),
+                (posX - xmap - width/2*facing),
+                (posY - ymap - height),
+                width*facing, height);
     }
 }

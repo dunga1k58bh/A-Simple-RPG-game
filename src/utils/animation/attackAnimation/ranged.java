@@ -8,7 +8,6 @@ import utils.animation.Animation;
 public class ranged extends Animation {
     public ranged() {
         setNumberOfStep(4);
-        setSelfLock(false);
         setInterval(3);
         upper.add(0, new Image("char/Small14-resources.assets-8747.png"));
         upper.add(1, new Image("char/Small15-resources.assets-12132.png"));

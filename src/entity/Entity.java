@@ -38,7 +38,7 @@ public abstract class Entity {
     protected  int currCol;
 
     //Left or right ??
-    protected boolean facingRight;
+    protected int facing;
 
     //if entity being attack it cant be attack for a while
     protected boolean flinching;

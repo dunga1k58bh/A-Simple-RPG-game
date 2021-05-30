@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public abstract class Animation {
     protected int facing;
-    protected boolean selfLock;
     protected int numberOfStep;
     protected int interval;
     protected ArrayList<Image> upper = new ArrayList<Image>();
@@ -18,12 +17,8 @@ public abstract class Animation {
 
     public abstract void render(GraphicsContext g, double x, double y, double zzX, double zzY);
 
-    public boolean isSelfLock() {
-        return selfLock;
-    }
-
     public void tick() {
-        if (interval != 1 && interval != 0 && count % interval == 0){
+        if (interval != 1 && interval != 0 && count % interval == 0 && count != 0){
             animationStep++;
         }
         else if (interval == 1) {
@@ -49,16 +44,17 @@ public abstract class Animation {
         }
     }
 
+    public void refresh() {
+        animationStep = 0;
+        count = 0;
+    }
+
     public void setFacing(int facing) {
         this.facing = facing;
     }
 
     public int getFacing() {
         return facing;
-    }
-
-    public void setSelfLock(boolean selfLock) {
-        this.selfLock = selfLock;
     }
 
     public int getNumberOfStep() {

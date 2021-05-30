@@ -22,10 +22,7 @@ public class meleeGreateSword extends Animation {
     private final Image blade9;
 
     public meleeGreateSword() {
-        //eff1: start:287 350 w:73 h:37
-        //eff2: 292 422 79 31
         setNumberOfStep(14);
-        setSelfLock(false);
         setInterval(2);
         blade0 = new Image("Skill/skillEffect-GreatSword/Small254.png");
         blade1 = new Image("Skill/skillEffect-GreatSword/Small255.png");
