@@ -11,10 +11,11 @@ import javafx.scene.paint.Color;
 import tilemap.TileMap;
 
 public class Snail extends Enemy{
-
 	private Image[] sprites;
 	public Snail(TileMap tm, int hardlevel) {
 		super(tm);
+		
+		EXP = 5;
 		moveSpeed = 0.3;
 		maxSpeed = 1 * hardlevel;
 		fallSpeed = 0.2;

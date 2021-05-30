@@ -140,20 +140,38 @@ public class Map2 extends GameState {
         player.tick();                                    //player upda
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
-            if (player.intersects(e)) player.changeHP(-5);
+            if (player.intersects(e)) player.getHit(e.getDamage());;
             if (player.getKey().skill1 == 1) {
             	if (player.getSkill1().intersects(e)) {
-            		e.getHit(2);
+            		e.getHit(player.getSkill1().getDamage());
             	}
             }
             if (player.getKey().skill2 == 1) {
             	if (player.getSkill2().intersects(e)) {
-            		e.getHit(1);
+            		e.getHit(player.getSkill2().getDamage());
             	}
             }
             e.tick();
 
             if(e.isDead()) {
+            	player.curEXP += e.getEXP();
+            	if(player.curEXP >= player.curMaxEXP) {
+            		player.level++;
+            		if(player.level == 2) {
+            			player.curMaxEXP = player.level2EXP;
+            			player.curEXP -= player.level1EXP;
+            			player.setMaxHP(600);
+            			player.setHP(600);
+            			player.setMP(player.maxMP);
+            		}
+            		if(player.level == 3) {
+            			player.curMaxEXP = player.level3EXP;
+            			player.curEXP -= player.level2EXP;
+            			player.setMaxHP(800);
+            			player.setHP(800);
+            			player.setMP(player.maxMP);
+            		}
+            	}
                 Dropping d = new Dropping(tilemap, e);
                 droppings.add(d);
                 enemies.remove(i);

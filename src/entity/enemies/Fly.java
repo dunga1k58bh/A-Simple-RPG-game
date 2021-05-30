@@ -15,13 +15,12 @@ public class Fly extends Enemy{
 	public final static int DOWN = 1;
 	public final static int LEFT = 2;
 	public final static int RIGHT = 3;
-	
 	// fly ball
 	private ArrayList<FlyBall> flyBalls;
 	private int flyBallDamage;
 	private boolean firing;
 	private long firingTimer;
-	private int hardLevel;
+	private long firingTime;
 	
 	// player
 	private Player player;
@@ -30,7 +29,8 @@ public class Fly extends Enemy{
 		super(tm);
 		player = p;
 		
-		hardLevel = hardLevel;
+		firingTime = 2500 / hardLevel;
+		EXP = 5;
 		moveSpeed = 1;
 		maxSpeed = 2 * hardLevel;
 		fallSpeed = 0.2;
@@ -104,7 +104,8 @@ public class Fly extends Enemy{
 		}
 		if (!firing) {
 			long elapsed = (System.nanoTime() - firingTimer) / 1000000;
-			if (elapsed > 2500) firing = true;
+			if (elapsed > firingTime) firing = true;
+
 		}
 		
 		// update fly balls
