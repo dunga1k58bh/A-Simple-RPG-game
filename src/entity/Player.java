@@ -1,5 +1,6 @@
 package entity;
 
+import entity.skills.AttackBox;
 import entity.skills.Skill1;
 import entity.skills.Skill2;
 import javafx.scene.canvas.GraphicsContext;
@@ -40,6 +41,7 @@ public class Player extends Entity{
     private long skill2Timer;
     private boolean skill1Lock;
     private boolean skill2Lock;
+    private AttackBox box;
 
 
     private int jump = 0;  //this variable is set to 1 whenever player is on-air
@@ -158,6 +160,14 @@ public class Player extends Entity{
     
     public Key getKey() {
     	return key;
+    }
+    
+    public AttackBox getBox() {
+    	return box;
+    }
+    
+    public boolean getLock3() {
+    	return lock3;
     }
 
     @Override
@@ -549,6 +559,9 @@ public class Player extends Entity{
                 }
                 case Q -> {
                     key.attack = 1;
+                    box = new AttackBox(tileMap);
+                    box.facingRight = facingRight;
+                    box.setPos(posX, posY);
                 }
             }
         }
@@ -589,6 +602,7 @@ public class Player extends Entity{
                 }
                 case Q -> {
                     key.attack = 0;
+                    box.setRemove();
                 }
                 case W-> {
                 	if (skill1Lock) {

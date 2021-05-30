@@ -102,23 +102,28 @@ public class Map4 extends GameState {
         camPosY = player.getPosY() - Main.height*2/3;
         tilemap.setPos(camPosX,camPosY);
         tilemap.tick();
-            if (player.getKey().skill1 == 1) {
-            	if (player.getSkill1().intersects(boss)) {
-            		boss.getHit(2);
-            	}
+        if (player.getKey().skill1 == 1) {
+        	if (player.getSkill1().intersects(boss)) {
+        		boss.getHit(player.getSkill1().getDamage());
+        	}
+        }
+        if (player.getKey().skill2 == 1) {
+        	if (player.getSkill2().intersects(boss)) {
+        		boss.getHit(player.getSkill2().getDamage());
+        	}
+        }
+        if (player.getKey().attack == 1 && player.getLock3() == true) {
+        	if (player.getBox().intersects(boss)) {
+            	boss.getHit(player.getBox().getDamage());
             }
-            if (player.getKey().skill2 == 1) {
-            	if (player.getSkill2().intersects(boss)) {
-            		boss.getHit(2);
-            	}
-            }
-            boss.tick();
-            if (player.intersects(boss.getLaserAttack())&&boss.getLaserAttack().getBeingUsed()){
-                player.getHit(boss.getLaserAttack().getDamage());
-            }
-            if (player.intersects(boss)){
-                player.getHit(20);
-            }
+        }
+        boss.tick();
+        if (player.intersects(boss.getLaserAttack())&&boss.getLaserAttack().getBeingUsed()){
+            player.getHit(boss.getLaserAttack().getDamage());
+        }
+        if (player.intersects(boss)){
+            player.getHit(20);
+        }
         player.tick();
         if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
             player.setDead(false);

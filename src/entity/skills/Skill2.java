@@ -11,7 +11,7 @@ public class Skill2  extends Entity{
     private Animation skill2Animation;
     private boolean remove;
     private final int manaCost = 50;
-    private final int damage = 10;
+    private final int damage = 20;
 
     public  Skill2(TileMap tileMap) {
         super(tileMap);
