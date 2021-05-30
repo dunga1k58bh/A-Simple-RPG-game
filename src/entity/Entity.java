@@ -88,6 +88,21 @@ public abstract class Entity {
     	this.HP += c;
     	if (HP <= 0)	HP = 0;
     }
+    public void getHit(int damage) {
+        if(dead || flinching) return;
+        HP -= damage;
+        if(HP < 0) HP = 0;
+        if(HP == 0) dead = true;
+        flinching = true;
+        flinchTimer = System.nanoTime();
+        beingHit = true;
+    }
+    public boolean isDead(){
+        return dead;
+    }
+    public void setDead(boolean b){
+         dead = b;
+    }
 
     public int getMP() {
         return MP;
@@ -210,17 +225,8 @@ public abstract class Entity {
             }
         }
         if (BottomLeft == Tile.DEAD || BottomRight == Tile.DEAD){
-            getHit(50);
+            getHit(200);
         }
-    }
-    public void getHit(int damage) {
-        if(dead || flinching) return;
-        HP -= damage;
-        if(HP < 0) HP = 0;
-        if(HP == 0) dead = true;
-        flinching = true;
-        flinchTimer = System.nanoTime();
-        beingHit = true;
     }
     public void setMapPosittion(){
         xmap = tileMap.getCameraPosX();

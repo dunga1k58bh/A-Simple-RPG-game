@@ -45,6 +45,9 @@ public class Map3 extends GameState {
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
     public final double playerStartingPosY = 200; //TODO
+    //position of player on map if return the old Map
+    private final double playerReturnPosX =  2000;
+    private final double playerReturnPosY =  1500;
     //Is this map clear ?
     public boolean isclear;
 
@@ -71,7 +74,7 @@ public class Map3 extends GameState {
         bgMusic.setVolume(0.1);
         //the gate
         gateToPreviousMap = new Gate(tileMap);
-        gateToPreviousMap.setPos(24,288);
+        gateToPreviousMap.setPos(24,240);
         gatetoNextMap = new Gate(tileMap);
         gatetoNextMap.setPos(2136,1632);
     }
@@ -79,8 +82,11 @@ public class Map3 extends GameState {
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        player.setPosX(playerStartingPosX);
-        player.setPosY(playerStartingPosY);
+        if(gsm.getNextMap()== true) {
+            player.setPos(playerStartingPosX,playerStartingPosY);
+        }else{
+            player.setPos(playerReturnPosX,playerReturnPosY);
+        }
         //Vá»©t TileMap cho player
         player.setTileMap(tileMap);
         hud = new HUD(player);
@@ -100,10 +106,6 @@ public class Map3 extends GameState {
                 new Point2D(1680, 200),
                 new Point2D(1800, 200)
         };
-        Monster2 m2 = new Monster2(tileMap, hardLevel);
-        m2.setPosition(700,900);
-        enemies.add(m2);
-        m2.setTarget(player);
 
         Fly fly = new Fly(tileMap, player, hardLevel);
         fly.setPos(700, 1000);
@@ -137,30 +139,60 @@ public class Map3 extends GameState {
         tileMap.setPos(camPosX,camPosY);
 
         tileMap.tick();
-        player.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
-            if (player.intersects(e)) player.changeHP(-5);
+            if (player.intersects(e)) player.getHit(e.getDamage());;
             if (player.getKey().skill1 == 1) {
-                if (player.getSkill1().intersects(e)) {
-                    e.getHit(2);
-                }
+            	if (player.getSkill1().intersects(e)) {
+            		e.getHit(player.getSkill1().getDamage());
+            	}
             }
             if (player.getKey().skill2 == 1) {
-                if (player.getSkill2().intersects(e)) {
-                    e.getHit(1);
-                }
+            	if (player.getSkill2().intersects(e)) {
+            		e.getHit(player.getSkill2().getDamage());
+            	}
+            }
+            if (player.getKey().attack == 1 && player.getLock3() == true) {
+            	if (player.getBox().intersects(e)) {
+            		e.getHit(player.getBox().getDamage());
+            	}
             }
             e.tick();
 
             if(e.isDead()) {
+            	player.curEXP += e.getEXP();
+            	if(player.curEXP >= player.curMaxEXP) {
+            		player.level++;
+            		if(player.level == 2) {
+            			player.curMaxEXP = player.level2EXP;
+            			player.curEXP -= player.level1EXP;
+            			player.setMaxHP(600);
+            			player.setHP(600);
+            			player.setMP(player.maxMP);
+            		}
+            		if(player.level == 3) {
+            			player.curMaxEXP = player.level3EXP;
+            			player.curEXP -= player.level2EXP;
+            			player.setMaxHP(800);
+            			player.setHP(800);
+            			player.setMP(player.maxMP);
+            		}
+            	}
                 Dropping d = new Dropping(tileMap, e);
                 droppings.add(d);
                 enemies.remove(i);
                 i--;
             }
         }
-        
+        player.tick();
+        if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
+            player.setDead(false);
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setMP(player.maxMP);
+            gsm.setNextMap(false);
+        }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();
@@ -218,7 +250,7 @@ public class Map3 extends GameState {
 
     @Override
     public void keyTyped(KeyEvent k) {
-//
+
         player.keyIn(k);
     }
 

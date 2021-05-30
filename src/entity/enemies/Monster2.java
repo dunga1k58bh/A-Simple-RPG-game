@@ -26,23 +26,24 @@ public class Monster2 extends Enemy{
    //Ä�á»©ng yÃªn
     private final  int LASERSWEPT = 5;
     private final  int HURT = 6;
-
+    private int EXP;
 
     //attack action
     int random_int;
 
     private final LaserAttack laserAttack;
     private Animation[] animations;
-
+    private int hardlevel;
     Image image ;
 
     public Monster2(TileMap tm, int hardLevel) {
         super(tm);
-        
+        this.hardlevel = hardLevel;
+        EXP = 150 * hardLevel;
         moveSpeed = 1;
         maxSpeed = 3 * hardLevel;
         fallSpeed = 0.2;
-        HP = maxHP = 200 * hardLevel;
+        HP = maxHP = 300 * hardLevel;
         damage = 50 * hardLevel;
         jumpStart =10;
         width = 220;
@@ -170,8 +171,8 @@ public class Monster2 extends Enemy{
         if (isDead()) currentAnimation =DEAD;     // What we do with the current animation and action
         if (currentAnimation == WALK ){
             jumping = false;
-            random_int = (int)(Math.random() * (6 - 2 + 1) + 2); // random from 2 to 6,
-            if (random_int<=3) nextAnimation = random_int;   //33% random jump or laser , game will harder if this percent is higer
+            random_int = (int)(Math.random() * (6- hardlevel - 2 + 1) + 2); // random from 2 to 6,
+            if (random_int<=3) nextAnimation = random_int;   //(??%) random jump or laser , game will harder if this percent is higher
             else nextAnimation=-1;
         }else if(currentAnimation == JUMP){
             jumping=true;

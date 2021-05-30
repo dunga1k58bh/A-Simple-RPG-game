@@ -11,7 +11,7 @@ public class Skill1  extends Entity{
     private Animation skill1Animation;
     private boolean remove;
     private final int manaCost = 200;
-    private final int damage = 20;
+    private final int damage = 40;
 
     public  Skill1(TileMap tileMap) {
         super(tileMap);
@@ -61,8 +61,8 @@ public class Skill1  extends Entity{
     
     @Override
     public void tick() {
-         if(facingRight) posX += 5;
-         else posX -= 5;
+         if(facingRight) posX += 10;
+         else posX -= 10;
          if (skill1Animation.hasPlayedOnce()) {
         	 remove = true;
          }

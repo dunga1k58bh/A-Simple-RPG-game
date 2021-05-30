@@ -73,7 +73,14 @@ public class TileMap {
             tiles[row][i].setType(type);
         }
     }
-
+    public void changeMap(int row){
+        for (int i = 0;i < mapCol ; i++){
+            map[row][i] = 24;
+        }
+    }
+    public int getMapRow(){
+        return mapRow;
+    }
     public int getTileSize() {
         return tileSize;
     }

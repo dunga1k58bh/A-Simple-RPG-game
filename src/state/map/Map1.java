@@ -89,7 +89,7 @@ public class Map1 extends GameState {
             player.setPos(playerReturnPosX,playerReturnPosY);
         }
         gsm.setNextMap(false);
-        //Vá»©t TileMap cho player
+        //PassTileMap for Player
         player.setTileMap(tilemap1);
         hud = new HUD(player);
         generateEnemies();
@@ -108,11 +108,6 @@ public class Map1 extends GameState {
 			new Point2D(1680, 200),
 			new Point2D(1800, 200)
 		};
-        Monster2 m2 = new Monster2(tilemap1, hardLevel);
-        m2.setPosition(700,900);
-        enemies.add(m2);
-        m2.setTarget(player);
-        
         Fly fly = new Fly(tilemap1, player, hardLevel);
         fly.setPos(700, 1000);
         enemies.add(fly);
@@ -157,9 +152,32 @@ public class Map1 extends GameState {
             		e.getHit(player.getSkill2().getDamage());
             	}
             }
+            if (player.getKey().attack == 1 && player.getLock3() == true) {
+            	if (player.getBox().intersects(e)) {
+            		e.getHit(player.getBox().getDamage());
+            	}
+            }
             
             e.tick();
             if(e.isDead()) {
+            	player.curEXP += e.getEXP();
+            	if(player.curEXP >= player.curMaxEXP) {
+            		player.level++;
+            		if(player.level == 2) {
+            			player.curMaxEXP = player.level2EXP;
+            			player.curEXP -= player.level1EXP;
+            			player.setMaxHP(600);
+            			player.setHP(600);
+            			player.setMP(player.maxMP);
+            		}
+            		if(player.level == 3) {
+            			player.curMaxEXP = player.level3EXP;
+            			player.curEXP -= player.level2EXP;
+            			player.setMaxHP(800);
+            			player.setHP(800);
+            			player.setMP(player.maxMP);
+            		}
+            	}
                 Dropping d = new Dropping(tilemap1, e);
                 droppings.add(d);
                 enemies.remove(i);
@@ -167,7 +185,14 @@ public class Map1 extends GameState {
             }
         }
         player.tick();
-
+        if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
+            player.setDead(false);
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setMP(player.maxMP);
+            gsm.setNextMap(false);
+        }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();

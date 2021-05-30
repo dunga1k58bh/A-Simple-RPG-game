@@ -8,6 +8,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import state.map.Map5;
+
+import java.io.FileInputStream;
 
 public class ThanksState extends GameState{
     private Image image;
@@ -19,9 +22,14 @@ public class ThanksState extends GameState{
     public  ThanksState(GameStateManager gsm){
         super(gsm);
 //        image = new Image("Menu/menubg.jpg");
-        font = Font.loadFont("file:res/Font/njnaruto.ttf",48);
-        titleFont = Font.loadFont("file:res/Font/njnaruto.ttf",100);
+        try {
+            image = new Image(new FileInputStream("res/Menu/menuBg.png"));
+            font = Font.loadFont("file:res/Font/njnaruto.ttf", 48);
+            titleFont = Font.loadFont("file:res/Font/njnaruto.ttf", 100);
 //
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         options = new String[]{
                 "Play Again",
                 "Exit",
@@ -83,6 +91,7 @@ public class ThanksState extends GameState{
         }
         //seliction
         if (k.getCode() == KeyCode.ENTER){
+
             if (currentOption == 1){
                 gsm.setState(0);
                 gsm.setCurrentMap(4);

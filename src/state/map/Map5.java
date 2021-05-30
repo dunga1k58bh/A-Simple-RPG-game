@@ -7,7 +7,6 @@ import application.Main;
 import entity.somethings.Gate;
 import entity.somethings.HUD;
 import entity.Player;
-import entity.enemies.Monster2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -30,13 +29,15 @@ public class Map5 extends GameState {
     private Gate gatetoNextMap;
     private Gate gateToPreviousMap;
     private HUD hud;
-    private Monster2 boss;
     //Music BackGround
-    private  Music bgMusic;
-
+    public   Music bgMusic;
+    private int begin ;
+    private final int stop  = 12;
+    private long startTime;
+    private boolean vocano;
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
-    public final double playerStartingPosY = 200; //TODO
+    public final double playerStartingPosY = 3500; //TODO
 
     //Is this map clear ?
     public boolean isclear;
@@ -48,50 +49,77 @@ public class Map5 extends GameState {
     public Map5(GameStateManager gsm){
         super(gsm);
         try {
-            bg= new Image(new FileInputStream("res/bg/bgMap4.png"));
-            bgMusic = new Music("res/Audio/bgMusic5.mp3");
+            bg= new Image(new FileInputStream("res/bg/bgMap5.png"));
+            bgMusic = new Music("res/Audio/Victory-TwoStepsFromHell.mp3");
             tilemap = new TileMap(48);
             tilemap.loadTileSet("Map/TileSet.png");
             tilemap.loadMap("res/Map/Map5.map");
         }catch (Exception e){
             e.printStackTrace();
         }
-
         tilemap.setPos(camPosX,camPosY);
         //generateEnemies();
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
-        bgMusic.setVolume(0.1);
+        bgMusic.setVolume(0.4);
         //the gate
         gateToPreviousMap = new Gate(tilemap);
         gateToPreviousMap.setPos(24,1680);
         gatetoNextMap = new Gate(tilemap);
         gatetoNextMap.setPos(1176,432);
+        begin = tilemap.getMapRow()-2;
+
     }
     @Override
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        player.setPosX(playerStartingPosX);
-        player.setPosY(playerStartingPosY);
+        if(!isclear) {
+            player.setPosX(playerStartingPosX);
+            player.setPosY(playerStartingPosY);
+        }
         // pass player to TileMap
         player.setTileMap(tilemap);
         hud = new HUD(player);
         bgMusic.startMusic();
+        vocano = false;
+        startTime = System.nanoTime();
     }
     @Override
-    public void tick(){                           //Tick of game
+    public void tick(){
+        long elapsed1 = (System.nanoTime() - startTime) / 1000000;
+        if(elapsed1> 5000){
+            vocano = true;
+        }
+        if(vocano) {
+            long elapsed = (System.nanoTime() - startTime) / 1000000;
+            if (elapsed > 600/gsm.getHardLevel()) {
+                tilemap.changeMap(begin);
+                if (begin >= stop) begin--;
+                if (begin == stop) isclear = true;
+                startTime = System.nanoTime();
+            }
+        }
+        //Tick of game
         if (player.getFacing() == 1) {
             camPosX = player.getPosX() - Main.width*1/3;
         }
         else {
             camPosX = player.getPosX() - Main.width*2/3;
         }
-        camPosY = player.getPosY() - Main.height*2/3;
+        camPosY = player.getPosY() - Main.height*3/7;
         tilemap.setPos(camPosX,camPosY);
         tilemap.tick();
         player.tick();
+        if(player.isDead()){
+            tilemap.loadMap("res/Map/Map5.map");
+            begin = tilemap.getMapRow()-2;
+            player.setPos(playerStartingPosX,playerStartingPosY);
+            player.setDead(false);
+            vocano = false;
+            startTime = System.nanoTime();
+        }
         //Check to open gate
         tilemap.OpenNextMap(0);
         changeMap();
@@ -126,14 +154,11 @@ public class Map5 extends GameState {
     }
 
     @Override
-    public void keyTyped(KeyEvent k) {
-//
-        player.keyIn(k);
-    }
-
+    public void keyTyped(KeyEvent k) { player.keyIn(k); }
     @Override
     public void keyReleased(KeyEvent k) {
         player.keyIn(k);
     }
+
 }
 

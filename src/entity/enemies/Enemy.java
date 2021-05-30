@@ -19,7 +19,7 @@ public abstract class Enemy extends Entity {
 	protected int maxHP;
 	protected boolean dead;
 	protected int damage;
-
+	protected int EXP;
 
 
 	
@@ -49,17 +49,9 @@ public abstract class Enemy extends Entity {
 	public Enemy(TileMap tm) {
 		super(tm);
 	}
-	public double getx() { return (int)posX; }
-	public double gety() { return (int)posY; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
-	public int getCWidth() { return cwidth; }
-	public int getCHeight() { return cheight; }
-	public void setLeft(boolean b) { left = b; }
-	public void setRight(boolean b) { right = b; }
 	public void setUp(boolean b) { up = b; }
-	public void setDown(boolean b) { down = b; }
-	public void setJumping(boolean b) { jumping = b; }
 	public boolean isDead() { return dead; }
 	public int getDamage() { return damage; }
 	public void setPosition(double x, double y) {
@@ -68,11 +60,14 @@ public abstract class Enemy extends Entity {
 		this.posX = x;
 		this.posY = y;
 	}
+	public int getEXP() {
+		return EXP;
+	}
 	public void setVector(double dx, double dy) {
 		this.dx = dx;
 		this.dy = dy;
 	}
-	
+	@Override
     public void getHit(int damage) {
         if(dead || flinching) return;
         HP -= damage;

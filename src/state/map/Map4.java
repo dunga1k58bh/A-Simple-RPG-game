@@ -36,8 +36,11 @@ public class Map4 extends GameState {
     private  Music bgMusic;
 
     //starting position of player on map (On-map coord)
-    public final double playerStartingPosX = 100;//TODO
+    public final double playerStartingPosX = 80;//TODO
     public final double playerStartingPosY = 200; //TODO
+    //position of player on map if return the old Map
+    private final double playerReturnPosX =  1150;
+    private final double playerReturnPosY =  750;
 
     //Is this map clear ?
     public boolean isclear;
@@ -67,16 +70,19 @@ public class Map4 extends GameState {
         bgMusic.setVolume(0.1);
         //the gate
         gateToPreviousMap = new Gate(tilemap);
-        gateToPreviousMap.setPos(24,240);
+        gateToPreviousMap.setPos(24,288);
         gatetoNextMap = new Gate(tilemap);
-        gatetoNextMap.setPos(1368,192);
+        gatetoNextMap.setPos(1368,864);
     }
     @Override
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        player.setPosX(playerStartingPosX);
-        player.setPosY(playerStartingPosY);
+        if(gsm.getNextMap()== true) {
+            player.setPos(playerStartingPosX,playerStartingPosY);
+        }else{
+            player.setPos(playerReturnPosX,playerReturnPosY);
+        }
         // pass player to TileMap
         player.setTileMap(tilemap);
         hud = new HUD(player);
@@ -102,24 +108,37 @@ public class Map4 extends GameState {
         camPosY = player.getPosY() - Main.height*2/3;
         tilemap.setPos(camPosX,camPosY);
         tilemap.tick();
+        if (player.getKey().skill1 == 1) {
+        	if (player.getSkill1().intersects(boss)) {
+        		boss.getHit(player.getSkill1().getDamage());
+        	}
+        }
+        if (player.getKey().skill2 == 1) {
+        	if (player.getSkill2().intersects(boss)) {
+        		boss.getHit(player.getSkill2().getDamage());
+        	}
+        }
+        if (player.getKey().attack == 1 && player.getLock3() == true) {
+        	if (player.getBox().intersects(boss)) {
+            	boss.getHit(player.getBox().getDamage());
+            }
+        }
+        boss.tick();
+        if (player.intersects(boss.getLaserAttack())&&boss.getLaserAttack().getBeingUsed()){
+            player.getHit(boss.getLaserAttack().getDamage());
+        }
+        if (player.intersects(boss)){
+            player.getHit(20);
+        }
         player.tick();
-            if (player.getKey().skill1 == 1) {
-            	if (player.getSkill1().intersects(boss)) {
-            		boss.getHit(2);
-            	}
-            }
-            if (player.getKey().skill2 == 1) {
-            	if (player.getSkill2().intersects(boss)) {
-            		boss.getHit(2);
-            	}
-            }
-            boss.tick();
-            if (player.intersects(boss.getLaserAttack())&&boss.getLaserAttack().getBeingUsed()){
-                player.getHit(boss.getLaserAttack().getDamage());
-            }
-            if (player.intersects(boss)){
-                player.getHit(20);
-            }
+        if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
+            player.setDead(false);
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setMP(player.maxMP);
+            gsm.setNextMap(false);
+        }
         //Check to open gate
         tilemap.OpenNextMap(boss.isDead()?0:1);
         changeMap();
