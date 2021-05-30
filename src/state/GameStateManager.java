@@ -65,7 +65,7 @@ public class GameStateManager {
      }
 
      public void tick() {
-         System.out.println("Hardlevel"+hardlevel);
+         //System.out.println("Hardlevel"+hardlevel);
     	gameStates[currentState].tick();
      }
      public void render(GraphicsContext g) {
