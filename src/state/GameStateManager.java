@@ -4,7 +4,6 @@ package state;
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import state.map.*;
 
 import java.util.ArrayList;
 public class GameStateManager {
@@ -12,18 +11,17 @@ public class GameStateManager {
    private int hardlevel;
    protected GameState[] gameStates; // State mutilple choice
    protected static ArrayList<GameState> mapStates;  // Map State
-
-
    private int currentState;
    private int currentMap;
    private boolean nextMap;  // if not it previous
      public GameStateManager()  {
     	 hardlevel = 1;
-    	 gameStates = new  GameState[4];
+    	 gameStates = new  GameState[5];
          mapStates = new ArrayList<>();
          gameStates[0] = new MenuState(this);       // MenuState is creat first number 0
                                                           // number 1  Playstate will be creat in MenuState// number 2 Setting is same
-         gameStates[3] = new ThanksState(this);     //Thanks is creat number 3
+         gameStates[3] = new ControlState(this);
+         gameStates[4] = new ThanksState(this);     //Thanks is creat number 3
          currentMap = 4;
          currentState = 0;
      }
@@ -65,7 +63,6 @@ public class GameStateManager {
      }
 
      public void tick() {
-         System.out.println("Hardlevel"+hardlevel);
     	gameStates[currentState].tick();
      }
      public void render(GraphicsContext g) {

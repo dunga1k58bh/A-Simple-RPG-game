@@ -43,7 +43,7 @@ public class PlayState extends GameState{
           mapStates.get(currentMap).tick();
         this.currentMap = gsm.getCurrentMap();
         if (currentMap>=mapStates.size()){
-            gsm.setState(3);
+            gsm.setState(4);   // move to thanksState
         }
     }
 

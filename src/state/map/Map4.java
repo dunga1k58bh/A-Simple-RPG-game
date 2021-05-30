@@ -67,7 +67,7 @@ public class Map4 extends GameState {
         bgMusic.setVolume(0.1);
         //the gate
         gateToPreviousMap = new Gate(tilemap);
-        gateToPreviousMap.setPos(24,240);
+        gateToPreviousMap.setPos(24,288);
         gatetoNextMap = new Gate(tilemap);
         gatetoNextMap.setPos(1368,192);
     }
@@ -102,7 +102,6 @@ public class Map4 extends GameState {
         camPosY = player.getPosY() - Main.height*2/3;
         tilemap.setPos(camPosX,camPosY);
         tilemap.tick();
-        player.tick();
             if (player.getKey().skill1 == 1) {
             	if (player.getSkill1().intersects(boss)) {
             		boss.getHit(2);
@@ -120,6 +119,14 @@ public class Map4 extends GameState {
             if (player.intersects(boss)){
                 player.getHit(20);
             }
+        player.tick();
+        if (player.isDead()){
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setDead(false);
+
+        }
         //Check to open gate
         tilemap.OpenNextMap(boss.isDead()?0:1);
         changeMap();

@@ -71,7 +71,7 @@ public class Map3 extends GameState {
         bgMusic.setVolume(0.1);
         //the gate
         gateToPreviousMap = new Gate(tileMap);
-        gateToPreviousMap.setPos(24,288);
+        gateToPreviousMap.setPos(24,240);
         gatetoNextMap = new Gate(tileMap);
         gatetoNextMap.setPos(2136,1632);
     }
@@ -137,7 +137,6 @@ public class Map3 extends GameState {
         tileMap.setPos(camPosX,camPosY);
 
         tileMap.tick();
-        player.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             if (player.intersects(e)) player.getHit(e.getDamage());;
@@ -178,7 +177,14 @@ public class Map3 extends GameState {
                 i--;
             }
         }
-        
+        player.tick();
+        if (player.isDead()){
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setDead(false);
+
+        }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();
@@ -236,7 +242,7 @@ public class Map3 extends GameState {
 
     @Override
     public void keyTyped(KeyEvent k) {
-//
+
         player.keyIn(k);
     }
 

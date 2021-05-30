@@ -3,12 +3,16 @@ package state;
 import application.Main;
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.io.FileInputStream;
+
 public class SettingState extends GameState{
+    private Image image;
     private int currentOption= 1;
     private Font font,titleFont ;
     private int PlayState=1,
@@ -16,9 +20,13 @@ public class SettingState extends GameState{
     private  String[] options;
     public SettingState(GameStateManager gsm){
         super(gsm);
-        font = Font.loadFont("file:res/Font/njnaruto.ttf",48);
-        titleFont = Font.loadFont("file:res/Font/njnaruto.ttf",100);
-
+        try {
+            image = new Image(new FileInputStream("res/Menu/menuBg.png"));
+            font = Font.loadFont("file:res/Font/njnaruto.ttf", 48);
+            titleFont = Font.loadFont("file:res/Font/njnaruto.ttf", 100);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         options = new String[]{
                 "NORMAL",
                 "HARD",
@@ -34,11 +42,9 @@ public class SettingState extends GameState{
     public void tick() {
          if(currentOption == 1){
              gsm.setHardLevel(1);       //mutilple to status of enemy
-             System.out.println("hardLevel " + gsm.getHardLevel());
          }
          if(currentOption == 2){
              gsm.setHardLevel(2);
-             System.out.println("hardLevel " + gsm.getHardLevel());
          }
 
     }
@@ -46,7 +52,7 @@ public class SettingState extends GameState{
     @Override
     public void render(GraphicsContext g) {
         //draw backgound;
-//        g.drawImage(image, 0, 0, Main.width, Main.height);
+        g.drawImage(image, 0, 0, Main.width, Main.height);
         //draw GameTitle
         g.setStroke(Color.BLACK);
         g.setFill(Color.DEEPSKYBLUE);

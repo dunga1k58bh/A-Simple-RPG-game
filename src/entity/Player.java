@@ -527,27 +527,27 @@ public class Player extends Entity{
                 case UP -> {
                     key.up = 1;
                     zzY -= 0.5;
-                    System.out.println("zzY = "+zzY);
+                    //System.out.println("zzY = "+zzY);
                 }
                 case DOWN -> {
                     key.down = 1;
                     zzY += 0.5;
-                    System.out.println("zzY = "+zzY);
+                    //System.out.println("zzY = "+zzY);
                 }
                 case LEFT -> {
                     key.left = 1;
                     zzX -= 0.5;
-                    System.out.println("zzX = "+zzX);
+                    //System.out.println("zzX = "+zzX);
                 }
                 case RIGHT -> {
                     key.right = 1;
                     zzX += 0.5;
-                    System.out.println("zzX = "+zzX);
+                    //System.out.println("zzX = "+zzX);
                 }
                 case ENTER -> {
                     debug = !debug;
                 }
-                case A -> {
+                case Q -> {
                     key.attack = 1;
                 }
             }
@@ -587,10 +587,10 @@ public class Player extends Entity{
                 case ENTER -> {
                     debug = false;
                 }
-                case A -> {
+                case Q -> {
                     key.attack = 0;
                 }
-                case Q -> {
+                case W-> {
                 	if (skill1Lock) {
                 		long elapsed = (System.nanoTime() - skill1Timer) / 1000000;
                 		if (elapsed > skill1.getTimeLoad()) {

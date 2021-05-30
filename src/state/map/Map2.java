@@ -137,7 +137,6 @@ public class Map2 extends GameState {
         tilemap.setPos(camPosX,camPosY);
 
         tilemap.tick();                                   //Map update each frame
-        player.tick();                                    //player upda
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             if (player.intersects(e)) player.getHit(e.getDamage());;
@@ -178,7 +177,14 @@ public class Map2 extends GameState {
                 i--;
             }
         }
-        
+        player.tick();                                    //player upda
+        if (player.isDead()){
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setDead(false);
+
+        }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();
