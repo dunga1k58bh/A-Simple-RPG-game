@@ -33,10 +33,10 @@ public class Fly extends Enemy{
 		maxSpeed = 2;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
-		HP = maxHP = 3;
-		damage = 1;
+		HP = maxHP = 40;
+		damage = 10;
 		flyBalls = new ArrayList<FlyBall>();
-		flyBallDamage = 1;
+		flyBallDamage = 5;
 		firing = true;
 		
 		width = 80;

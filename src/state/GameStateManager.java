@@ -5,10 +5,11 @@ import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import state.map.*;
+
 import java.util.ArrayList;
 public class GameStateManager {
 
-   private double hardlevel;
+   private int hardlevel;
    protected static ArrayList<GameState> gameStates; // State mutilple choice
    protected static ArrayList<GameState> mapStates;  // Map State
 
@@ -17,7 +18,7 @@ public class GameStateManager {
    private int currentMap;
    private boolean nextMap;  // if not it previous
      public GameStateManager()  {
-
+    	 hardlevel = 1;
          gameStates= new ArrayList<>();
          mapStates = new ArrayList<>();
          currentMap = 0;
@@ -52,10 +53,13 @@ public class GameStateManager {
          return  nextMap;
      }
 
-     //
-    public void setHardlevel(double hardlevel){
+     public int getHardLevel() {
+    	 return hardlevel;
+     }
+     
+     public void setHardLevel(int hardlevel){
          this.hardlevel = hardlevel;
-    }
+     }
 
      public void tick() {
     	gameStates.get(currentState).tick();

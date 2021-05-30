@@ -10,7 +10,8 @@ public class Skill2  extends Entity{
     private Image[] frames;
     private Animation skill2Animation;
     private boolean remove;
-    private final int manaCost = 100;
+    private final int manaCost = 50;
+    private final int damage = 10;
 
     public  Skill2(TileMap tileMap) {
         super(tileMap);
@@ -33,6 +34,10 @@ public class Skill2  extends Entity{
     
     public int getManaCost() {
     	return manaCost;
+    }
+    
+    public int getDamage() {
+    	return damage;
     }
     
     public boolean shouldRemove() {

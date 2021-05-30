@@ -37,6 +37,7 @@ public class Map2 extends GameState {
     private final Gate gatetoNextMap;
     private final Gate gateToPreviousMap;
     private HUD hud;
+    private int hardLevel;
 
     //Music BackGround
     private  Music bgMusic;
@@ -63,7 +64,7 @@ public class Map2 extends GameState {
             e.printStackTrace();
         }
          tilemap.setPos(camPosX,camPosY);
-        //generateEnemies();
+        hardLevel = gsm.getHardLevel();
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
@@ -113,7 +114,7 @@ public class Map2 extends GameState {
         enemies.add(fly2);
 
         for (Point2D point : points) {
-            s = new Snail(tilemap);
+            s = new Snail(tilemap, hardLevel);
             f = new Fly(tilemap, player);
             f.setPos(point.getX(), point.getY() - 100);
             s.setPosition(point.getX(), point.getY());

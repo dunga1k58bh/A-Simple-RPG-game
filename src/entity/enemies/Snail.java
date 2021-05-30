@@ -13,22 +13,22 @@ import tilemap.TileMap;
 public class Snail extends Enemy{
 
 	private Image[] sprites;
-	public Snail(TileMap tm) {
+	public Snail(TileMap tm, int hardlevel) {
 		super(tm);
 		moveSpeed = 0.3;
-		maxSpeed = 1;
+		maxSpeed = 1 * hardlevel;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
-		HP = maxHP = 3;
-		damage = 1;
+		HP = maxHP = 30 * hardlevel;
+		damage = 10 * hardlevel;
 		
 		width = 60;
 		height = 60;
-		this.xmin = width/2+1;
-		this.xmax = tileMap.getWidth()-width/2-1;
+		this.xmin = width/2 + 1;
+		this.xmax = tileMap.getWidth() - width/2 - 1;
 		this.ymin = height;
-		this.ymax = tileMap.getHeight() -1;
-	    setEntityBoxSize(40,40 );
+		this.ymax = tileMap.getHeight() - 1;
+	    setEntityBoxSize(40, 40);
 		
 		// load sprites
 		try {
