@@ -47,9 +47,9 @@ public class Skill1  extends Entity{
 
     public  void setPos(double x, double y){
         if (facingRight){
-            super.setPos(x + 5, y);
+            super.setPos(x + 10, y);
         }else {
-            super.setPos(x -5, y);
+            super.setPos(x - 10, y);
         }
     }
     
