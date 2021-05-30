@@ -32,11 +32,13 @@ public class SettingState extends GameState{
 
     @Override
     public void tick() {
-         if(currentOption == 0){
-             gsm.setHardlevel(1);        //mutilple to status of enemy
-         }
          if(currentOption == 1){
-             gsm.setHardlevel(1.5);
+             gsm.setHardLevel(1);       //mutilple to status of enemy
+             System.out.println("hardLevel " + gsm.getHardLevel());
+         }
+         if(currentOption == 2){
+             gsm.setHardLevel(2);
+             System.out.println("hardLevel " + gsm.getHardLevel());
          }
 
     }

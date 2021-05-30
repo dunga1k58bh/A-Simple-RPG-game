@@ -36,8 +36,10 @@ public class Player extends Entity{
     //Skills
     private Skill1 skill1;
     private Skill2 skill2;
-    long startimeSkill1;
-    long startimeSkill2;
+    private long skill1Timer;
+    private long skill2Timer;
+    private boolean skill1Lock;
+    private boolean skill2Lock;
 
 
     private int jump = 0;  //this variable is set to 1 whenever player is on-air
@@ -75,6 +77,8 @@ public class Player extends Entity{
     private boolean debug;
     
     public Player() {
+    	skill1Lock = false;
+    	skill2Lock = false;
     	facingRight = true;
     	HPinc = MPinc = 50;
     	HPpotNum = 5;
@@ -560,12 +564,14 @@ public class Player extends Entity{
                 	if (HPpotNum > 0 && HP < maxHP) {
                 		HPpotNum--;
                 		HP += HPinc;
+                		if (HP > maxHP) HP = maxHP;
                 	}
                 }
                 case DIGIT2 -> {
                 	if (MPpotNum > 0 && MP < maxMP) {
                 		MPpotNum--;
                 		MP += MPinc;
+                		if (MP > maxMP) MP = maxMP;
                 	}
                 }
                 case ENTER -> {
@@ -575,26 +581,49 @@ public class Player extends Entity{
                     key.attack = 0;
                 }
                 case Q -> {
+                	if (skill1Lock) {
+                		long elapsed = (System.nanoTime() - skill1Timer) / 1000000;
+                		if (elapsed > skill1.getTimeLoad()) {
+                			skill1Lock = false;
+                		}
+                		else {
+                			break;
+                		}
+                	}
                 	skill1 = new Skill1(tileMap);
                 	if (MP < skill1.getManaCost()) {
                 		skill1.setRemove();
                 		break;
                 	}
+                	skill1Timer = System.nanoTime();
                 	MP -= skill1.getManaCost();
                 	skill1.facingRight = facingRight;
                 	skill1.setPos(posX, posY);
                 	key.skill1 = 1;
+                	skill1Lock = true;
                 }
                 case E -> {
+                	if (skill2Lock) {
+                		long elapsed = (System.nanoTime() - skill2Timer) / 1000000;
+                		if (elapsed > skill2.getTimeLoad()) {
+                			skill2Lock = false;
+                		}
+                		else {
+                			skill2.setRemove();
+                			break;
+                		}
+                	}
                 	skill2 = new Skill2(tileMap);
                 	if (MP < skill2.getManaCost()) {
                 		skill2.setRemove();
                 		break;
                 	}
+                	skill2Timer = System.nanoTime();
                 	MP -= skill2.getManaCost();
                 	skill2.facingRight = facingRight;
                 	skill2.setPos(posX, posY);
                 	key.skill2 = 1;
+                	skill2Lock = true;
                 }
             }
         }

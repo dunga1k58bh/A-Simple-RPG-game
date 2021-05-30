@@ -23,7 +23,7 @@ public class Monster2 extends Enemy{
     private final int JUMP = 2;
     private final int LASERATTACK =3;
     private final int DEAD = 4;
-   //Đứng yên
+   //Ä�á»©ng yÃªn
     private final  int LASERSWEPT = 5;
     private final  int HURT = 6;
 

@@ -35,6 +35,7 @@ public class Map1 extends GameState {
     private final TileMap tilemap1;
     private Gate gatetoNextMap;
     private HUD hud;
+    private int hardLevel;
     
     //Music BackGround
     private final Music bgMusic; //will be played when player in this map // in the setPlayer() method
@@ -67,8 +68,9 @@ public class Map1 extends GameState {
         tilemap1.loadTileSet("Map/TileSet.png");
         tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.setPos(camPosX, camPosY);
-        //generateEnemies();
-
+    	hardLevel = gsm.getHardLevel();
+        System.out.println("hardLevel " + gsm.getHardLevel());
+        
         //Set Cycle music background and Play
         bgMusic.setCycle();
         bgMusic.setVolume(0.1);
@@ -121,7 +123,7 @@ public class Map1 extends GameState {
         enemies.add(fly2);
         
         for (Point2D point : points) {
-            s = new Snail(tilemap1);
+            s = new Snail(tilemap1, hardLevel);
             f = new Fly(tilemap1, player);
             f.setPos(point.getX(), point.getY() - 100);
             s.setPosition(point.getX(), point.getY());
@@ -148,12 +150,12 @@ public class Map1 extends GameState {
             if (player.intersects(e)) player.changeHP(-5);
             if (player.getKey().skill1 == 1) {
             	if (player.getSkill1().intersects(e)) {
-            		e.getHit(2);
+            		e.getHit(player.getSkill1().getDamage());
             	}
             }
             if (player.getKey().skill2 == 1) {
             	if (player.getSkill2().intersects(e)) {
-            		e.getHit(1);
+            		e.getHit(player.getSkill2().getDamage());
             	}
             }
             

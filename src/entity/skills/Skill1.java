@@ -10,7 +10,8 @@ public class Skill1  extends Entity{
     private Image[] frames;
     private Animation skill1Animation;
     private boolean remove;
-    private final int manaCost = 100;
+    private final int manaCost = 200;
+    private final int damage = 20;
 
     public  Skill1(TileMap tileMap) {
         super(tileMap);
@@ -26,7 +27,7 @@ public class Skill1  extends Entity{
         frames[4]= new Image("SKill/Skill4-41.png");
         frames[5]= new Image("SKill/Skill4-51.png");
 
-        setTimeLoad(100);
+        setTimeLoad(1500);
         skill1Animation = new Animation();
         skill1Animation.setFrames(frames);
         skill1Animation.setDelay(200);
@@ -35,6 +36,10 @@ public class Skill1  extends Entity{
     
     public int getManaCost() {
     	return manaCost;
+    }
+    
+    public int getDamage() {
+    	return damage;
     }
     
     public boolean shouldRemove() {
@@ -47,9 +52,9 @@ public class Skill1  extends Entity{
 
     public  void setPos(double x, double y){
         if (facingRight){
-            super.setPos(x + 5, y);
+            super.setPos(x + 10, y);
         }else {
-            super.setPos(x -5, y);
+            super.setPos(x - 10, y);
         }
     }
     
