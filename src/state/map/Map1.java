@@ -69,7 +69,6 @@ public class Map1 extends GameState {
         tilemap1.loadMap("res/Map/Map1.map");
         tilemap1.setPos(camPosX, camPosY);
     	hardLevel = gsm.getHardLevel();
-        System.out.println("hardLevel " + gsm.getHardLevel());
         
         //Set Cycle music background and Play
         bgMusic.setCycle();
@@ -109,22 +108,22 @@ public class Map1 extends GameState {
 			new Point2D(1680, 200),
 			new Point2D(1800, 200)
 		};
-        Monster2 m2 = new Monster2(tilemap1);
+        Monster2 m2 = new Monster2(tilemap1, hardLevel);
         m2.setPosition(700,900);
         enemies.add(m2);
         m2.setTarget(player);
         
-        Fly fly = new Fly(tilemap1, player);
+        Fly fly = new Fly(tilemap1, player, hardLevel);
         fly.setPos(700, 1000);
         enemies.add(fly);
         
-        Fly fly2 = new Fly(tilemap1, player);
+        Fly fly2 = new Fly(tilemap1, player, hardLevel);
         fly2.setPos(500, 700);
         enemies.add(fly2);
         
         for (Point2D point : points) {
             s = new Snail(tilemap1, hardLevel);
-            f = new Fly(tilemap1, player);
+            f = new Fly(tilemap1, player, hardLevel);
             f.setPos(point.getX(), point.getY() - 100);
             s.setPosition(point.getX(), point.getY());
             enemies.add(s);
@@ -147,7 +146,7 @@ public class Map1 extends GameState {
         tilemap1.tick();
         for(int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
-            if (player.intersects(e)) player.changeHP(-5);
+            if (player.intersects(e)) player.getHit(e.getDamage());;
             if (player.getKey().skill1 == 1) {
             	if (player.getSkill1().intersects(e)) {
             		e.getHit(player.getSkill1().getDamage());
