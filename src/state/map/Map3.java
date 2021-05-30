@@ -100,22 +100,22 @@ public class Map3 extends GameState {
                 new Point2D(1680, 200),
                 new Point2D(1800, 200)
         };
-        Monster2 m2 = new Monster2(tileMap);
+        Monster2 m2 = new Monster2(tileMap, hardLevel);
         m2.setPosition(700,900);
         enemies.add(m2);
         m2.setTarget(player);
 
-        Fly fly = new Fly(tileMap, player);
+        Fly fly = new Fly(tileMap, player, hardLevel);
         fly.setPos(700, 1000);
         enemies.add(fly);
 
-        Fly fly2 = new Fly(tileMap, player);
+        Fly fly2 = new Fly(tileMap, player, hardLevel);
         fly2.setPos(500, 700);
         enemies.add(fly2);
 
         for (Point2D point : points) {
             s = new Snail(tileMap, hardLevel);
-            f = new Fly(tileMap, player);
+            f = new Fly(tileMap, player, hardLevel);
             f.setPos(point.getX(), point.getY() - 100);
             s.setPosition(point.getX(), point.getY());
             enemies.add(s);

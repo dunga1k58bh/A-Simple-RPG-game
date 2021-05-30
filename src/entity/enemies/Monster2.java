@@ -36,13 +36,14 @@ public class Monster2 extends Enemy{
 
     Image image ;
 
-    public Monster2(TileMap tm) {
+    public Monster2(TileMap tm, int hardLevel) {
         super(tm);
+        
         moveSpeed = 1;
-        maxSpeed = 3;
+        maxSpeed = 3 * hardLevel;
         fallSpeed = 0.2;
-        HP = maxHP = 15;
-        damage = 50;
+        HP = maxHP = 200 * hardLevel;
+        damage = 50 * hardLevel;
         jumpStart =10;
         width = 220;
         height =190;

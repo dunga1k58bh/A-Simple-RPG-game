@@ -21,20 +21,22 @@ public class Fly extends Enemy{
 	private int flyBallDamage;
 	private boolean firing;
 	private long firingTimer;
+	private int hardLevel;
 	
 	// player
 	private Player player;
 	
-	public Fly(TileMap tm, Player p) {
+	public Fly(TileMap tm, Player p, int hardLevel) {
 		super(tm);
 		player = p;
 		
+		hardLevel = hardLevel;
 		moveSpeed = 1;
-		maxSpeed = 2;
+		maxSpeed = 2 * hardLevel;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
-		HP = maxHP = 40;
-		damage = 10;
+		HP = maxHP = 40 * hardLevel;
+		damage = 10 * hardLevel;
 		flyBalls = new ArrayList<FlyBall>();
 		flyBallDamage = 5;
 		firing = true;
