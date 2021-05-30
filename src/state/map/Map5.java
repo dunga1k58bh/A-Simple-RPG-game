@@ -59,7 +59,7 @@ public class Map5 extends GameState {
 
         //Set Cycle music background and Play
         bgMusic.setCycle();
-        bgMusic.setVolume(0.1);
+        bgMusic.setVolume(0.4);
         //the gate
         gateToPreviousMap = new Gate(tilemap);
         gateToPreviousMap.setPos(24,1680);
@@ -123,10 +123,7 @@ public class Map5 extends GameState {
     }
 
     @Override
-    public void keyTyped(KeyEvent k) {
-//
-        player.keyIn(k);
-    }
+    public void keyTyped(KeyEvent k) { player.keyIn(k); }
     @Override
     public void keyReleased(KeyEvent k) {
         player.keyIn(k);

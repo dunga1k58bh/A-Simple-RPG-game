@@ -89,7 +89,7 @@ public class Map1 extends GameState {
             player.setPos(playerReturnPosX,playerReturnPosY);
         }
         gsm.setNextMap(false);
-        //Vá»©t TileMap cho player
+        //PassTileMap for Player
         player.setTileMap(tilemap1);
         hud = new HUD(player);
         generateEnemies();
@@ -167,7 +167,14 @@ public class Map1 extends GameState {
             }
         }
         player.tick();
-
+        if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
+            player.setDead(false);
+            gsm.setNextMap(true);
+            setPlayer(player);
+            player.setHP(player.maxHP);
+            player.setMP(player.maxMP);
+            gsm.setNextMap(false);
+        }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
 			d.tick();

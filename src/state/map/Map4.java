@@ -120,12 +120,13 @@ public class Map4 extends GameState {
                 player.getHit(20);
             }
         player.tick();
-        if (player.isDead()){
+        if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
+            player.setDead(false);
             gsm.setNextMap(true);
             setPlayer(player);
             player.setHP(player.maxHP);
-            player.setDead(false);
-
+            player.setMP(player.maxMP);
+            gsm.setNextMap(false);
         }
         //Check to open gate
         tilemap.OpenNextMap(boss.isDead()?0:1);

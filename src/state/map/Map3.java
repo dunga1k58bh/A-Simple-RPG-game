@@ -160,12 +160,13 @@ public class Map3 extends GameState {
             }
         }
         player.tick();
-        if (player.isDead()){
+        if(player.isDead()){                    //if player dead revival him in the pos begin and resumoner enemy
+            player.setDead(false);
             gsm.setNextMap(true);
             setPlayer(player);
             player.setHP(player.maxHP);
-            player.setDead(false);
-
+            player.setMP(player.maxMP);
+            gsm.setNextMap(false);
         }
 		for(int i = 0; i < droppings.size(); i++) {
 			Dropping d = droppings.get(i);
