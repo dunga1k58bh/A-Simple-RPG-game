@@ -108,11 +108,6 @@ public class Map1 extends GameState {
 			new Point2D(1680, 200),
 			new Point2D(1800, 200)
 		};
-        Monster2 m2 = new Monster2(tilemap1, hardLevel);
-        m2.setPosition(700,900);
-        enemies.add(m2);
-        m2.setTarget(player);
-        
         Fly fly = new Fly(tilemap1, player, hardLevel);
         fly.setPos(700, 1000);
         enemies.add(fly);

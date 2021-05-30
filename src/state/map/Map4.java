@@ -36,8 +36,11 @@ public class Map4 extends GameState {
     private  Music bgMusic;
 
     //starting position of player on map (On-map coord)
-    public final double playerStartingPosX = 100;//TODO
+    public final double playerStartingPosX = 80;//TODO
     public final double playerStartingPosY = 200; //TODO
+    //position of player on map if return the old Map
+    private final double playerReturnPosX =  1150;
+    private final double playerReturnPosY =  750;
 
     //Is this map clear ?
     public boolean isclear;
@@ -69,14 +72,17 @@ public class Map4 extends GameState {
         gateToPreviousMap = new Gate(tilemap);
         gateToPreviousMap.setPos(24,288);
         gatetoNextMap = new Gate(tilemap);
-        gatetoNextMap.setPos(1368,192);
+        gatetoNextMap.setPos(1368,864);
     }
     @Override
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        player.setPosX(playerStartingPosX);
-        player.setPosY(playerStartingPosY);
+        if(gsm.getNextMap()== true) {
+            player.setPos(playerStartingPosX,playerStartingPosY);
+        }else{
+            player.setPos(playerReturnPosX,playerReturnPosY);
+        }
         // pass player to TileMap
         player.setTileMap(tilemap);
         hud = new HUD(player);

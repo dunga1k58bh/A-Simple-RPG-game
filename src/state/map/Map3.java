@@ -45,6 +45,9 @@ public class Map3 extends GameState {
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
     public final double playerStartingPosY = 200; //TODO
+    //position of player on map if return the old Map
+    private final double playerReturnPosX =  2000;
+    private final double playerReturnPosY =  1500;
     //Is this map clear ?
     public boolean isclear;
 
@@ -79,8 +82,11 @@ public class Map3 extends GameState {
     public void setPlayer(Player player) {
         this.player = player;
         //System.out.println("playerSet: " + player);
-        player.setPosX(playerStartingPosX);
-        player.setPosY(playerStartingPosY);
+        if(gsm.getNextMap()== true) {
+            player.setPos(playerStartingPosX,playerStartingPosY);
+        }else{
+            player.setPos(playerReturnPosX,playerReturnPosY);
+        }
         //Vá»©t TileMap cho player
         player.setTileMap(tileMap);
         hud = new HUD(player);
@@ -100,10 +106,6 @@ public class Map3 extends GameState {
                 new Point2D(1680, 200),
                 new Point2D(1800, 200)
         };
-        Monster2 m2 = new Monster2(tileMap, hardLevel);
-        m2.setPosition(700,900);
-        enemies.add(m2);
-        m2.setTarget(player);
 
         Fly fly = new Fly(tileMap, player, hardLevel);
         fly.setPos(700, 1000);

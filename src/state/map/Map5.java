@@ -34,7 +34,7 @@ public class Map5 extends GameState {
 
     //starting position of player on map (On-map coord)
     public final double playerStartingPosX = 100;//TODO
-    public final double playerStartingPosY = 200; //TODO
+    public final double playerStartingPosY = 1600; //TODO
 
     //Is this map clear ?
     public boolean isclear;
