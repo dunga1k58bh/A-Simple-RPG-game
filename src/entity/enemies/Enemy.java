@@ -19,7 +19,7 @@ public abstract class Enemy extends Entity {
 	protected int maxHP;
 	protected boolean dead;
 	protected int damage;
-
+	protected int EXP;
 
 
 	
@@ -59,6 +59,9 @@ public abstract class Enemy extends Entity {
 		posYBegin = y;
 		this.posX = x;
 		this.posY = y;
+	}
+	public int getEXP() {
+		return EXP;
 	}
 	public void setVector(double dx, double dy) {
 		this.dx = dx;

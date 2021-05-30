@@ -26,7 +26,7 @@ public class Monster2 extends Enemy{
    //Ä�á»©ng yÃªn
     private final  int LASERSWEPT = 5;
     private final  int HURT = 6;
-
+    private int EXP;
 
     //attack action
     int random_int;
@@ -39,6 +39,7 @@ public class Monster2 extends Enemy{
     public Monster2(TileMap tm, int hardLevel) {
         super(tm);
         
+        EXP = 150 * hardLevel;
         moveSpeed = 1;
         maxSpeed = 3 * hardLevel;
         fallSpeed = 0.2;

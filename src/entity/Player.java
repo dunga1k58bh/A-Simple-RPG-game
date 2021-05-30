@@ -64,7 +64,7 @@ public class Player extends Entity{
 
     // max HP, MP, level ...
     public int maxHP, maxMP, level;
-    public int curEXP, levelEXP;
+    public int curEXP, curMaxEXP, level1EXP, level2EXP, level3EXP;
     public int HPpotNum, MPpotNum;
     public int HPinc, MPinc;
     private int atkType = attackType.RANGED;
@@ -80,14 +80,18 @@ public class Player extends Entity{
     	skill1Lock = false;
     	skill2Lock = false;
     	facingRight = true;
-    	HPinc = MPinc = 50;
+    	HPinc = 50;
+    	MPinc = 100;
     	HPpotNum = 5;
     	MPpotNum = 5;
-    	curEXP = 10;
-    	levelEXP = 99;
+    	curEXP = 0;
+    	level1EXP = 100;
+    	level2EXP = 150;
+    	level3EXP = 250;
+    	curMaxEXP = level1EXP;
     	level = 1;
-    	HP = 400;
-    	MP = 400;
+    	HP = 500;
+    	MP = 500;
     	maxHP = 500;
     	maxMP = 500;
     	
@@ -126,6 +130,12 @@ public class Player extends Entity{
         jumpLowerBody.add(0,new Image("char/Small29-resources.assets-15129.png")); //Phase 1
         jumpLowerBody.add(1,new Image("char/Small30-resources.assets-11864.png")); //Phase 3
 
+    }
+    public void setMaxHP(int hp) {
+    	maxHP = hp;
+    }
+    public void setMaxMP(int mp) {
+    	maxHP = mp;
     }
 
     public Player(int x, int y) {
