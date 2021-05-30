@@ -225,7 +225,7 @@ public abstract class Entity {
             }
         }
         if (BottomLeft == Tile.DEAD || BottomRight == Tile.DEAD){
-            getHit(50);
+            getHit(200);
         }
     }
     public void setMapPosittion(){
