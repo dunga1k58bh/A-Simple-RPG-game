@@ -85,11 +85,14 @@ public class MenuState extends GameState{
 		//seliction
 		if (k.getCode() == KeyCode.ENTER){
 			if (currentOption ==options.length) System.exit(0);
+			if (currentOption == 1){
+				gsm.gameStates[1] = new PlayState(gsm);
+			}
+			if (currentOption == 2){
+				gsm.gameStates[2] = new SettingState(gsm);
+			}
 			//Select Current Option
 			gsm.setState(currentOption);
-
-
-
 		}
 	}
 

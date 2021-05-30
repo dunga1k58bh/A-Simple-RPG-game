@@ -14,7 +14,6 @@ public class PlayState extends GameState{
     private Player player ;
     private int currentMap;
     private  ArrayList<GameState> mapStates ;   ///mapStates have been init in GamstateManager
-    private boolean endgame;
 
     public PlayState(GameStateManager gsm){
         super(gsm);
@@ -27,7 +26,6 @@ public class PlayState extends GameState{
         mapStates.add(new Map4(gsm));   //3
         mapStates.add(new Map5(gsm));   //4
         mapStates.get(currentMap).setPlayer(player);   ///pass the player to current MapState
-        endgame = false;
     }
 
 
@@ -42,36 +40,33 @@ public class PlayState extends GameState{
     public void tick() {
         this.currentMap = gsm.getCurrentMap(); // Update the current mapstate if the mapState  changes
 //        System.out.println(currentMap);
-        if(!endgame)  mapStates.get(currentMap).tick();
+          mapStates.get(currentMap).tick();
         this.currentMap = gsm.getCurrentMap();
         if (currentMap>=mapStates.size()){
-            endgame = true;
+            gsm.setState(3);
         }
     }
 
     @Override
     public void render(GraphicsContext g) {            //render the current map
-        if(!endgame) mapStates.get(currentMap).render(g);
+          mapStates.get(currentMap).render(g);
           //g.strokeText("PlayState",300,300);
-        if (endgame) {
-
-        }
     }
 
     @Override
     public void keyPressed(KeyEvent k) {
-        if(!endgame) mapStates.get(currentMap).keyPressed(k);
+          mapStates.get(currentMap).keyPressed(k);
 
     }
 
     @Override
     public void keyTyped(KeyEvent k) {
-       if(!endgame) mapStates.get(currentMap).keyTyped(k);
+           mapStates.get(currentMap).keyTyped(k);
     }
 
     @Override
     public void keyReleased(KeyEvent k) {
-        if(!endgame)mapStates.get(currentMap).keyReleased(k);
+           mapStates.get(currentMap).keyReleased(k);
     }
 
 }

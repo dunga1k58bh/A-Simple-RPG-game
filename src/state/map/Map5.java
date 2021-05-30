@@ -65,9 +65,9 @@ public class Map5 extends GameState {
         bgMusic.setVolume(0.1);
         //the gate
         gateToPreviousMap = new Gate(tilemap);
-        gateToPreviousMap.setPos(24,240);
+        gateToPreviousMap.setPos(24,1680);
         gatetoNextMap = new Gate(tilemap);
-        gatetoNextMap.setPos(1368,192);
+        gatetoNextMap.setPos(1176,432);
     }
     @Override
     public void setPlayer(Player player) {

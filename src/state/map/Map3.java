@@ -71,7 +71,7 @@ public class Map3 extends GameState {
         bgMusic.setVolume(0.1);
         //the gate
         gateToPreviousMap = new Gate(tileMap);
-        gateToPreviousMap.setPos(24,240);
+        gateToPreviousMap.setPos(24,288);
         gatetoNextMap = new Gate(tileMap);
         gatetoNextMap.setPos(2136,1632);
     }

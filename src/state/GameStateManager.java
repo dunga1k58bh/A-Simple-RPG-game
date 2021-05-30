@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class GameStateManager {
 
    private int hardlevel;
-   protected static ArrayList<GameState> gameStates; // State mutilple choice
+   protected GameState[] gameStates; // State mutilple choice
    protected static ArrayList<GameState> mapStates;  // Map State
 
 
@@ -19,12 +19,12 @@ public class GameStateManager {
    private boolean nextMap;  // if not it previous
      public GameStateManager()  {
     	 hardlevel = 1;
-         gameStates= new ArrayList<>();
+    	 gameStates = new  GameState[4];
          mapStates = new ArrayList<>();
+         gameStates[0] = new MenuState(this);       // MenuState is creat first number 0
+                                                          // number 1  Playstate will be creat in MenuState// number 2 Setting is same
+         gameStates[3] = new ThanksState(this);     //Thanks is creat number 3
          currentMap = 4;
-         gameStates.add(new MenuState(this));// 0
-         gameStates.add(new PlayState(this));// 1
-         gameStates.add(new SettingState(this));//
          currentState = 0;
      }
      //for basic control
@@ -42,6 +42,9 @@ public class GameStateManager {
      }
      public int getCurrentMap(){
          return currentMap;
+     }
+     public void setCurrentMap(int i){
+         this.currentMap = i;
      }
      public void setPlayer(Player player){
          mapStates.get(currentMap).setPlayer(player);
@@ -62,18 +65,19 @@ public class GameStateManager {
      }
 
      public void tick() {
-    	gameStates.get(currentState).tick();
+         System.out.println("Hardlevel"+hardlevel);
+    	gameStates[currentState].tick();
      }
      public void render(GraphicsContext g) {
-    	 gameStates.get(currentState).render(g);
+    	 gameStates[currentState].render(g);
      }
      public void keyPressed( KeyEvent k) {
-    	gameStates.get(currentState).keyPressed(k); 
+    	gameStates[currentState].keyPressed(k);
      }
      public void keyReleased(KeyEvent k) {
-    	gameStates.get(currentState).keyReleased(k);
+    	gameStates[currentState].keyReleased(k);
      }
      public void keyTyped(KeyEvent k) {
-     	gameStates.get(currentState).keyTyped(k);
+     	gameStates[currentState].keyTyped(k);
       }
 }
