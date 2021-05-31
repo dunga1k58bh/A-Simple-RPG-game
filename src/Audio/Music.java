@@ -1,6 +1,7 @@
 package  Audio;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class Music {
     private MediaPlayer mediaPlayer;
@@ -12,6 +13,9 @@ public class Music {
     }
     public void startMusic(){
         mediaPlayer.play();
+    }
+    public void jumpTo(long times){
+        mediaPlayer.setStartTime(Duration.seconds(times));
     }
 
     public void setCycle(){

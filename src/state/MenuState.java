@@ -93,7 +93,7 @@ public class MenuState extends GameState{
 		if (k.getCode() == KeyCode.ENTER){
 			if (currentOption ==options.length) System.exit(0);
 			if (currentOption == 1){
-				gsm.setCurrentMap(0);
+//				gsm.setCurrentMap(0);
 				gsm.gameStates[1] = new PlayState(gsm);
 			}
 			if (currentOption == 2){

@@ -245,7 +245,7 @@ public class Monster2 extends Enemy{
                 }
                 if(player.getPosX()-posX>0){
                     right=true;
-                    facing = -1;
+                    facing = 1;
                     left=false;
                 }else{
                     right=false;
@@ -277,7 +277,7 @@ public class Monster2 extends Enemy{
                 animations[currentAnimation].getImage(),
                 (posX -xmap+ ((double)animations[currentAnimation].getWidth()/2-15)*facing),
                 (posY -ymap- (double)animations[currentAnimation].getHeight()+15),
-                -animations[currentAnimation].getWidth(),
+                animations[currentAnimation].getWidth()*facing*(-1),
                 animations[currentAnimation].getHeight());
 
         if(laserAttack.getBeingUsed())  laserAttack.render(graphicsContext);

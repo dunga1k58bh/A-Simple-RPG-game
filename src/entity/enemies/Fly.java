@@ -185,7 +185,6 @@ public class Fly extends Enemy{
 		for(int i = 0; i < flyBalls.size(); i++) {
 			flyBalls.get(i).render(graphicsContext);
 		}
-		
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {
