@@ -2,6 +2,7 @@ package state;
 
 import entity.Player;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import state.map.*;
 
@@ -56,7 +57,9 @@ public class PlayState extends GameState{
     @Override
     public void keyPressed(KeyEvent k) {
           mapStates.get(currentMap).keyPressed(k);
-
+          if(k.getCode() == KeyCode.ESCAPE){
+              gsm.setState(5);
+          }
     }
 
     @Override

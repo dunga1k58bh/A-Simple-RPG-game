@@ -145,6 +145,24 @@ public class Fly extends Enemy{
 			if(elapsed > 1000) flinching = false;
 		}
 		
+		int random_int = (int)Math.floor(Math.random()*4);
+		if (random_int == UP) {
+			up = true;
+			down = false;	left = false;	right = false;
+		}
+		else if (random_int == DOWN) {
+			down = true;
+			up = false;		left = false;	right = false;
+		}
+		else if (random_int == LEFT) {
+			left = true;
+			right = false;	up = false;		down = false;
+		}
+		else if (random_int == RIGHT) {
+			right = true;
+			left = false;	up = false;		down = false;
+		}
+		
 		// if it hits a wall, go other direction
 		if(right && dx == 0) {
 			right = false;
@@ -164,25 +182,6 @@ public class Fly extends Enemy{
 			up = true;
 			down = false;
 		}
-		
-		int random_int = (int)Math.floor(Math.random()*4);
-		if (random_int == UP) {
-			up = true;
-			down = false;	left = false;	right = false;
-		}
-		else if (random_int == DOWN) {
-			down = true;
-			up = false;		left = false;	right = false;
-		}
-		else if (random_int == LEFT) {
-			left = true;
-			right = false;	up = false;		down = false;
-		}
-		else if (random_int == RIGHT) {
-			right = true;
-			left = false;	up = false;		down = false;
-		}
-		
 		// update animation
 		animation.update();
 	}

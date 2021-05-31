@@ -9,7 +9,7 @@ import tilemap.TileMap;
 
 
 
-public class Monster2 extends Enemy{
+public class Boss extends Enemy{
     private int currentAnimation;
     private int nextAnimation;
     private int consercutiveAnimations;
@@ -35,7 +35,7 @@ public class Monster2 extends Enemy{
     private int hardlevel;
     Image image ;
 
-    public Monster2(TileMap tm, int hardLevel) {
+    public Boss(TileMap tm, int hardLevel) {
         super(tm);
         this.hardlevel = hardLevel;
         EXP = 150 * hardLevel;

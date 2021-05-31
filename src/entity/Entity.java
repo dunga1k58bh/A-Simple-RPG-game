@@ -7,6 +7,7 @@ import tilemap.Tile;
 import tilemap.TileMap;
 
 public abstract class Entity {
+    //Status
     protected int HP;
     protected int MP;
     protected boolean dead;
@@ -158,7 +159,7 @@ public abstract class Entity {
         this.cheight = cheight;
     }
     //Hàm tính loại Tile mà 4 góc HCN của Entity đang ở khi Entity ở tọa độ x,y
-    public void CaculateCorrners(double x, double y){
+    public void CaculateCorners(double x, double y){
         int LeftCol = (int)(x-cwidth/2)/tileSize;
         int RightCol = (int) (x+cwidth/2)/tileSize;
         int TopRow = (int) (y-cheight)/tileSize;
@@ -184,7 +185,7 @@ public abstract class Entity {
 //            if(dy<0) onRoof = true;
             dy = 0;
         }
-        CaculateCorrners(posX,posY+ 3*dy); //LMAO IELTS 10.0
+        CaculateCorners(posX,posY+ 3*dy); //LMAO IELTS 10.0
         //Sau đây là 4 trường hợp chính
         if(dy!=0) {
             if ((BottomRight == Tile.BLOCK || BottomLeft == Tile.BLOCK)
@@ -210,7 +211,7 @@ public abstract class Entity {
         if(dy<0){
             onGround = false;
         }
-        CaculateCorrners(posX+dx,posY);
+        CaculateCorners(posX+dx,posY);
         if (dx>0){ //Sang trái
             if (TopRight == Tile.BLOCK && BottomRight == Tile.BLOCK){
                 dx = 0;
