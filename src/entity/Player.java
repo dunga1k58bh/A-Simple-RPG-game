@@ -11,7 +11,6 @@ import utils.animation.Animation;
 import utils.animation.attackAnimation.meleeGreateSword;
 import utils.animation.movementAnimation.run;
 import utils.animation.movementAnimation.stand;
-import utils.animation.particle.bloodSplash;
 import utils.attackType;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ public class Player extends Entity{
     private final ArrayList<Image> jumpUpperBody = new ArrayList<Image>();
     private final Image jumpHead;
 
+    //for animation logic control
     private int animationStep2 = 0;
     private int animationStep3 = 0;
 
@@ -45,7 +45,7 @@ public class Player extends Entity{
     private int jump = 0;  //this variable is set to 1 whenever player is on-air
     private double dt = 1; //pseudo time between frames
 
-    //velocity of player when moving
+    //charactor mobility control
     private final double velocityX = 5;
     private final double velocityY = -15;
     private double currentVelocityX = 0;
@@ -56,27 +56,36 @@ public class Player extends Entity{
     private int lastRunningDirection = 0;
     //private int facing = 1;
 
+    //for debugging
     private double zzY = 0;
     private double zzX = 0;
+    private boolean debug;
+
+    //for logical control
     private boolean lock = false;
     private boolean lock2 = false;
+    private boolean lock3;
+
+    //Store key input data
     private Key key= new Key();
 
-    // max HP, MP, level ...
+    // Combat stuffs
     public int maxHP, maxMP, level;
     public int curEXP, curMaxEXP, level1EXP, level2EXP, level3EXP;
     public int HPpotNum, MPpotNum;
     public int HPinc, MPinc;
+
     private int atkType = attackType.RANGED;
 
+    //Packed animation
     private Animation currentAttackAnimation = new meleeGreateSword();
     private Animation currentStandAnimation = new stand();
     private Animation currentRunAnimation = new run();
 
-    private boolean lock3;
-    private boolean debug;
-    
+
     public Player() {
+
+        //variable initializing
         facing = 1;
         attackLock = false;
     	skill1Lock = false;
@@ -100,6 +109,8 @@ public class Player extends Entity{
         setPosY(300);
         setEntityBoxSize(30,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
 
+
+        //this is unpacked animation. TODO: pack animation
         //jump animation contains 3 phases:
         //Phase 1: from ground to highest-air (Example: https://drive.google.com/file/d/12mnGkDOkYaG6wl46t_2hhXUM60TrX_NP/view?usp=sharing)
         //Phase 2: air-rolling (Example: https://drive.google.com/file/d/19lhi_kn1RBmVkM7ksC5QPMG8mFIGK23E/view?usp=sharing)
@@ -164,20 +175,23 @@ public class Player extends Entity{
             if(elapsed > 1000) flinching = false; // player cant be attacked in 1000ms if he has been attacked before
         }
 
-        if (!onGround && !lock) { //falling
+        if (!onGround && !lock) { //this means charactor is falling
             falling = true;
         }
 
-        if (onGround) {
+        if (onGround) { //charactor is on ground
             falling = false;
             lock = false;
             lock2 = false;
             currentVelocityY = 0;
         }
-        if (key.attack == 1 && !lock3) {
+
+        if (key.attack == 1 && !lock3) { //key logic
             currentVelocityY = 0;
             lock3 = true;
         }
+
+        //logic control for animation
         if (lock3) {
             currentAttackAnimation.tick();
             if (currentAttackAnimation.getAnimationStep() % currentAttackAnimation.getNumberOfStep() == 0  && currentAttackAnimation.getAnimationStep() !=0) {
@@ -208,11 +222,13 @@ public class Player extends Entity{
             }
         }
 
-        if (key.up == 1 && currentVelocityY >= 0 && onGround && !lock) {
+        if (key.up == 1 && currentVelocityY >= 0 && onGround && !lock) { //key logic
             lock = true;
             currentVelocityY = velocityY;
         }
 
+        //Logic for player movement
+        //tip: this is basic physic you learnt at school
         runningDirection = key.right - key.left;
         if (runningDirection == 1) {
             facing = runningDirection;
@@ -251,7 +267,7 @@ public class Player extends Entity{
             ((stand)currentStandAnimation).setOffset(offset);
         }
         
-        //Update Skill
+        //Key logic for activating skills
         if (key.skill1 == 1) {
         	if (!skill1.shouldRemove()) {
         		skill1.tick();
@@ -270,19 +286,21 @@ public class Player extends Entity{
         }
     }
 
-    //private "default skin"
+    //
     @Override
     public void render(GraphicsContext graphicsContext) {
-        //Đoạn này hiểu đơn giản chỉ cần lấy pos Draw như bên dưới thì nó sẽ nằm trong màn hình
+        //posX, posY are currently on-map cord, those statements bellow convert them to on-screen cord for animation drawing
         double posXTemp = posX;
         double posYTemp = posY;
         posX = posX - tileMap.getCameraPosX();
         posY = posY - tileMap.getCameraPosY();
-        if (lock3){
+        //END
+
+        if (lock3){ //draw attack animation
             currentAttackAnimation.setFacing(facing);
             currentAttackAnimation.render(graphicsContext, posX, posY, zzX, zzY);
         }
-        else if (falling) {
+        else if (falling) { //draw fall animation
             if (facing == 1) {
                 graphicsContext.drawImage(big1,0,69,40,85,posX + -20.5,posY + -87.5 ,40*facing,85);
                 graphicsContext.drawImage(jumpHead,0,0,jumpHead.getWidth(),jumpHead.getHeight(),posX+-24.0,posY+-76.0,jumpHead.getWidth()*facing,jumpHead.getHeight());
@@ -296,7 +314,7 @@ public class Player extends Entity{
                 graphicsContext.drawImage(jumpUpperBody.get(5),0,0,jumpUpperBody.get(5).getWidth(),jumpUpperBody.get(5).getHeight(),posX+31,posY+-59.0,jumpUpperBody.get(5).getWidth()*facing,jumpUpperBody.get(5).getHeight());
             }
         }
-        else if (lock) {
+        else if (lock) { //draw jump animation
             if (phs == 0) {
                 if (facing == 1) {
                     graphicsContext.drawImage(big1,0,69,40,85,posX + -20.5,posY + -87.5,40*facing,85);
@@ -334,11 +352,11 @@ public class Player extends Entity{
                 }
             }
         }
-        else  if (runningDirection == 0) {
+        else  if (runningDirection == 0) { //draw stand animation
             currentStandAnimation.setFacing(facing);
             currentStandAnimation.render(graphicsContext,posX,posY,zzX,zzY);
         }
-        else if (runningDirection == -1 || runningDirection == 1) {
+        else if (runningDirection == -1 || runningDirection == 1) { //draw run animation
             currentRunAnimation.setFacing(facing);
             currentRunAnimation.render(graphicsContext,posX,posY,zzX,zzY);
         }
@@ -351,6 +369,7 @@ public class Player extends Entity{
             //Filling:
             graphicsContext.fillOval(posX-radius, posY-radius, radius*2, radius*2);
         }
+
         posX = posXTemp;
         posY = posYTemp;
 
@@ -360,39 +379,41 @@ public class Player extends Entity{
         if (key.skill2 == 1) {
             skill2.render(graphicsContext);
         }
-        if (true) {
-        	key.attack = 0;
-        }
+        key.attack = 0;
     }
 
     public int getFacing() {
         return facing;
     }
 
-    private void drawWalkAnimation(int s) {
-        return;
-    }
-
-    public void keyIn(KeyEvent keyEvent) {
+    public void keyIn(KeyEvent keyEvent) { //Key logics are processed here
         if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) { //KEY PRESSED
             switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 1;
+
+                    //this variable is used to position animation.
                     zzY -= 0.5;
                     //System.out.println("zzY = "+zzY);
                 }
                 case DOWN -> {
                     key.down = 1;
+
+                    //this variable is used to position animation.
                     zzY += 0.5;
                     //System.out.println("zzY = "+zzY);
                 }
                 case LEFT -> {
                     key.left = 1;
+
+                    //this variable is used to position animation.
                     zzX -= 0.5;
                     //System.out.println("zzX = "+zzX);
                 }
                 case RIGHT -> {
                     key.right = 1;
+
+                    //this variable is used to position animation.
                     zzX += 0.5;
                     //System.out.println("zzX = "+zzX);
                 }
@@ -497,20 +518,4 @@ public class Player extends Entity{
             }
         }
     }
-
-
-    /*
-    //Method does not control animation
-    private void jump() {
-
-    }
-    //Method does not control animation
-    private void left() { //Method does not control animation
-
-    }
-    //Method does not control animation
-    private void right(){
-
-    }
-     */
 }

@@ -188,8 +188,6 @@ public class Fly extends Enemy{
 	
 	@Override
 	public void render(GraphicsContext graphicsContext) {
-		bloodSplash.render(graphicsContext, posX + (-xmap - (double)width/2) * -facing, posY -ymap - (double)height/2, 0, 0);
-
 		setMapPosittion();
 		// render fly balls
 		for(int i = 0; i < flyBalls.size(); i++) {
@@ -213,6 +211,7 @@ public class Fly extends Enemy{
 		}
 
 		super.render(graphicsContext);
+		bloodSplash.render(graphicsContext, posX + (-xmap - (double)width/2) * -facing, posY -ymap - (double)height/2, 0, 0);
 //		double radius = 3;
 //		//Stoking
 //		graphicsContext.strokeOval(posX-xmap-radius, posY-ymap-radius, radius*2, radius*2);

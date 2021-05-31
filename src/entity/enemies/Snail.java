@@ -9,9 +9,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import tilemap.TileMap;
+import utils.animation.particle.bloodSplash;
 
 public class Snail extends Enemy{
 	private Image[] sprites;
+	private utils.animation.Animation bloodSplash = new bloodSplash();
 	public Snail(TileMap tm, int hardlevel) {
 		super(tm);
 		
@@ -77,6 +79,12 @@ public class Snail extends Enemy{
 	}
 	@Override
 	public void tick() {
+		if (lastHp != HP) {
+			((bloodSplash)bloodSplash).activate();
+			lastHp = HP;
+		}
+		bloodSplash.tick();
+		bloodSplash.setFacing(facing);
 		// update position
 		falling = true;
 		getNextPosition();
@@ -107,6 +115,7 @@ public class Snail extends Enemy{
 	@Override
 	public void render(GraphicsContext graphicsContext) {
 		setMapPosittion();
+
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {
@@ -124,5 +133,6 @@ public class Snail extends Enemy{
 					5);
 		}
 		super.render(graphicsContext);
+		bloodSplash.render(graphicsContext, posX + (-xmap - (double)width/2) * -facing, posY -ymap - (double)height/2, 0, 0);
 	}
 }
