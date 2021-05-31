@@ -21,9 +21,6 @@ public abstract class Enemy extends Entity {
 	
 	// animation
 	protected Animation animation;
-	//protected int curAction;
-	//protected int preAction;
-
 	
 	// movement
 	protected boolean left;
