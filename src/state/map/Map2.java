@@ -150,7 +150,7 @@ public class Map2 extends GameState {
             		e.getHit(player.getSkill2().getDamage());
             	}
             }
-            if (player.getKey().attack == 1 && player.getLock3() == true) {
+            if (player.getKey().attack == 1) {
             	if (player.getBox().intersects(e)) {
             		e.getHit(player.getBox().getDamage());
             	}

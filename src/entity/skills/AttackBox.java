@@ -13,6 +13,7 @@ public class AttackBox extends Entity{
 		width = 100;
 		height = 60;
 		setEntityBoxSize(100, 60);
+		setTimeLoad(1000);
 	}
 	
     public int getDamage() {

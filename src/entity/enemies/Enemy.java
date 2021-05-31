@@ -21,9 +21,6 @@ public abstract class Enemy extends Entity {
 	
 	// animation
 	protected Animation animation;
-	protected int curAction;
-	protected int preAction;
-
 	
 	// movement
 	protected boolean left;
@@ -35,11 +32,11 @@ public abstract class Enemy extends Entity {
 	// movement attributes
 	protected double moveSpeed;
 	protected double maxSpeed;
-	protected double stopSpeed;
+	//protected double stopSpeed;
 	protected double fallSpeed;
 	protected double maxFallSpeed;
 	protected double jumpStart;
-	protected double stopJumpSpeed;
+	//protected double stopJumpSpeed;
 	
 	// constructor
 	public Enemy(TileMap tm) {
