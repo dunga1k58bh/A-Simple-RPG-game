@@ -1,7 +1,6 @@
 package entity;
 
 import application.Main;
-import entity.enemies.Enemy;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import tilemap.Tile;

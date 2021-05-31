@@ -1,7 +1,6 @@
 package tilemap;
 
 import application.Main;
-import entity.Player;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,8 +13,8 @@ import java.io.*;
 // ->>
 public class TileMap {
 
-    // - Gốc tọa độ là góc trên cùng bên trái của cả map
-    //Pos : Vị trị bắt đầu vẽ 1 phần map(góc trên cùng bên trái)
+    // - Gá»‘c tá»�a Ä‘á»™ lÃ  gÃ³c trÃªn cÃ¹ng bÃªn trÃ¡i cá»§a cáº£ map
+    //Pos : Vá»‹ trá»‹ báº¯t Ä‘áº§u váº½ 1 pháº§n map(gÃ³c trÃªn cÃ¹ng bÃªn trÃ¡i)
     private double x; //SCREEN position(topleft corner) on VIRTUAL MAP
     private double y;
 
@@ -98,7 +97,7 @@ public class TileMap {
         int c= rc%tilesetCol;
         return tiles[r][c].getType();
     }
-    //file .map là 1 file 2 dòng đầu là cột n, hàng m, mảng m*n là số hiệu của các tile trong tileSet
+    //file .map lÃ  1 file 2 dÃ²ng Ä‘áº§u lÃ  cá»™t n, hÃ ng m, máº£ng m*n lÃ  sá»‘ hiá»‡u cá»§a cÃ¡c tile trong tileSet
     public void loadMap(String s){
         try {
             //Doc File
@@ -108,7 +107,7 @@ public class TileMap {
             mapRow = Integer.parseInt(br.readLine());
             map = new int[mapRow][mapCol];
 
-            width = mapCol* tileSize; //Kích cỡ map
+            width = mapCol* tileSize; //KÃ­ch cá»¡ map
             height = mapRow*tileSize;
             xmin = 0;
             xmax = width - Main.width;
@@ -132,8 +131,8 @@ public class TileMap {
         }
     }
 
-    //Cắt ảnh, gốc ảnh trên cùng bên trái,
-    //(x,y) điểm bắt đầu cắt
+    //Cáº¯t áº£nh, gá»‘c áº£nh trÃªn cÃ¹ng bÃªn trÃ¡i,
+    //(x,y) Ä‘iá»ƒm báº¯t Ä‘áº§u cáº¯t
     //(targetWidth,targetHeight) :V
     public Image getCropImage(Image image,double x, double y,double tagetWidth, double tagetHeight){
         Rectangle2D cropArea = new Rectangle2D(x,y,tagetWidth,tagetHeight);
@@ -159,7 +158,7 @@ public class TileMap {
     public void setPos(double x, double y){
         this.x +=(x-this.x)*camSpeed;
         this.y +=(y-this.y)*camSpeed;
-        //Đoạn này để đảm bảo chỉ vẽ những thứ có trong map
+        //Ä�oáº¡n nÃ y Ä‘á»ƒ Ä‘áº£m báº£o chá»‰ váº½ nhá»¯ng thá»© cÃ³ trong map
         if (this.x<xmin) {
             this.x = xmin;
         }
@@ -173,7 +172,7 @@ public class TileMap {
             this.y = ymax;
         }
 
-        //cột hàng bắt đầu vẽ
+        //cá»™t hÃ ng báº¯t Ä‘áº§u váº½
         colBeginDraw = (int)  this.x /tileSize;
         rowBeginDraw= (int)  this.y /tileSize;
 
@@ -188,7 +187,7 @@ public class TileMap {
                 int rc = map[row][col];
                 int r= rc/tilesetCol;
                 int c= rc%tilesetCol;
-                //Bản chất của 2 tham số tọa độ của hàm dưới đây là phép dịch gốc tọa độ!!
+                //Báº£n cháº¥t cá»§a 2 tham sá»‘ tá»�a Ä‘á»™ cá»§a hÃ m dÆ°á»›i Ä‘Ã¢y lÃ  phÃ©p dá»‹ch gá»‘c tá»�a Ä‘á»™!!
                 g.drawImage(tiles[r][c].getImage(),(int)-x+col*tileSize,(int)-y+row*tileSize);
             }
         }

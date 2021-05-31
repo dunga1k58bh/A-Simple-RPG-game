@@ -118,7 +118,7 @@ public class Map4 extends GameState {
         		boss.getHit(player.getSkill2().getDamage());
         	}
         }
-        if (player.getKey().attack == 1 && player.getLock3() == true) {
+        if (player.getKey().attack == 1) {
         	if (player.getBox().intersects(boss)) {
             	boss.getHit(player.getBox().getDamage());
             }

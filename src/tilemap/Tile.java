@@ -1,6 +1,5 @@
 package tilemap;
 
-import entity.Entity;
 import javafx.scene.image.Image;
 
 

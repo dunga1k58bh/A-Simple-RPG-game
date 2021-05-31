@@ -39,8 +39,10 @@ public class Player extends Entity{
     private Skill2 skill2;
     private long skill1Timer;
     private long skill2Timer;
+    private long attackTimer;
     private boolean skill1Lock;
     private boolean skill2Lock;
+    private boolean attackLock;
     private AttackBox box;
 
 
@@ -80,6 +82,7 @@ public class Player extends Entity{
     
     public Player() {
         facing = 1;
+        attackLock = false;
     	skill1Lock = false;
     	skill2Lock = false;
     	HPinc = 50;
@@ -378,6 +381,9 @@ public class Player extends Entity{
         if (key.skill2 == 1) {
             skill2.render(graphicsContext);
         }
+        if (true) {
+        	key.attack = 0;
+        }
     }
 
     public int getFacing() {
@@ -415,15 +421,26 @@ public class Player extends Entity{
                     debug = !debug;
                 }
                 case Q -> {
-                    key.attack = 1;
-                    box = new AttackBox(tileMap);
+                	if (attackLock) {
+                		long elapsed = (System.nanoTime() - attackTimer) / 1000000;
+                		if (elapsed > box.getTimeLoad()) {
+                			attackLock = false;
+                		}
+                		else {
+                			break;
+                		}
+                	}
+                	box = new AttackBox(tileMap);
+                    attackTimer = System.nanoTime();
                     box.facing = facing;
                     box.setPos(posX, posY);
+                    key.attack = 1;
+                    attackLock = true;
                 }
             }
         }
         else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)){
-            switch (keyEvent.getCode()) {
+        	switch (keyEvent.getCode()) {
                 case UP -> {
                     key.up = 0;
                 }
@@ -452,10 +469,6 @@ public class Player extends Entity{
                 }
                 case ENTER -> {
                     debug = false;
-                }
-                case Q -> {
-                    key.attack = 0;
-                    box.setRemove();
                 }
                 case W-> {
                 	if (skill1Lock) {
