@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import state.GameStateManager;
@@ -45,12 +46,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			//Root and Scene
-
-
 			BorderPane root = new BorderPane();
 			root.getChildren().add(canvas);
 		    scene = new Scene(root,width,height);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.getIcons().add(new Image("img.png"));
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
