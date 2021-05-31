@@ -1,23 +1,18 @@
 package application;
-	
-import Audio.Music;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import state.GameStateManager;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-
-import java.io.File;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import state.GameStateManager;
 
 public class Main extends Application {
 	//kich thuoc cua scene
