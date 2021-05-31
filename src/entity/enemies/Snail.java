@@ -17,7 +17,7 @@ public class Snail extends Enemy{
 		
 		EXP = 5;
 		moveSpeed = 0.3;
-		maxSpeed = 1 * hardlevel;
+		maxSpeed = hardlevel;
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
 		HP = maxHP = 30 * hardlevel;

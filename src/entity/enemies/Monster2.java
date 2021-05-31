@@ -140,9 +140,6 @@ public class Monster2 extends Enemy{
     @Override
     public void tick() {
         falling = true;
-        // update position
-//        System.out.println("Current Animation "+currentAnimation);
-//        System.out.println("Beinghit"+ beingHit);
         if(currentAnimation!= JUMP)  falling = true;
         if (HP < 0.2 *maxHP ){
             moveSpeed=1.5;

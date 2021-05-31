@@ -46,9 +46,12 @@ public class FlyBall extends Enemy{
 	}
 	
 	public void setHit() {
-		if(hit) return;
+		if(hit) {
+			return;
+		}
 		hit = true;
-		dx = 0;		dy = 0;
+		dx = 0;
+		dy = 0;
 	}
 	
 	public boolean shouldRemove() { 

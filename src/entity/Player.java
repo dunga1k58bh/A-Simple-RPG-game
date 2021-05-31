@@ -11,25 +11,21 @@ import utils.animation.Animation;
 import utils.animation.attackAnimation.meleeGreateSword;
 import utils.animation.movementAnimation.run;
 import utils.animation.movementAnimation.stand;
+import utils.animation.particle.bloodSplash;
 import utils.attackType;
 
 import java.util.ArrayList;
 
 public class Player extends Entity{
     private final Image big1 = new Image("char/Big1-resources.assets-9056.png"); //outfit and miscellaneous stuffs
-    private final Image big3 = new Image("char/Big3-resources.assets-9054.png"); //skill effect
-    private final ArrayList<Image> head = new ArrayList<Image>();
-    private final ArrayList<Image> runLowerBody = new ArrayList<Image>();
-    private final ArrayList<Image> runUpperBody = new ArrayList<Image>();
     private final ArrayList<Image> jumpLowerBody = new ArrayList<Image>();
     private final ArrayList<Image> jumpUpperBody = new ArrayList<Image>();
     private final Image jumpHead;
-    private int animationStep = 0;
+
     private int animationStep2 = 0;
     private int animationStep3 = 0;
 
     private int phs = 0;
-    private int count1 = 0;
     private int count2 = 0;
     private int count3 = 0;
     private int offset = 0;
@@ -75,7 +71,7 @@ public class Player extends Entity{
 
     private Animation currentAttackAnimation = new meleeGreateSword();
     private Animation currentStandAnimation = new stand();
-    private Animation curentRunAnimation = new run();
+    private Animation currentRunAnimation = new run();
 
     private boolean lock3;
     private boolean debug;
@@ -103,21 +99,6 @@ public class Player extends Entity{
         setPosX(500);
         setPosY(300);
         setEntityBoxSize(30,50);// Dòng này thêm kích cỡ nhân vật (E mới ước chừng thôi) ENGLISH PLS? stupid
-        //add default texture
-
-        head.add(0,new Image("char/Small32-resources.assets-4440.png")); //standing
-        head.add(1,new Image("char/Small33-resources.assets-14326.png")); //running
-        runUpperBody.add (0,new Image("char/Small6-resources.assets-12601.png"));
-        runUpperBody.add (1,new Image("char/Small7-resources.assets-12452.png"));
-        runUpperBody.add (2,new Image("char/Small8-resources.assets-1354.png"));
-        runUpperBody.add (3,new Image("char/Small9-resources.assets-7446.png"));
-        runUpperBody.add (4,new Image("char/Small10-resources.assets-8065.png")); //Small11-resources.assets-7160.png
-
-        runLowerBody.add(0,new Image("char/Small24-resources.assets-12840.png"));
-        runLowerBody.add(1,new Image("char/Small25-resources.assets-6123.png"));
-        runLowerBody.add(2,new Image("char/Small26-resources.assets-6747.png"));
-        runLowerBody.add(3,new Image("char/Small27-resources.assets-6734.png"));
-        runLowerBody.add(4,new Image("char/Small28-resources.assets-5528.png"));
 
         //jump animation contains 3 phases:
         //Phase 1: from ground to highest-air (Example: https://drive.google.com/file/d/12mnGkDOkYaG6wl46t_2hhXUM60TrX_NP/view?usp=sharing)
@@ -216,8 +197,6 @@ public class Player extends Entity{
             }
             if (phs == 1) {
                 count3 ++;
-                //animationStep3++;//++;
-                //dy = 0;
             }
             if (count3 % 2 == 1) {
                 animationStep3 ++;
@@ -240,20 +219,20 @@ public class Player extends Entity{
             lastRunningDirection = runningDirection;
             currentVelocityX = velocityX;
             dx= dt * Math.max(velocityX,0);
-            curentRunAnimation.setFacing(facing);
-            curentRunAnimation.tick();
+            currentRunAnimation.setFacing(facing);
+            currentRunAnimation.tick();
         } else if (runningDirection == -1) {
             facing = runningDirection;
             lastRunningDirection = runningDirection;
             currentVelocityX = velocityX;
             dx =- dt * Math.max(velocityX,0);
-            curentRunAnimation.setFacing(facing);
-            curentRunAnimation.tick();
+            currentRunAnimation.setFacing(facing);
+            currentRunAnimation.tick();
         }
         else if (runningDirection == 0) {
             currentVelocityX -= accelerationX *dt;
             dx = lastRunningDirection * dt * Math.max(currentVelocityX,0);
-            curentRunAnimation.refresh();
+            currentRunAnimation.refresh();
         }
 
         currentVelocityY += dt * accelerationY;
@@ -268,7 +247,7 @@ public class Player extends Entity{
             count2 = 0;
             animationStep2 ++;
             offset = animationStep2%2*3;
-            ((run)curentRunAnimation).setOffset(offset);
+            ((run) currentRunAnimation).setOffset(offset);
             ((stand)currentStandAnimation).setOffset(offset);
         }
         
@@ -360,8 +339,8 @@ public class Player extends Entity{
             currentStandAnimation.render(graphicsContext,posX,posY,zzX,zzY);
         }
         else if (runningDirection == -1 || runningDirection == 1) {
-            curentRunAnimation.setFacing(facing);
-            curentRunAnimation.render(graphicsContext,posX,posY,zzX,zzY);
+            currentRunAnimation.setFacing(facing);
+            currentRunAnimation.render(graphicsContext,posX,posY,zzX,zzY);
         }
 
         //Draw a small dot at player position for simple debug

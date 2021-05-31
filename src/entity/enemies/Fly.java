@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import tilemap.TileMap;
+import utils.animation.particle.bloodSplash;
 
 public class Fly extends Enemy{
 	private Image[] sprites;
@@ -24,6 +25,7 @@ public class Fly extends Enemy{
 	
 	// player
 	private Player player;
+	private utils.animation.Animation bloodSplash = new bloodSplash();
 	
 	public Fly(TileMap tm, Player p, int hardLevel) {
 		super(tm);
@@ -36,6 +38,7 @@ public class Fly extends Enemy{
 		fallSpeed = 0.2;
 		maxFallSpeed = 10.0;
 		HP = maxHP = 40 * hardLevel;
+		lastHp = HP;
 		damage = 10 * hardLevel;
 		flyBalls = new ArrayList<FlyBall>();
 		flyBallDamage = 5;
@@ -94,6 +97,12 @@ public class Fly extends Enemy{
 	
 	@Override
 	public void tick() {
+		if (lastHp != HP) {
+			((bloodSplash)bloodSplash).activate();
+			lastHp = HP;
+		}
+		bloodSplash.tick();
+		bloodSplash.setFacing(facing);
 		if (firing && !notOnScreen()) {
 			FlyBall fb = new FlyBall(tileMap);
 			fb.setPosition(posX, posY);
@@ -180,6 +189,8 @@ public class Fly extends Enemy{
 	
 	@Override
 	public void render(GraphicsContext graphicsContext) {
+		bloodSplash.render(graphicsContext, posX + (-xmap - (double)width/2) * -facing, posY -ymap - (double)height/2, 0, 0);
+
 		setMapPosittion();
 		// render fly balls
 		for(int i = 0; i < flyBalls.size(); i++) {

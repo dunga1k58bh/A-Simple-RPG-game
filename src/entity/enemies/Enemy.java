@@ -12,6 +12,7 @@ public abstract class Enemy extends Entity {
 	protected  double posYBegin;
 
 	protected int HP;
+	protected int lastHp;
 	protected int maxHP;
 	protected boolean dead;
 	protected int damage;
@@ -59,10 +60,7 @@ public abstract class Enemy extends Entity {
 	public int getEXP() {
 		return EXP;
 	}
-	public void setVector(double dx, double dy) {
-		this.dx = dx;
-		this.dy = dy;
-	}
+
 	@Override
     public void getHit(int damage) {
         if(dead || flinching) return;
