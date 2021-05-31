@@ -1,25 +1,24 @@
 package utils.animation;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 
-public class Animation {
-    private boolean selfLock;
-    private int numberOfStep;
-    private int interval;
-    private ArrayList<Image> upper = new ArrayList<Image>();
-    private ArrayList<Image> lower = new ArrayList<Image>();
-    private ArrayList<Image> head = new ArrayList<Image>();
-    private int count;
-    private int animationStep;
+public abstract class Animation {
+    protected int facing;
+    protected int numberOfStep;
+    protected int interval;
+    protected ArrayList<Image> upper = new ArrayList<Image>();
+    protected ArrayList<Image> lower = new ArrayList<Image>();
+    protected ArrayList<Image> head = new ArrayList<Image>();
+    protected int count;
+    protected int animationStep;
 
-    public boolean isSelfLock() {
-        return selfLock;
-    }
+    public abstract void render(GraphicsContext g, double x, double y, double zzX, double zzY);
 
     public void tick() {
-        if (interval != 1 && interval != 0 && count % interval == 0){
+        if (interval != 1 && interval != 0 && count % interval == 0 && count != 0){
             animationStep++;
         }
         else if (interval == 1) {
@@ -45,8 +44,17 @@ public class Animation {
         }
     }
 
-    public void setSelfLock(boolean selfLock) {
-        this.selfLock = selfLock;
+    public void refresh() {
+        animationStep = 0;
+        count = 0;
+    }
+
+    public void setFacing(int facing) {
+        this.facing = facing;
+    }
+
+    public int getFacing() {
+        return facing;
     }
 
     public int getNumberOfStep() {

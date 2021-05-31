@@ -69,7 +69,7 @@ public class Fly extends Enemy{
 		left = false;
 		up = false;
 		down = false;
-		facingRight = true;
+		facing = 1;
 	}
 	
 	private void getNextPosition() {
@@ -140,12 +140,12 @@ public class Fly extends Enemy{
 		if(right && dx == 0) {
 			right = false;
 			left = true;
-			facingRight = false;
+			facing = -1;
 		}
 		else if(left && dx == 0){
 			right = true;
 			left = false;
-			facingRight = true;
+			facing = 1;
 		}
 		else if(up && dy == 0) {
 			up = false;
@@ -185,7 +185,6 @@ public class Fly extends Enemy{
 		for(int i = 0; i < flyBalls.size(); i++) {
 			flyBalls.get(i).render(graphicsContext);
 		}
-		
 		if(notOnScreen()) return;
 		//HP of enemy
 		if (!dead) {

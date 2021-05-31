@@ -1,12 +1,8 @@
 package entity.enemies;
 
-import application.Main;
 import entity.Animation;
 import entity.Entity;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import tilemap.Tile;
 import tilemap.TileMap;
 
@@ -92,23 +88,11 @@ public abstract class Enemy extends Entity {
 
 	@Override
 	public void render(GraphicsContext graphicsContext) {
-
-
     	//draw Animation of Enemy
-		if(facingRight) {
-			graphicsContext.drawImage(
-					animation.getImage(),
-					(posX -xmap- width / 2),
-					(posY -ymap- height ),
-					width,height);
-		}
-		else {
-			graphicsContext.drawImage(
+		graphicsContext.drawImage(
 				animation.getImage(),
-				(posX -xmap + width / 2 ),
+				(posX -xmap- width / 2*facing),
 				(posY -ymap- height ),
-				-width,height);          //-width to flip image
-		}
+				width*facing,height);
 	}
-
 }

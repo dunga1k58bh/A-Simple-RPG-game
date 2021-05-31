@@ -28,7 +28,7 @@ public class Dropping extends Enemy{
 		this.xmax = tileMap.getWidth()-width/2-1;
 		this.ymin = height;
 		this.ymax = tileMap.getHeight() -1;
-		setEntityBoxSize(width, height);
+		setEntityBoxSize(width,height);
 		
 		try {
 			imageHP = new Image[1];

@@ -40,10 +40,10 @@ public class Snail extends Enemy{
 			sprites = new Image[3];
 			for(int i = 0; i < sprites.length; i++) {
 				sprites[i] = SwingFXUtils.toFXImage(spritesheet.getSubimage(
-					i * width,
-					0,
-					width,
-					height),
+						i * width,
+						0,
+						width,
+						height),
 					null
 				);
 			}
@@ -57,7 +57,7 @@ public class Snail extends Enemy{
 		animation.setDelay(300);
 		
 		right = true;
-		facingRight = true;
+		facing = 1;
 	}
 	
 	private void getNextPosition() {
@@ -93,12 +93,12 @@ public class Snail extends Enemy{
 		if((right && dx == 0)||posX - posXBegin > 100) {
 			right = false;
 			left = true;
-			facingRight = false;
+			facing = -1;
 		}
 		else if((left && dx == 0)||posX - posXBegin < -100){
 			right = true;
 			left = false;
-			facingRight = true;
+			facing = 1;
 		}
 		
 		// update animation

@@ -74,6 +74,7 @@ public class Map5 extends GameState {
     @Override
     public void setPlayer(Player player) {
         this.player = player;
+        player.setHP(100);
         //System.out.println("playerSet: " + player);
         if(!isclear) {
             player.setPosX(playerStartingPosX);
@@ -83,6 +84,7 @@ public class Map5 extends GameState {
         player.setTileMap(tilemap);
         hud = new HUD(player);
         bgMusic.startMusic();
+        bgMusic.jumpTo(40);
         vocano = false;
         startTime = System.nanoTime();
     }
