@@ -22,7 +22,7 @@ public class GameStateManager {
                                                           // number 1  Playstate will be creat in MenuState// number 2 Setting is same
          gameStates[3] = new ControlState(this);
          gameStates[4] = new ThanksState(this);     //Thanks is creat number 3
-         currentMap = 4;
+         currentMap = 0;
          currentState = 0;
      }
      //for basic control
