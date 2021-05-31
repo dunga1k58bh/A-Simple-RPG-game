@@ -77,7 +77,7 @@ public abstract class Enemy extends Entity {
 	@Override
 	public void CheckTileMapCollision() {
 		super.CheckTileMapCollision();
-		CaculateCorrners(posX,posY+ 3*dy);
+		CaculateCorners(posX,posY+ 3*dy);
 		if(dy<0){ //Bay lên
             if (TopLeft == Tile.BLOCK || TopRight == Tile.BLOCK){
                 dy = 0;

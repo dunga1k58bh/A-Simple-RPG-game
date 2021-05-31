@@ -9,7 +9,6 @@ import entity.somethings.Dropping;
 import entity.somethings.Gate;
 import entity.somethings.HUD;
 import entity.Player;
-import entity.enemies.Monster2;
 import entity.enemies.Snail;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;

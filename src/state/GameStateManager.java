@@ -16,12 +16,14 @@ public class GameStateManager {
    private boolean nextMap;  // if not it previous
      public GameStateManager()  {
     	 hardlevel = 1;
-    	 gameStates = new  GameState[5];
+    	 gameStates = new  GameState[6];
          mapStates = new ArrayList<>();
          gameStates[0] = new MenuState(this);       // MenuState is creat first number 0
-                                                          // number 1  Playstate will be creat in MenuState// number 2 Setting is same
+// number 1  Playstate will be creat in MenuState//
+         gameStates[2] = new SettingState(this);
          gameStates[3] = new ControlState(this);
-         gameStates[4] = new ThanksState(this);     //Thanks is creat number 3
+         gameStates[4] = new ThanksState(this);
+         gameStates[5] = new PauseState(this);
          currentMap = 0;
          currentState = 0;
      }
